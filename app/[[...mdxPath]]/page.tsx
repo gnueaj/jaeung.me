@@ -1,5 +1,6 @@
 import { useMDXComponents as getMDXComponents } from "@/mdx-components";
 import { data } from "@/data";
+import { siteConfig } from "@/site.config";
 import { Metadata } from "next";
 import { generateStaticParamsFor, importPage } from "nextra/pages";
 import type { FC } from "react";

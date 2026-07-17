@@ -1,0 +1,35 @@
+sections:
+  - key: about
+    title: About
+    shortTitle: About
+    type: main
+
+  - key: career
+    title: Career
+    shortTitle: Career
+    type: main
+
+  - key: educations
+    title: Educations
+    shortTitle: Edu
+    type: main
+
+  - key: publications
+    title: Publications
+    shortTitle: Pubs
+    type: main
+
+  - key: misc
+    title: Miscellaneous
+    shortTitle: Misc
+    type: main
+
+  - key: projects
+    title: Project Gallery
+    shortTitle: Project
+    type: page
+
+  - key: blog
+    title: Blog
+    shortTitle: Blog
+    type: page

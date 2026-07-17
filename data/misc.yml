@@ -1,0 +1,177 @@
+honors:
+  - id: 2025-tinder-hackathon
+    name: 2025 Tinder Global Hackathon
+    title: "People's Award"
+    location: West Hollywood, USA
+    date: "2025.02"
+    
+  - id: 2025-skku-research-matters-plus
+    name: SKKU Research Matters Plus
+    title: 3rd Place Winner
+    location: Suwon, Korea
+    date: "2025.02"
+
+  - id: 2025-skku-outstanding-research-award
+    name: Outstanding Research Award
+    title: 1st Place Winner
+    location: Suwon, Korea
+    date: "2025.02"
+    description: >
+      The sole master's among the three awardees
+
+  - id: 2024-skku-ta-award
+    name: 2024 SKKU TA Award
+    title: Provost's Award
+    location: Suwon, Korea
+    date: "2024.01"
+    description: >
+      Given to 18 TAs on SKKU, Best TA in the College of Computing. Course: Introduction to HCI (2023 Fall)
+
+  - id: 2023-sparcs-startup-hackathon
+    name: 2023 SPARCS Startup Hackathon
+    title: 1st Place Winner
+    location: Seoul, Korea
+    date: "2023.01"
+
+  - id: 2022-skku-ai-sw-capstone
+    name: 2022 SKKU AI-SW Capstone Design Project Contest
+    title: 3rd Place Winner
+    location: Seoul, Korea
+    date: "2022.12"
+
+  - id: 2022-skku-ai-education-hackathon
+    name: 2022 SKKU AI-Education Hackathon
+    title: 1st Place Winner
+    location: Seoul, Korea
+    date: "2022.09"
+
+  - id: 2022-monothon-hackathon
+    name: Monothon Hackathon
+    title: 1st Place Winner
+    location: Seoul, Korea
+    date: "2022.01"
+
+  - id: 2021-skku-ai-sw-capstone
+    name: 2021 SKKU AI-SW Capstone Design Project Contest
+    title: 3rd Place Winner
+    location: Seoul, Korea
+    date: "2021.12"
+
+  - id: 2021-ksii-fall-conference-ideathon
+    name: KSII 2021 Fall Conference Ideathon
+    title: 3rd Place Winner
+    location: Jungsun, Korea
+    date: "2021.10"
+
+  - id: 2021-skku-ai-education-hackathon
+    name: 2021 SKKU AI-Education Hackathon
+    title: 2nd Place Winner
+    location: Seoul, Korea
+    date: "2021.10"
+
+  - id: 2020-4th-industrial-revolution-competition
+    name: 2020 KSIE 4th Industrial Revolution Competition
+    title: 3rd Place Winner
+    location: Seoul, Korea
+    date: "2020.11"
+
+  - id: 2012-seongdong-institute
+    name: Seongdong Institute of Computing for Gifted
+    title: 1st Place Winner
+    location: Seoul, Korea
+    date: "2012.10"
+
+services:
+  - id: 2025-realthon
+    name: 2025 RE:ALThon Hackathon
+    title: Mentor
+    location: Seoul, Korea
+    date: "2025.11"
+    
+  - id: 2024-korea-visualization-workshop-organizer
+    name: 2024 2nd Korea Visualization Workshop
+    title: Organizer
+    location: Seoul, Korea
+    date: "2024.10"
+
+  - id: 2023-ieee-pacificvis
+    name: 2023 IEEE PacificVis Symposium
+    title: Student Volunteer
+    location: Seoul, Korea
+    date: "2023.04"
+
+  - id: ta
+    name: Sungkyunkwan University
+    title: Teaching Assistant
+    location: Suwon, Korea
+    date:
+      from: 2022-09
+      to: 2024-08
+    description: >
+      SKKU Computer Science and Engineering:
+
+      - Open-source Software Practice (2022 Fall)
+
+      - Information Visualization (2023 Spring, 2024 Spring)
+
+      - Introduction to HCI (2022 Fall, 2023 Fall, 2024 Fall)
+
+      - Introduction to Data Structure (2024 Spring)
+
+  - id: lecturer
+    name: Sungkyunkwan University
+    title: Lecturer
+    location: Seoul, Korea
+    date:
+      from: 2022-08
+      to: 2023-08
+    description: >
+      Paid lecturer for the following courses:
+
+      -  ROKA Military AI Course (2022 Summer, Data Visualization)
+
+      - Summer Bootcamp for Dept. of Applied AI (2023 Summer, Open-Source Software, Web Development)
+
+scholarships:
+  - id: 2024-shimsan-scholarship-spring
+    name: 2024 Spring Shim-San Scholarship
+    title: Scholarship
+    location: Suwon, Korea
+    date: "2024.06"
+
+  - id: 2023-shimsan-scholarship-fall
+    name: 2023 Fall Shim-San Scholarship
+    title: Scholarship
+    location: Suwon, Korea
+    date: "2023.12"
+
+  - id: 2023-skku-graduate-scholarship
+    name: SKKU Graduate School Scholarship
+    title: Scholarship
+    location: Suwon, Korea
+    date: "2023.09"
+
+talks:
+  - id: 2024-korea-visualization-workshop-talk
+    name: 2024 2nd Korea Visualization Workshop
+    title: Speaker
+    location: Suwon, Korea
+    date: "2024.10"
+    description: >
+      Bavisitter: Integrating Design Guidelines into Large Language Models for Visualization Authoring
+
+  - id: 2022-skku-cse-seminar-talk
+    name: 2022 SKKU CSE Research Story
+    title: Speaker
+    location: Suwon, Korea
+    date: "2022.12"
+    description: >
+      Intentable: A Mixed-Initiative System for Intent-Based Chart Captioning
+
+  - id: 2022-skku-ai-colloquium-talk
+    name: 2022 SKKU AI Colloquium
+    title: Speaker
+    location: Suwon, Korea
+    date: "2022.10"
+    description: >
+      Intentable: A Mixed-Initiative System for Intent-Based Chart Captioning

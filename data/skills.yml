@@ -1,0 +1,20 @@
+skills:
+  - type: Frontend
+    description: >
+      **React**, **TypeScript**, Visualization (**D3**, visx, Vega, vis.gl, ...)
+
+  - type: Backend
+    description: >
+      Python, **FastAPI**, Docker, PostgreSQL, Celery, Redis, AWS (S3, EC2, ...), CI/CD (GitHub Actions)
+
+  - type: AI/ML
+    description: >
+      **PyTorch**, HuggingFace, NLP
+
+  - type: Design
+    description: >
+      **Figma**, Illustrator, Photoshop, Prototyping, User Research
+
+  - type: Language
+    description: >
+      Korean (Native), English (Fluent)

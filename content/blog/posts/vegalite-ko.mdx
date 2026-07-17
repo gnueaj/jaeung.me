@@ -1,0 +1,125 @@
+---
+title: Vega Lite 한국어 지원하기
+date: 2025-05-24
+description: Vega-Lite에서 한국어로 Unit, Aggregate, Transformation 렌더링하기
+tags: [TypeScript, Visualization]
+type: post
+---
+
+Vega Lite를 쓰다보면 Title이나 Label이 한국어로 되어있어도 Mean, Binned 등이 영어로 나와서 완전한 한글화가 되지 않는 문제가 있다.
+
+아래 코드를 사용하면 Vega-Lite에서 한국어로 Unit, Aggregate, Transformation을 렌더링할 수 있다.
+
+```sh npm2yarn
+npm i vega-lite vega-embed
+```
+
+의존성을 추가해줘야 오류가 나지 않는다.
+
+```ts filename="getVegaLiteKo.ts" {1}
+import { vegaLite } from "vega-embed";
+import { type Config, type TopLevelSpec } from "vega-lite";
+import { isArgmaxDef, isArgminDef } from "vega-lite/build/src/aggregate";
+import { isBinning } from "vega-lite/build/src/bin";
+import type { FieldDefBase } from "vega-lite/build/src/channeldef";
+import {
+  getTimeUnitParts,
+  isBinnedTimeUnit,
+  normalizeTimeUnit,
+} from "vega-lite/build/src/timeunit";
+
+const koreanAggregateTerms: Record<string, string> = {
+  count: "항목 수",
+  sum: "합계",
+  mean: "평균",
+  average: "평균",
+  median: "중앙값",
+  min: "최소값",
+  max: "최대값",
+  variance: "분산",
+  stdev: "표준편차",
+  first: "첫번째",
+  last: "마지막",
+  ci0: "신뢰구간 하한",
+  ci1: "신뢰구간 상한",
+  missing: "결측값",
+  valid: "유효값",
+  distinct: "고유값",
+};
+
+const koreanTimeUnits: Record<string, string> = {
+  year: "년",
+  quarter: "분기",
+  month: "월",
+  week: "주",
+  day: "일",
+  date: "일",
+  hours: "시",
+  minutes: "분",
+  seconds: "초",
+  milliseconds: "밀리초",
+  yearquarter: "년분기",
+  yearquartermonth: "년분기월",
+  yearmonth: "년월",
+  yearmonthdate: "년월일",
+  yearmonthdatehours: "년월일시",
+  yearmonthdatehoursminutes: "년월일시분",
+  yearmonthdatehoursminutesseconds: "년월일시분초",
+  monthdate: "월일",
+  hoursminutes: "시분",
+  hoursminutesseconds: "시분초",
+  minutesseconds: "분초",
+  secondsmilliseconds: "초밀리초",
+};
+
+export function getKorean(word: string) {
+  return koreanAggregateTerms[word] || koreanTimeUnits[word] || word;
+}
+
+function containsKorean(text: string) {
+  const koreanRegex = /[ㄱ-ㅎㅏ-ㅣ가-힣]/;
+  return koreanRegex.test(text);
+}
+export default function getKoreanVegaLite(vlSpec: TopLevelSpec) {
+  return vegaLite.compile(vlSpec, {
+    fieldTitle: (fieldDef: FieldDefBase<string>, config: Config) => {
+      const { field, aggregate, timeUnit, bin } = fieldDef;
+      if (aggregate === "count") {
+        return config.countTitle && containsKorean(config.countTitle)
+          ? config.countTitle
+          : getKorean("count");
+      } else if (bin && isBinning(bin)) {
+        return `${field} (구간화)`;
+      } else if (timeUnit && !isBinnedTimeUnit(timeUnit)) {
+        const unit = normalizeTimeUnit(timeUnit)?.unit;
+        if (unit) {
+          return `${field} (${getTimeUnitParts(unit).map(getKorean).join(" ")})`;
+        }
+      } else if (aggregate) {
+        if (isArgmaxDef(aggregate)) {
+          return `${aggregate.argmax}가 최대일 때의 ${field}`;
+        } else if (isArgminDef(aggregate)) {
+          return `${aggregate.argmin}가 최소일 때의 ${field}`;
+        } else {
+          return `${field}의 ${getKorean(aggregate)}값`;
+        }
+      }
+      return String(field);
+    },
+  }).spec;
+}
+```
+
+아래와 같이 사용하면 된다.
+
+```tsx
+i18n.language === "ko" ? getKoreanVegaLite(spec) : spec;
+```
+
+> [!tip]
+>
+> 이 코드는 `vega-lite`의 `compile` 메서드를 사용하여 한국어로 번역된 Vega-Lite 사양을 생성한다. `compile` 메서드는 Vega Lite 사양을 Vega로 사양으로 컴파일하는 메서드이기 때문에 이 코드는 정확하게는 **한국어 버전의 Vega Lite** 를 얻는 코드가 아니라, 주어진 Vega Lite Spec을 **한국어로 렌더링하는** 코드로 보는 것이 정확하다.
+
+### References
+
+https://vega.github.io/vega-lite/usage/compile.html

@@ -1,0 +1,11 @@
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    groups:
+      # 모든 의존성을 하나의 그룹으로
+      all-dependencies:
+        patterns:
+          - "*"

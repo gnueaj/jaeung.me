@@ -1,0 +1,18 @@
+educations:
+  - id: skku-sw
+    name: Sungkyunkwan University
+    title: M.Eng. in Computer Science and Engineering
+    from: 2023.09.01
+    to: 2025.02.28
+    location: Suwon, Korea
+    description: >
+      Data Visualization and Human-Computer (AI) Interaction, Advisor: Prof. Jaemin Jo
+
+  - id: skku-cse
+    name: Sungkyunkwan University
+    title: B.Sc. in Computer Science Education
+    from: 2019.03.02
+    to: 2023.08.31
+    location: Seoul, Korea
+    description: >
+      Public Teacher Certificate in Computer Science Education

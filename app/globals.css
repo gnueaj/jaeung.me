@@ -1,0 +1,195 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+@theme {
+  --font-display: var(--font-open-sans), sans-serif;
+  --font-sans: var(--font-open-sans), sans-serif;
+}
+
+[data-theme="light"] {
+  --bg: var(--color-zinc-50);
+  --card-bg: var(--color-white);
+}
+[data-theme="dark"] {
+  --bg: var(--color-zinc-950);
+  --card-bg: var(--color-zinc-900);
+}
+
+.me-nav-header {
+  @apply sticky top-0 z-10 -my-2 bg-[var(--bg)] py-2;
+}
+
+div.nextra-code {
+  @apply my-6;
+}
+/* ::after will be hidden starting from the 'md' breakpoint */
+.me-nav-header::after {
+  content: ""; /* Required for ::after to be rendered */
+  position: absolute; /* Position relative to the .bite element */
+  left: 0px;
+  bottom: -20px;
+  width: 100%;
+
+  height: 20px; /* Size of the pseudo-element */
+  background-color: var(--card-bg);
+  z-index: 101;
+  /* Apply rounded corners by default, hide from md upwards */
+  @apply rounded-t-2xl md:hidden;
+}
+
+/* ::before will be hidden starting from the 'md' breakpoint */
+.me-nav-header::before {
+  content: ""; /* Required for ::before to be rendered */
+  position: absolute; /* Position relative to the .bite element */
+  left: 0px;
+  bottom: -20px;
+  width: 100%;
+  height: 20px; /* Size of the pseudo-element */
+  z-index: 100;
+  background-color: var(--bg);
+  /* Apply rounded corners by default, hide from md upwards */
+  @apply md:hidden;
+}
+
+.me-card {
+  @apply m-0 flex w-full rounded-2xl bg-white md:rounded-4xl dark:bg-zinc-900;
+}
+
+.me-hover {
+  @apply hover:text-primary -ml-0.5 rounded-sm px-0.5 py-0 underline decoration-dotted underline-offset-2 transition-all duration-100 ease-in-out hover:no-underline;
+}
+
+.me-prose {
+  @apply prose prose-zinc prose-base prose-p:mt-0 prose-p:mb-2 prose-img:rounded-lg dark:prose-invert prose-a:decoration-dotted prose-img:md:px-8 prose-img:my-2 prose-a:text-zinc-900 prose-a:font-normal prose-a:dark:text-white max-w-none;
+  padding-inline: 0;
+  @apply prose-headings:mb-4;
+  @apply prose-ul:m-0 prose-li:m-0 prose-li:mb-1 prose-ul:mt-2;
+  @apply p-8 md:p-16;
+  @apply text-zinc-800 dark:text-zinc-200;
+  @apply prose-strong:*:text-zinc-900 dark:prose-strong:text-white;
+
+  /* h1 */
+  @apply prose-h1:text-zinc-900 dark:prose-h1:text-white;
+  @apply prose-h1:mt-2 prose-h1:md:mt-4 prose-h1:font-bold prose-h1:text-3xl;
+
+  /* h2 */
+  @apply prose-h2:text-zinc-800 dark:prose-h2:text-zinc-200;
+
+  /* h3 */
+  @apply prose-h3:text-zinc-800 dark:prose-h3:text-zinc-200 prose-h3:mb-2;
+  :where(ol > li):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
+    padding-inline-start: 0;
+  }
+}
+
+.me-list {
+  @apply m-0 mb-0 flex flex-col px-0 pl-0;
+}
+
+.me-highlight {
+  @apply bg-primary text-primary-content rounded-md font-semibold;
+}
+
+.menu {
+  --menu-active-bg: var(--color-primary);
+  --menu-active-text: var(--color-primary-content);
+}
+
+html {
+  @apply bg-[var(--bg)];
+  @apply text-zinc-800 dark:text-zinc-200;
+  scrollbar-gutter: stable;
+  scrollbar-width: none;
+
+  scrollbar-color: var(--color-primary) var(--bg);
+
+  /* no overscroll */
+  overscroll-behavior: none;
+}
+
+h2,
+h3 {
+  @apply scroll-mt-20 md:scroll-mt-4;
+}
+
+body {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+@plugin "daisyui" {
+  themes:
+    light --default,
+    dark --prefersdark;
+}
+
+@plugin "daisyui/theme" {
+  name: "light";
+  default: true;
+  prefersdark: false;
+  color-scheme: "light";
+  --color-base-100: oklch(100% 0 0);
+  --color-base-200: oklch(98% 0 0);
+  --color-base-300: oklch(95% 0 0);
+  --color-base-content: oklch(21% 0.006 285.885);
+  --color-primary: oklch(75% 0.183 55.934);
+  --color-primary-content: oklch(98% 0.016 73.684);
+  --color-secondary: oklch(55% 0.195 38.402);
+  --color-secondary-content: oklch(98% 0.016 73.684);
+  --color-accent: oklch(77% 0.152 181.912);
+  --color-accent-content: oklch(38% 0.063 188.416);
+  --color-neutral: oklch(14% 0.005 285.823);
+  --color-neutral-content: oklch(92% 0.004 286.32);
+  --color-info: oklch(74% 0.16 232.661);
+  --color-info-content: oklch(29% 0.066 243.157);
+  --color-success: oklch(76% 0.177 163.223);
+  --color-success-content: oklch(37% 0.077 168.94);
+  --color-warning: oklch(82% 0.189 84.429);
+  --color-warning-content: oklch(41% 0.112 45.904);
+  --color-error: oklch(71% 0.194 13.428);
+  --color-error-content: oklch(27% 0.105 12.094);
+  --radius-selector: 0.5rem;
+  --radius-field: 0.25rem;
+  --radius-box: 0.5rem;
+  --size-selector: 0.1875rem;
+  --size-field: 0.25rem;
+  --border: 0.5px;
+  --depth: 0;
+  --noise: 0;
+}
+
+@plugin "daisyui/theme" {
+  name: "dark";
+  default: false;
+  prefersdark: false;
+  color-scheme: "dark";
+  --color-base-100: oklch(25.33% 0.016 252.42);
+  --color-base-200: oklch(23.26% 0.014 253.1);
+  --color-base-300: oklch(21.15% 0.012 254.09);
+  --color-base-content: oklch(97.807% 0.029 256.847);
+  --color-primary: oklch(75% 0.183 55.934);
+  --color-primary-content: oklch(98% 0.016 73.684);
+  --color-secondary: oklch(55% 0.195 38.402);
+  --color-secondary-content: oklch(98% 0.016 73.684);
+  --color-accent: oklch(77% 0.152 181.912);
+  --color-accent-content: oklch(38% 0.063 188.416);
+  --color-neutral: oklch(14% 0.005 285.823);
+  --color-neutral-content: oklch(92% 0.004 286.32);
+  --color-info: oklch(74% 0.16 232.661);
+  --color-info-content: oklch(29% 0.066 243.157);
+  --color-success: oklch(76% 0.177 163.223);
+  --color-success-content: oklch(37% 0.077 168.94);
+  --color-warning: oklch(82% 0.189 84.429);
+  --color-warning-content: oklch(41% 0.112 45.904);
+  --color-error: oklch(71% 0.194 13.428);
+  --color-error-content: oklch(27% 0.105 12.094);
+  --radius-selector: 0.5rem;
+  --radius-field: 0.25rem;
+  --radius-box: 0.5rem;
+  --size-selector: 0.25rem;
+  --size-field: 0.25rem;
+  --border: 1px;
+  --depth: 1;
+  --noise: 0;
+}

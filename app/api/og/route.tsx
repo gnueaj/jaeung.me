@@ -1,5 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import { ImageResponse } from "next/og";
+import { siteConfig } from "@/site.config";
 // App router includes @vercel/og.
 // No need to install it.
 
@@ -35,12 +36,8 @@ export async function GET(request: Request) {
     const absoluteImageURL = new URL(imageURL, request.url);
 
     // ?title=<title>
-    const title = formatTitle(searchParams.get("title"), 24, "Jiwon Jason Choi");
-    const description = formatTitle(
-      searchParams.get("description"),
-      50,
-      "Research, Careers, and Personal Information",
-    );
+    const title = formatTitle(searchParams.get("title"), 24, siteConfig.name);
+    const description = formatTitle(searchParams.get("description"), 50, siteConfig.tagline);
 
     return new ImageResponse(
       <div tw="text-white px-20 py-[80px] bg-[#030303] flex justify-between flex-col w-full h-full">
@@ -68,8 +65,8 @@ export async function GET(request: Request) {
             tw="rounded-lg mr-4"
           />
           <div tw="flex flex-col">
-            <h3 tw="font-bold text-2xl m-0 mb-2">Jiwon Jason Choi</h3>
-            <p tw="text-gray-400 text-lg m-0">Research Scientist & Software Engineer</p>
+            <h3 tw="font-bold text-2xl m-0 mb-2">{siteConfig.name}</h3>
+            <p tw="text-gray-400 text-lg m-0">{siteConfig.tagline}</p>
           </div>
         </div>
       </div>,

@@ -1,4 +1,5 @@
 import { useMDXComponents as getMDXComponents } from "@/mdx-components";
+import { data } from "@/data";
 import { Metadata } from "next";
 import { generateStaticParamsFor, importPage } from "nextra/pages";
 import type { FC } from "react";
@@ -32,9 +33,10 @@ export async function generateMetadata(props: PageProps) {
 }
 
 function getCustomMetadata(metadata: NetraMetadata): NetraMetadata {
-  const title = metadata.title === "Index" ? "Jiwon Jason Choi" : metadata.title;
+  const title = metadata.title === "Index" ? data.meta().name : metadata.title;
   return {
     ...metadata,
+    metadataBase: new URL(siteConfig.url),
     title,
     icons: {
       apple: "/apple-touch-icon.png",
@@ -57,8 +59,7 @@ function getCustomMetadata(metadata: NetraMetadata): NetraMetadata {
   };
 }
 
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-expect-error
+// @ts-expect-error nextra's wrapper type is not exported
 const Wrapper = getMDXComponents().wrapper;
 
 const Page: FC<PageProps> = async (props) => {

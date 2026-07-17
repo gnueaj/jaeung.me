@@ -78,7 +78,6 @@ const Responsive = <T extends React.ElementType = "div">({
         <Component
           key={`breakpoint-${random}-${key}`}
           className={twMerge(getResponsiveClassName(key), className)}
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           {...(props as any)}>
           {content}
         </Component>

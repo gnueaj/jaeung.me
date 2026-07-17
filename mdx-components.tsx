@@ -21,6 +21,7 @@ import { useMDXComponents as getNextraMDXComponents } from "nextra/mdx-component
 import type { ComponentProps, FC } from "react";
 import { twMerge } from "tailwind-merge";
 import { Giscus } from "./components";
+import { isGiscusEnabled } from "./site.config";
 
 export const publications = data.publications().publications;
 
@@ -180,7 +181,7 @@ export const useMDXComponents: UseMDXComponents<typeof DEFAULT_COMPONENTS> = <
             </>
           )}
 
-          {metadata.type === "post" && (
+          {metadata.type === "post" && isGiscusEnabled && (
             <div>
               <div className="divider mt-16" />
               <Giscus />

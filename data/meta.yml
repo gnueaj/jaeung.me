@@ -2,6 +2,10 @@ name: Jiwon Jason Choi
 position: Software Engineer & Research Scientist
 affiliation: ML, HCI, and Visualization
 
+# Author name to highlight (bold + primary color) in the Publications list.
+# Must match exactly how the name appears in publications.yml authors.
+authorHighlight: Jiwon Choi
+
 # Contact Information
 contacts:
   email: jiwnchoi@gmail.com

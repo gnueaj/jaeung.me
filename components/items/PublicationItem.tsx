@@ -6,6 +6,7 @@ import { twMerge } from "tailwind-merge";
 
 async function AuthorNames({ authorList }: { authorList: string[] }) {
   const authors = data.authors().authors;
+  const authorHighlight = data.meta().authorHighlight;
   const authorMap = Object.fromEntries(authors.map((author) => [author.name, author]));
 
   return (
@@ -17,7 +18,7 @@ async function AuthorNames({ authorList }: { authorList: string[] }) {
               href={authorMap[authorName].url}
               className="me-hover"
               target={authorMap[authorName].url.startsWith("http") ? "_blank" : "_self"}>
-              <span className={authorName === "Jiwon Choi" ? "text-primary font-semibold" : ""}>
+              <span className={authorName === authorHighlight ? "text-primary font-semibold" : ""}>
                 {authorName}
               </span>
             </Link>

@@ -83,6 +83,8 @@ export default function Navigation({ sections }: { sections: Section[] }) {
     if (isProgrammaticScroll.current) return;
     const firstVisibleKey = sectionRefs.current.find((el) => el && visibleSections[el.id])?.id;
     if (firstVisibleKey && activated !== firstVisibleKey) {
+      // Scroll-spy: reflect the first visible section in the active hash.
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setHash(firstVisibleKey);
     }
   }, [visibleSections, sections, activated, sectionRefs]);

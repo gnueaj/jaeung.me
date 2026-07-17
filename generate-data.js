@@ -5,7 +5,8 @@
 const fs = require("fs").promises;
 const path = require("path");
 const yaml = require("js-yaml");
-const chokidar = require("chokidar");
+// chokidar is ESM-only (v5+) and is loaded lazily via dynamic import in watch
+// mode only — see below. Requiring it at top level breaks `node` (ERR_REQUIRE_ESM).
 const { quicktype, InputData, jsonInputForTargetLanguage } = require("quicktype-core");
 async function main() {
   const { default: yargs } = await import("yargs/yargs");
@@ -306,6 +307,7 @@ async function main() {
       path.join(DATA_DIR, "**/*.yaml"),
       path.join(DATA_DIR, "**/*.yml"),
     ];
+    const { default: chokidar } = await import("chokidar");
     const watcher = chokidar.watch(watchPaths, {
       persistent: true,
       ignoreInitial: true,

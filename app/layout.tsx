@@ -11,9 +11,10 @@ import { ThemeProvider } from "next-themes";
 import Image from "next/image";
 import "nextra-theme-blog/style.css";
 
-import { Navigation, Responsive, ScrollToTopButton } from "@/components";
+import { Copyright, Navigation, Responsive, ScrollToTopButton } from "@/components";
 import ContactButtons from "@/components/ContactButtons";
 import { data } from "@/data";
+import { siteConfig } from "@/site.config";
 
 const openSans = Open_Sans({
   subsets: ["latin"],
@@ -59,14 +60,13 @@ export default async function RootLayout({ children }: { children: React.ReactNo
                 className="me-card sticky top-0 w-full flex-col p-2 md:block md:p-4"
                 style={{ zIndex: 1000 }}>
                 <Navigation sections={sections} />
-                {/* <Search /> */}
               </section>
             </div>
             <Responsive
               base={null}
               md={
                 <Footer className="flex w-full flex-col-reverse items-center justify-start gap-2 text-zinc-500 dark:text-zinc-400">
-                  Copyright © 2025 Jiwon Jason Choi
+                  <Copyright />
                 </Footer>
               }
             />
@@ -83,7 +83,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           <Responsive
             base={
               <Footer className="w-full p-4 text-zinc-500 dark:text-zinc-400">
-                Copyright © 2025 Jiwon Jason Choi
+                <Copyright />
               </Footer>
             }
             md={null}
@@ -91,7 +91,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         </ThemeProvider>
         <ScrollToTopButton />
       </body>
-      <GoogleAnalytics gaId="G-XVX4B96FPG" />
+      {siteConfig.gaId && <GoogleAnalytics gaId={siteConfig.gaId} />}
       <Analytics />
       <SpeedInsights />
     </html>

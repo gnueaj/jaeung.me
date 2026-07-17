@@ -48,7 +48,7 @@ const LABEL_MAP: Record<string, string> = {
   instagram: "Instagram profile",
 };
 
-const HREF_MAP: Record<string, (valye: string) => string> = {
+const HREF_MAP: Record<string, (value: string) => string> = {
   github: (username: string) => `https://github.com/${username}`,
   twitter: (username: string) => `https://x.com/${username}`,
   linkedin: (username: string) => `https://www.linkedin.com/in/${username}`,

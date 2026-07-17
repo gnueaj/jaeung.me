@@ -1,13 +1,16 @@
 {
-  "name": "jiwnchoi",
+  "name": "jaeung-me",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": ">=20"
+  },
   "scripts": {
     "dev": "pnpm datagen && concurrently \"next dev \" \"pnpm datagen --watch\"",
     "build": "pnpm datagen && next build ",
     "start": "next start",
     "prestart": "pnpm datagen",
-    "lint": "next lint",
+    "lint": "eslint .",
     "format": "prettier --write .",
     "postbuild": "pagefind --site .next/server/app --output-path public/_pagefind",
     "prepare": "husky",
@@ -51,7 +54,7 @@
     "chokidar": "^5.0.0",
     "concurrently": "^9.2.1",
     "daisyui": "^5.5.19",
-    "eslint": "^10.2.1",
+    "eslint": "^9.39.0",
     "eslint-config-next": "16.2.4",
     "husky": "^9.1.7",
     "js-yaml": "^4.1.1",

@@ -191,7 +191,7 @@ export default function Guestbook() {
     }
   }
 
-  async function deleteComment(id: string) {
+  async function deleteComment(id: string, parentId?: string) {
     setIsDeleting(true);
     setMessage("");
 
@@ -206,6 +206,19 @@ export default function Guestbook() {
 
       setDeleteTarget(null);
       setDeletePassword("");
+
+      // Replies don't affect the counts — pagination is over top-level notes
+      // only — so drop it in place instead of refetching the page.
+      if (parentId) {
+        setComments((current) =>
+          current.map((comment) =>
+            comment.id === parentId
+              ? { ...comment, replies: comment.replies.filter((reply) => reply.id !== id) }
+              : comment,
+          ),
+        );
+        return;
+      }
 
       const nextTotal = Math.max(0, totalComments - 1);
       const nextTotalPages = Math.max(1, Math.ceil(nextTotal / COMMENTS_PAGE_SIZE));
@@ -311,28 +324,71 @@ export default function Guestbook() {
                 {comment.replies.length > 0 && (
                   <ol className="m-0 mt-3 flex list-none flex-col gap-3 border-l-2 border-zinc-200 p-0 pl-4 dark:border-zinc-800">
                     {comment.replies.map((reply) => (
-                      <li key={reply.id} className="flex items-start gap-3">
-                        <span
-                          aria-hidden="true"
-                          className="bg-primary/10 flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-base">
-                          {reply.emoji ?? "👾"}
-                        </span>
-                        <div className="min-w-0 flex-1">
-                          <div className="flex items-baseline gap-2">
-                            <p className="m-0 truncate text-sm font-semibold text-zinc-900 dark:text-zinc-100">
-                              {reply.nickname}
-                            </p>
-                            <span className="bg-primary/15 text-primary m-0 shrink-0 rounded-full px-1.5 py-0.5 text-[10px] font-medium">
-                              Author
-                            </span>
-                            <p className="m-0 shrink-0 text-xs text-zinc-400 dark:text-zinc-500">
-                              {formatCommentDate(reply.createdAt)}
+                      <li key={reply.id}>
+                        <div className="flex items-start gap-3">
+                          <span
+                            aria-hidden="true"
+                            className="bg-primary/10 flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-base">
+                            {reply.emoji ?? "👾"}
+                          </span>
+                          <div className="min-w-0 flex-1">
+                            <div className="flex items-baseline gap-2">
+                              <p className="m-0 truncate text-sm font-semibold text-zinc-900 dark:text-zinc-100">
+                                {reply.nickname}
+                              </p>
+                              <span className="bg-primary/15 text-primary m-0 shrink-0 rounded-full px-1.5 py-0.5 text-[10px] font-medium">
+                                Author
+                              </span>
+                              <p className="m-0 shrink-0 text-xs text-zinc-400 dark:text-zinc-500">
+                                {formatCommentDate(reply.createdAt)}
+                              </p>
+                            </div>
+                            <p className="mt-1.5 mb-0 text-sm leading-6 break-words whitespace-pre-wrap text-zinc-700 dark:text-zinc-300">
+                              {reply.content}
                             </p>
                           </div>
-                          <p className="mt-1.5 mb-0 text-sm leading-6 break-words whitespace-pre-wrap text-zinc-700 dark:text-zinc-300">
-                            {reply.content}
-                          </p>
+
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setDeleteTarget((current) =>
+                                current === reply.id ? null : reply.id,
+                              );
+                              setDeletePassword("");
+                              setMessage("");
+                            }}
+                            aria-expanded={deleteTarget === reply.id}
+                            className="hover:text-primary shrink-0 px-1 py-0.5 text-xs text-zinc-400 transition dark:text-zinc-500">
+                            Delete
+                          </button>
                         </div>
+
+                        {deleteTarget === reply.id && (
+                          <div className="mt-2 flex flex-col gap-2 rounded-xl bg-zinc-100 p-3 sm:flex-row dark:bg-zinc-800/70">
+                            <input
+                              type="password"
+                              minLength={4}
+                              maxLength={72}
+                              autoFocus
+                              autoComplete="current-password"
+                              value={deletePassword}
+                              onChange={(event) => setDeletePassword(event.target.value)}
+                              onKeyDown={(event) => {
+                                if (event.key === "Enter") void deleteComment(reply.id, comment.id);
+                              }}
+                              className={inputClassName}
+                              placeholder="Owner password"
+                              aria-label="Owner password"
+                            />
+                            <button
+                              type="button"
+                              disabled={isDeleting || deletePassword.length < 4}
+                              onClick={() => void deleteComment(reply.id, comment.id)}
+                              className="rounded-xl bg-zinc-900 px-3 py-2 text-sm font-medium whitespace-nowrap text-white transition hover:bg-zinc-700 disabled:opacity-50 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-white">
+                              {isDeleting ? "Deleting…" : "Confirm delete"}
+                            </button>
+                          </div>
+                        )}
                       </li>
                     ))}
                   </ol>

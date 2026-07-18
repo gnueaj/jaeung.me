@@ -44,7 +44,10 @@ export type UseMDXComponents<
 };
 
 const createHeading = (Tag: `h${2 | 3 | 4 | 5 | 6}`): FC<ComponentProps<typeof Tag>> =>
-  function HeadingLink({ children, id, className, ...props }) {
+  // No permalink anchor: the sidebar nav already jumps between sections and
+  // rewrites the hash, so the hover "#" was redundant. `id` must stay — the nav
+  // links to it and the scroll-spy resolves sections with getElementById.
+  function Heading({ children, id, className, ...props }) {
     return (
       <Tag
         id={id}
@@ -56,13 +59,6 @@ const createHeading = (Tag: `h${2 | 3 | 4 | 5 | 6}`): FC<ComponentProps<typeof T
         }
         {...props}>
         {children}
-        {id && (
-          <a
-            href={`#${id}`}
-            className="not-prose subheading-anchor"
-            aria-label="Permalink for this section"
-          />
-        )}
       </Tag>
     );
   };

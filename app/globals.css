@@ -3,8 +3,8 @@
 @custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 
 @theme {
-  --font-display: var(--font-open-sans), sans-serif;
-  --font-sans: var(--font-open-sans), sans-serif;
+  --font-display: var(--font-open-sans), var(--font-noto-sans-kr), sans-serif;
+  --font-sans: var(--font-open-sans), var(--font-noto-sans-kr), sans-serif;
 }
 
 [data-theme="light"] {
@@ -113,7 +113,7 @@ div.nextra-code {
   background-color: var(--color-primary);
 }
 
-@keyframes me-project-cta-pulse {
+@keyframes me-nav-cta-pulse {
   0%,
   100% {
     transform: translateY(0) scale(1);
@@ -133,12 +133,12 @@ div.nextra-code {
 
 /* `color` is only set on the middle keyframes, so it interpolates from — and
    settles back to — the tab's normal colour once the pulse ends. */
-.menu .menu-item > a.me-project-cta {
-  animation: me-project-cta-pulse 1.35s ease-in-out 2;
+.menu .menu-item > a.me-nav-cta {
+  animation: me-nav-cta-pulse 1.35s ease-in-out 2;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .menu .menu-item > a.me-project-cta {
+  .menu .menu-item > a.me-nav-cta {
     animation: none;
     /* No motion available, so hold a static cue instead of flashing nothing. */
     color: var(--color-primary);

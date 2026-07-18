@@ -37,6 +37,7 @@ publications:
     url:
       pdf: https://ieeexplore.ieee.org/document/11364307
       git: https://github.com/gnueaj/Machine-Unlearning-Comparator
+      video: https://www.youtube.com/watch?v=yAyAYp2msDk
 
   - id: bavisitter
     title: "Bavisitter: Integrating Design Guidelines into Large Language Models for Visualization Authoring"

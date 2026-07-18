@@ -2,7 +2,7 @@ import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 
 import "katex/dist/katex.min.css";
-import { Open_Sans } from "next/font/google";
+import { Noto_Sans_KR, Open_Sans } from "next/font/google";
 import "./globals.css";
 
 import { GoogleAnalytics } from "@next/third-parties/google";
@@ -24,11 +24,23 @@ const openSans = Open_Sans({
   variable: "--font-open-sans",
 });
 
+// Open Sans has no Hangul, so Korean text would otherwise fall back to whatever
+// gothic the OS ships. Listed after Open Sans in the stack, this only ever picks
+// up the glyphs Open Sans is missing.
+const notoSansKr = Noto_Sans_KR({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-noto-sans-kr",
+});
+
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const sections = data.sections().sections;
   const meta = data.meta();
   return (
-    <html lang="en" suppressHydrationWarning className={openSans.className}>
+    <html
+      lang="en"
+      suppressHydrationWarning
+      className={`${openSans.variable} ${notoSansKr.variable} font-sans`}>
       <body className="flex h-fit max-w-7xl flex-col gap-4 p-0 md:flex-row md:px-8 md:py-4">
         <ThemeProvider
           attribute={["data-theme", "class"]}
@@ -41,17 +53,17 @@ export default async function RootLayout({ children }: { children: React.ReactNo
               <Image
                 src={"/profilepic.jpg"}
                 alt="Profile Picture"
-                className="mx-auto h-[150px] w-[120px] rounded-2xl object-cover md:aspect-[4/5] md:h-auto md:w-full"
+                className="mx-auto h-[150px] w-[120px] rounded-2xl object-cover md:aspect-[4/5] md:h-auto md:w-[86%]"
                 width={1000}
                 height={1250}
                 priority
               />
               <div className="flex w-full flex-col overflow-hidden overflow-x-hidden md:items-center">
                 <p className="mb-2 truncate text-lg font-semibold">{meta.name}</p>
-                <p className="mb-1 truncate text-xs text-zinc-500 dark:text-zinc-400">
+                <p className="mb-1 text-xs text-zinc-500 md:text-center dark:text-zinc-400">
                   {meta.position}
                 </p>
-                <p className="truncate text-xs text-zinc-500 dark:text-zinc-400">
+                <p className="text-xs text-zinc-500 md:text-center dark:text-zinc-400">
                   {meta.affiliation}
                 </p>
                 <ContactButtons className={"mt-3 flex w-full gap-2 md:justify-center"} />

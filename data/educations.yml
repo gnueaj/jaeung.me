@@ -7,17 +7,9 @@ educations:
     to: "2026.02"
     location: Suwon, Korea
     description: >
-      **GPA:** 4.43/4.5
-
-      **Interactive Data Computing Lab (IDCLab)**
+      **GPA:** 4.43/4.5 · Graduated early
 
       - Advisor: Prof. Jaemin Jo
-
-      - Graduated early
-
-      - Thesis: *Unlearning Comparator: A Visual Analytics System for Comparative Evaluation of Machine Unlearning Methods*
-
-      - Teaching Assistant: Fundamentals of Machine Learning (2024 Fall, 2025 Spring, 2025 Fall). [Course materials](https://github.com/gnueaj/machine-learning-exams-SKKU)
 
   - id: skku-bachelors
     name: >
@@ -29,6 +21,6 @@ educations:
     description: >
       **Overall GPA:** 4.32/4.5 · **Major GPA:** 4.4/4.5
 
-      - Ranked 1st in the cohort
+      - Summa Cum Laude, **Ranked 1st** in the cohort
 
       - Military service in the Republic of Korea Army (July 2020–January 2022)

@@ -4,9 +4,9 @@ sections:
     shortTitle: About
     type: main
 
-  - key: career
-    title: Career
-    shortTitle: Career
+  - key: experience
+    title: Experience
+    shortTitle: Exp
     type: main
 
   - key: educations
@@ -27,6 +27,11 @@ sections:
   - key: projects
     title: Project Gallery
     shortTitle: Project
+    type: page
+
+  - key: guestbook
+    title: Guestbook
+    shortTitle: Guest
     type: page
 
 # Blog remains hidden until its content is ready.

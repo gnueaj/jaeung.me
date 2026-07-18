@@ -14,6 +14,9 @@ const USER_TAKEOVER_EVENTS = ["wheel", "touchstart", "keydown"] as const;
 // Empty this set once /projects holds Jaeung's own work.
 const LOCKED_PAGE_KEYS = new Set(["projects"]);
 
+// The tab that pulses once the visitor reaches the bottom of the home page.
+const CTA_PAGE_KEY = "guestbook";
+
 function useSectionRefs(sections: Section[]) {
   const sectionRefs = useRef<HTMLElement[]>([]);
 
@@ -77,12 +80,6 @@ export default function Navigation({ sections }: { sections: Section[] }) {
         }
       }
 
-      // The last section's heading can sit below the activation line even when
-      // the page is scrolled as far as it goes, which left it impossible to
-      // highlight. Once we're at the bottom, it *is* the current section.
-      const lastSection = sectionRefs.current.at(-1);
-      if (reachedBottom && lastSection) nextSection = lastSection.id;
-
       setHash((current) => (current === nextSection ? current : nextSection));
     };
 
@@ -115,9 +112,9 @@ export default function Navigation({ sections }: { sections: Section[] }) {
     // to false, kills the pulse, and jitters as the visitor scrolls down again.
     if (list.scrollWidth <= list.clientWidth) return;
 
-    const link = Array.from(
-      list.querySelectorAll<HTMLElement>('[data-project-gallery="true"]'),
-    ).find((el) => el.offsetParent !== null);
+    const link = Array.from(list.querySelectorAll<HTMLElement>('[data-nav-cta="true"]')).find(
+      (el) => el.offsetParent !== null,
+    );
     if (!link) return;
 
     // Centre it by moving the list's own scroll offset, never the page.
@@ -254,13 +251,13 @@ export default function Navigation({ sections }: { sections: Section[] }) {
                   md={section.title}
                   prefetch={!isLocked}
                   aria-disabled={isLocked || undefined}
-                  data-project-gallery={section.key === "projects" ? "true" : undefined}
+                  data-nav-cta={section.key === CTA_PAGE_KEY ? "true" : undefined}
                   aria-current={activated === section.key ? "page" : undefined}
                   className={clsx(
                     "w-[64px] rounded-lg text-center text-xs md:w-full md:text-start md:text-base",
                     activated === section.key ? "me-highlight font-bold" : "",
-                    pathname === "/" && isAtPageBottom && section.key === "projects"
-                      ? "me-project-cta"
+                    pathname === "/" && isAtPageBottom && section.key === CTA_PAGE_KEY
+                      ? "me-nav-cta"
                       : "",
                   )}
                 />

@@ -78,6 +78,10 @@ const URL_FULLNAME = {
   video: "Video",
 };
 
+// Fixed display order, so it no longer depends on the key order each entry
+// happens to use in `data/publications.yml`.
+const URL_ORDER = ["web", "video", "git", "pdf"] as const;
+
 export default async function PublicationItem(props: Publication) {
   const { title, authors, url, venue } = props;
 
@@ -89,17 +93,16 @@ export default async function PublicationItem(props: Publication) {
         <p className="not-prose text-sm text-zinc-500 dark:text-zinc-400">{venue}</p>
 
         <div className="mt-2 flex flex-wrap gap-2">
-          {Object.entries(url).map(
-            ([key, value]) =>
+          {URL_ORDER.map((key) => {
+            const value = url[key];
+            return (
               value && (
-                <PublicationButton
-                  key={key}
-                  href={value}
-                  icon={URL_ICON[key as keyof typeof URL_ICON]}>
-                  {URL_FULLNAME[key as keyof typeof URL_FULLNAME]}
+                <PublicationButton key={key} href={value} icon={URL_ICON[key]}>
+                  {URL_FULLNAME[key]}
                 </PublicationButton>
-              ),
-          )}
+              )
+            );
+          })}
         </div>
       </div>
     </li>

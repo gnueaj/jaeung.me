@@ -10,6 +10,20 @@ career:
       Designing and evaluating next-generation on-device architectures for
       embedding and vision-language models.
 
+  - id: skku-research-assistant
+    name: >
+      [Sungkyunkwan University](https://www.skku.edu/eng/)
+    title: Research Assistant @ [Interactive Data Computing Lab](https://idclab.skku.edu)
+    from: "2024.09"
+    to: "2026.02"
+    location: Suwon, Korea
+    description: >
+      Advisor: Prof. Jaemin Jo
+
+      - Researched machine unlearning evaluation through visual analytics.
+
+      - Teaching Assistant: Fundamentals of Machine Learning (2024 Fall, 2025 Spring, 2025 Fall). [Course materials](https://github.com/gnueaj/machine-learning-exams-SKKU)
+
   - id: deep-daiv
     name: >
       [deep daiv.](https://www.instagram.com/deep.daiv/)
@@ -20,16 +34,26 @@ career:
       Mentored projects in explainable AI (XAI) and computer vision.<br />
       Reviewed AI-related content and newsletters before publication.
 
+  - id: skku-idclab-undergraduate-researcher
+    name: >
+      [Sungkyunkwan University](https://www.skku.edu/eng/)
+    title: Undergraduate Researcher @ [Interactive Data Computing Lab](https://idclab.skku.edu)
+    from: "2024.01"
+    to: "2024.08"
+    location: Suwon, Korea
+    description: >
+      Advisor: Prof. Jaemin Jo
+
+      - Contributed to the [Bavisitter](https://github.com/jiwnchoi/bavisitter) research project.
+
   - id: skku-undergraduate-researcher
     name: >
       [Sungkyunkwan University](https://www.skku.edu/eng/)
-    title: Undergraduate Researcher, Computer Science
+    title: Undergraduate Researcher @ VSCLab (now [V-Lab](https://v-laboratory.github.io/) at Yonsei University)
     from: "2023.07"
     to: "2023.12"
     location: Suwon, Korea
     description: >
-      **VSCLab** (now V-Lab at Yonsei University)
-
-      - Advisor: Prof. Eunbyung Park
+      Advisor: Prof. Eunbyung Park
 
       - Project: [Satellite Image Building Area Segmentation](https://github.com/gnueaj/Satellite-Image-Building-Area-Segmentation)

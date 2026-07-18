@@ -82,7 +82,7 @@ export async function GET(request: NextRequest) {
     const to = from + COMMENTS_PAGE_SIZE - 1;
     const database = getCommentsDatabase();
     const { data, error, count } = await database
-      .from("playground_comments")
+      .from("guestbook_comments")
       .select("id,nickname,emoji,content,created_at", { count: "exact" })
       .is("deleted_at", null)
       .order("created_at", { ascending: false })
@@ -122,7 +122,7 @@ export async function POST(request: NextRequest) {
     const database = getCommentsDatabase();
     const passwordHash = await hashCommentPassword(input.password);
     const { data, error } = await database
-      .from("playground_comments")
+      .from("guestbook_comments")
       .insert({
         nickname: input.nickname,
         emoji: input.emoji,
@@ -155,7 +155,7 @@ export async function DELETE(request: NextRequest) {
 
     const database = getCommentsDatabase();
     const { data, error: readError } = await database
-      .from("playground_comments")
+      .from("guestbook_comments")
       .select("id,nickname,emoji,content,created_at,password_hash")
       .eq("id", id)
       .is("deleted_at", null)
@@ -172,7 +172,7 @@ export async function DELETE(request: NextRequest) {
     }
 
     const { error: deleteError } = await database
-      .from("playground_comments")
+      .from("guestbook_comments")
       .update({ deleted_at: new Date().toISOString() })
       .eq("id", id)
       .is("deleted_at", null);

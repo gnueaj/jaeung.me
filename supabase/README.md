@@ -1,4 +1,4 @@
-# Playground guestbook setup
+# Guestbook setup
 
 The guestbook uses Supabase only as a private server-side database. Visitors never receive a
 Supabase key and can delete only their own notes with the password they chose when posting.
@@ -7,7 +7,7 @@ Supabase key and can delete only their own notes with the password they chose wh
 
 1. Create a Supabase project.
 2. Open **SQL Editor** in the Supabase Dashboard.
-3. Paste and run [`playground_comments.sql`](./playground_comments.sql).
+3. Paste and run [`guestbook_comments.sql`](./guestbook_comments.sql).
 
 ## 2. Configure local development
 
@@ -33,7 +33,7 @@ delete form. Then redeploy the site.
 
 ## Moderation
 
-Open **Supabase Dashboard → Table Editor → playground_comments**. To hide a note while keeping
+Open **Supabase Dashboard → Table Editor → guestbook_comments**. To hide a note while keeping
 it recoverable, set its `deleted_at` value to the current time. To remove it permanently, delete
 the row. Alternatively, enter `GUESTBOOK_ADMIN_PASSWORD` in any note's regular deletion-password
 field. The UI does not reveal that this owner password exists, and the public guestbook never

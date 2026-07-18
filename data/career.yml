@@ -7,13 +7,29 @@ career:
     to: Present
     location: Seoul, Korea
     description: >
-      Research Engineer at the AI Center of Samsung Research.
+      Designing and evaluating next-generation on-device architectures for
+      embedding and vision-language models.
 
   - id: deep-daiv
     name: >
       [deep daiv.](https://www.instagram.com/deep.daiv/)
-    title: Project Mentor
+    title: Project Mentor & Content Reviewer
     from: "2024.02"
     to: "2025.01"
     description: >
-      Mentored projects in explainable AI (XAI) and computer vision.
+      Mentored projects in explainable AI (XAI) and computer vision.<br />
+      Reviewed AI-related content and newsletters before publication.
+
+  - id: skku-undergraduate-researcher
+    name: >
+      [Sungkyunkwan University](https://www.skku.edu/eng/)
+    title: Undergraduate Researcher, Computer Science
+    from: "2023.07"
+    to: "2023.12"
+    location: Suwon, Korea
+    description: >
+      **VSCLab** (now V-Lab at Yonsei University)
+
+      - Advisor: Prof. Eunbyung Park
+
+      - Project: [Satellite Image Building Area Segmentation](https://github.com/gnueaj/Satellite-Image-Building-Area-Segmentation)

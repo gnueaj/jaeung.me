@@ -32,8 +32,8 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       <body className="flex h-fit max-w-7xl flex-col gap-4 p-0 md:flex-row md:px-8 md:py-4">
         <ThemeProvider
           attribute={["data-theme", "class"]}
-          defaultTheme="system"
-          enableSystem
+          defaultTheme="dark"
+          enableSystem={false}
           disableTransitionOnChange>
           <div className="min-h-2xs max-h-2xs hidden max-w-2xs min-w-2xs md:block" />
           <aside className="sticky top-[-160px] z-3 -mb-4 flex w-full flex-col gap-2 md:fixed md:top-4 md:h-[calc(100vh-2rem)] md:max-w-2xs md:min-w-2xs md:gap-2">
@@ -71,7 +71,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           </aside>
           <main className="w-full grow md:-mr-4">
             <article
-              className="me-prose me-card drawer-content w-full flex-col p-16"
+              className="me-prose me-card drawer-content w-full flex-col"
               dir="ltr"
               data-pagefind-body>
               {children}

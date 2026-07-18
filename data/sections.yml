@@ -28,9 +28,8 @@ sections:
     title: Project Gallery
     shortTitle: Project
     type: page
-# Blog is hidden from the nav for now. The content/blog/** template is kept
-# intact — re-add the entry below to bring the tab back.
-#
+
+# Blog remains hidden until its content is ready.
 #  - key: blog
 #    title: Blog
 #    shortTitle: Blog

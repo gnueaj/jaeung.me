@@ -6,6 +6,14 @@ import { usePathname, useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Responsive from "./Responsive";
 
+// Anything here means the visitor grabbed the scroll back from us.
+const USER_TAKEOVER_EVENTS = ["wheel", "touchstart", "keydown"] as const;
+
+// Page tabs whose route still holds the original template author's content.
+// They render and animate exactly like a normal tab, but must not navigate yet.
+// Empty this set once /projects holds Jaeung's own work.
+const LOCKED_PAGE_KEYS = new Set(["projects"]);
+
 function useSectionRefs(sections: Section[]) {
   const sectionRefs = useRef<HTMLElement[]>([]);
 
@@ -24,6 +32,8 @@ export default function Navigation({ sections }: { sections: Section[] }) {
   const router = useRouter();
   const pathname = usePathname();
   const [hash, setHash] = useState<string>("");
+  const [isAtPageBottom, setIsAtPageBottom] = useState(false);
+  const navigationListRef = useRef<HTMLUListElement>(null);
 
   const activated = useMemo(() => {
     if (pathname === "/") {
@@ -44,6 +54,15 @@ export default function Navigation({ sections }: { sections: Section[] }) {
     let animationFrame: number | null = null;
     const updateActiveSection = () => {
       animationFrame = null;
+      // Guard on "is there anything to scroll" — otherwise a page shorter than
+      // the viewport counts as "at the bottom" the instant it loads, and the
+      // Project Gallery CTA fires with the visitor never having scrolled.
+      const doc = document.documentElement;
+      const isScrollable = doc.scrollHeight > window.innerHeight + 8;
+      const reachedBottom =
+        isScrollable && window.innerHeight + window.scrollY >= doc.scrollHeight - 80;
+      setIsAtPageBottom((current) => (current === reachedBottom ? current : reachedBottom));
+
       if (isProgrammaticScroll.current) return;
 
       const isMd = window.matchMedia("(min-width: 768px)").matches;
@@ -57,6 +76,12 @@ export default function Navigation({ sections }: { sections: Section[] }) {
           break;
         }
       }
+
+      // The last section's heading can sit below the activation line even when
+      // the page is scrolled as far as it goes, which left it impossible to
+      // highlight. Once we're at the bottom, it *is* the current section.
+      const lastSection = sectionRefs.current.at(-1);
+      if (reachedBottom && lastSection) nextSection = lastSection.id;
 
       setHash((current) => (current === nextSection ? current : nextSection));
     };
@@ -78,15 +103,56 @@ export default function Navigation({ sections }: { sections: Section[] }) {
     };
   }, [pathname, sectionRefs]);
 
+  useEffect(() => {
+    if (!isAtPageBottom || pathname !== "/") return;
+
+    const list = navigationListRef.current;
+    if (!list) return;
+
+    // Only the mobile nav scrolls sideways. Bail on desktop: the sidebar is
+    // position:fixed, so scrollIntoView() there scrolls the *window* to reveal
+    // the link — which drags the page off the bottom, flips isAtPageBottom back
+    // to false, kills the pulse, and jitters as the visitor scrolls down again.
+    if (list.scrollWidth <= list.clientWidth) return;
+
+    const link = Array.from(
+      list.querySelectorAll<HTMLElement>('[data-project-gallery="true"]'),
+    ).find((el) => el.offsetParent !== null);
+    if (!link) return;
+
+    // Centre it by moving the list's own scroll offset, never the page.
+    const left = link.offsetLeft + link.offsetWidth / 2 - list.clientWidth / 2;
+    list.scrollTo({ left: Math.max(0, left), behavior: "smooth" });
+  }, [isAtPageBottom, pathname]);
+
+  // A fixed timeout was wrong in both directions: it unlocked mid-flight on long
+  // jumps (so the highlight snapped back), and it kept ignoring the visitor for
+  // the rest of the window on short ones. Unlock when the smooth scroll actually
+  // settles, or the moment the visitor scrolls themselves.
   const releaseProgrammaticScroll = useCallback(() => {
     if (programmaticScrollTimeoutRef.current) {
       clearTimeout(programmaticScrollTimeoutRef.current);
+      programmaticScrollTimeoutRef.current = null;
     }
 
-    programmaticScrollTimeoutRef.current = setTimeout(() => {
+    const finish = () => {
+      if (programmaticScrollTimeoutRef.current) {
+        clearTimeout(programmaticScrollTimeoutRef.current);
+        programmaticScrollTimeoutRef.current = null;
+      }
+      window.removeEventListener("scrollend", finish);
+      USER_TAKEOVER_EVENTS.forEach((event) => window.removeEventListener(event, finish));
+
       isProgrammaticScroll.current = false;
       window.dispatchEvent(new Event("scroll"));
-    }, 800);
+    };
+
+    window.addEventListener("scrollend", finish);
+    USER_TAKEOVER_EVENTS.forEach((event) =>
+      window.addEventListener(event, finish, { passive: true }),
+    );
+    // Safety net for browsers without `scrollend`.
+    programmaticScrollTimeoutRef.current = setTimeout(finish, 1200);
   }, []);
 
   const handleMainSectionClick = (sectionKey: string) => {
@@ -126,7 +192,9 @@ export default function Navigation({ sections }: { sections: Section[] }) {
 
   return (
     <nav aria-label="Main navigation" className="not-prose flex w-full md:flex-col">
-      <ul className="menu flex w-full flex-row flex-nowrap justify-between gap-1 overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] md:flex-col [&::-webkit-scrollbar]:hidden">
+      <ul
+        ref={navigationListRef}
+        className="menu flex w-full flex-row flex-nowrap justify-between gap-1 overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] md:flex-col [&::-webkit-scrollbar]:hidden">
         {sections
           .filter((s) => s.type === "main")
           .map((section) => (
@@ -163,30 +231,42 @@ export default function Navigation({ sections }: { sections: Section[] }) {
             About
           </button>
         </li> */}
-        <div className="divider divider-horizontal md:divider-vertical divider-primary mx-1 flex-shrink-0 md:my-1" />
+        {sections.some((s) => s.type === "page") && (
+          <div className="divider divider-horizontal md:divider-vertical divider-primary mx-1 flex-shrink-0 md:my-1" />
+        )}
         {sections
           .filter((s) => s.type === "page")
-          .map((section) => (
-            <li key={section.key} className="menu-item flex-shrink-0">
-              <Responsive
-                component={Link}
-                onClick={(e) => {
-                  e.preventDefault();
-                  router.push(`/${section.key}`, { scroll: true });
-                }}
-                href={`/${section.key}`}
-                target="_self"
-                base={section.shortTitle}
-                md={section.title}
-                prefetch={true}
-                aria-current={activated === section.key ? "page" : undefined}
-                className={clsx(
-                  "w-[64px] rounded-lg text-center text-xs md:w-full md:text-start md:text-base",
-                  activated === section.key ? "me-highlight font-bold" : "",
-                )}
-              />
-            </li>
-          ))}
+          .map((section) => {
+            const isLocked = LOCKED_PAGE_KEYS.has(section.key);
+
+            return (
+              <li key={section.key} className="menu-item flex-shrink-0">
+                <Responsive
+                  component={Link}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    if (isLocked) return;
+                    router.push(`/${section.key}`, { scroll: true });
+                  }}
+                  href={isLocked ? "#" : `/${section.key}`}
+                  target="_self"
+                  base={section.shortTitle}
+                  md={section.title}
+                  prefetch={!isLocked}
+                  aria-disabled={isLocked || undefined}
+                  data-project-gallery={section.key === "projects" ? "true" : undefined}
+                  aria-current={activated === section.key ? "page" : undefined}
+                  className={clsx(
+                    "w-[64px] rounded-lg text-center text-xs md:w-full md:text-start md:text-base",
+                    activated === section.key ? "me-highlight font-bold" : "",
+                    pathname === "/" && isAtPageBottom && section.key === "projects"
+                      ? "me-project-cta"
+                      : "",
+                  )}
+                />
+              </li>
+            );
+          })}
       </ul>
     </nav>
   );

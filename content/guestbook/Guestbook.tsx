@@ -1,7 +1,7 @@
 "use client";
 
 import { GUESTBOOK_EMOJI_SUGGESTIONS, normalizeGuestbookEmoji } from "@/lib/guestbook-emoji";
-import { FormEvent, useEffect, useRef, useState } from "react";
+import { FormEvent, useEffect, useRef, useState, useSyncExternalStore } from "react";
 
 type GuestbookComment = {
   id: string;
@@ -9,6 +9,8 @@ type GuestbookComment = {
   emoji: string | null;
   content: string;
   createdAt: string;
+  isAuthorReply: boolean;
+  replies: GuestbookComment[];
 };
 
 type GuestbookPagination = {
@@ -19,6 +21,10 @@ type GuestbookPagination = {
 };
 
 const COMMENTS_PAGE_SIZE = 10;
+
+// The owner flag comes from the URL and cannot change without a reload, so the
+// store never has to notify anyone.
+const subscribeToNothing = () => () => {};
 
 const inputClassName =
   "w-full rounded-xl border border-zinc-200 bg-white px-3 py-2 text-sm text-zinc-900 outline-none transition placeholder:text-zinc-400 focus:border-primary focus:ring-2 focus:ring-primary/15 dark:border-zinc-700 dark:bg-zinc-950 dark:text-zinc-100 dark:placeholder:text-zinc-500";
@@ -53,7 +59,24 @@ export default function Guestbook() {
   const [totalComments, setTotalComments] = useState(0);
   const [totalPages, setTotalPages] = useState(1);
   const [reloadKey, setReloadKey] = useState(0);
+  const [replyTarget, setReplyTarget] = useState<string | null>(null);
+  const [replyContent, setReplyContent] = useState("");
+  const [replyPassword, setReplyPassword] = useState("");
+  const [isReplying, setIsReplying] = useState(false);
   const emojiRef = useRef<HTMLDivElement>(null);
+
+  // `?owner=1` only reveals the reply controls; the server still demands the
+  // admin password, so this is a convenience rather than a security boundary.
+  // Keeping it out of the default view means visitors never see a button that
+  // isn't theirs to use.
+  //
+  // Read through useSyncExternalStore rather than an effect: the server snapshot
+  // is false, so the markup matches on hydration and there is no state write.
+  const isOwnerMode = useSyncExternalStore(
+    subscribeToNothing,
+    () => new URLSearchParams(window.location.search).get("owner") === "1",
+    () => false,
+  );
 
   // Dismiss the badge picker the way any popover should: click away or Escape.
   useEffect(() => {
@@ -153,6 +176,38 @@ export default function Guestbook() {
     }
   }
 
+  async function submitReply(parentId: string) {
+    setIsReplying(true);
+    setMessage("");
+
+    try {
+      const response = await fetch("/api/guestbook/comments", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ parentId, content: replyContent, password: replyPassword }),
+      });
+
+      if (!response.ok) throw new Error(await responseError(response));
+
+      const payload = (await response.json()) as { comment: GuestbookComment };
+      setComments((current) =>
+        current.map((comment) =>
+          comment.id === parentId
+            ? { ...comment, replies: [...comment.replies, payload.comment] }
+            : comment,
+        ),
+      );
+
+      setReplyTarget(null);
+      setReplyContent("");
+      // Deliberately keep the password so a run of replies needs it typed once.
+    } catch (error) {
+      setMessage(error instanceof Error ? error.message : "Could not post the reply.");
+    } finally {
+      setIsReplying(false);
+    }
+  }
+
   async function deleteComment(id: string) {
     setIsDeleting(true);
     setMessage("");
@@ -242,18 +297,98 @@ export default function Guestbook() {
                     </p>
                   </div>
 
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setDeleteTarget((current) => (current === comment.id ? null : comment.id));
-                      setDeletePassword("");
-                      setMessage("");
-                    }}
-                    aria-expanded={deleteTarget === comment.id}
-                    className="hover:text-primary shrink-0 px-1 py-0.5 text-xs text-zinc-400 transition dark:text-zinc-500">
-                    Delete
-                  </button>
+                  <div className="flex shrink-0 items-center gap-1">
+                    {isOwnerMode && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setReplyTarget((current) => (current === comment.id ? null : comment.id));
+                          setReplyContent("");
+                          setMessage("");
+                        }}
+                        aria-expanded={replyTarget === comment.id}
+                        className="hover:text-primary px-1 py-0.5 text-xs text-zinc-400 transition dark:text-zinc-500">
+                        Reply
+                      </button>
+                    )}
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setDeleteTarget((current) => (current === comment.id ? null : comment.id));
+                        setDeletePassword("");
+                        setMessage("");
+                      }}
+                      aria-expanded={deleteTarget === comment.id}
+                      className="hover:text-primary px-1 py-0.5 text-xs text-zinc-400 transition dark:text-zinc-500">
+                      Delete
+                    </button>
+                  </div>
                 </div>
+
+                {comment.replies.length > 0 && (
+                  <ol className="m-0 mt-3 flex list-none flex-col gap-3 border-l-2 border-zinc-200 p-0 pl-4 dark:border-zinc-800">
+                    {comment.replies.map((reply) => (
+                      <li key={reply.id} className="flex items-start gap-3">
+                        <span
+                          aria-hidden="true"
+                          className="bg-primary/10 flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-base">
+                          {reply.emoji ?? "👾"}
+                        </span>
+                        <div className="min-w-0 flex-1">
+                          <div className="flex items-baseline gap-2">
+                            <p className="m-0 truncate text-sm font-semibold text-zinc-900 dark:text-zinc-100">
+                              {reply.nickname}
+                            </p>
+                            <span className="bg-primary/15 text-primary m-0 shrink-0 rounded-full px-1.5 py-0.5 text-[10px] font-medium">
+                              Author
+                            </span>
+                            <p className="m-0 shrink-0 text-xs text-zinc-400 dark:text-zinc-500">
+                              {formatCommentDate(reply.createdAt)}
+                            </p>
+                          </div>
+                          <p className="mt-1.5 mb-0 text-sm leading-6 break-words whitespace-pre-wrap text-zinc-700 dark:text-zinc-300">
+                            {reply.content}
+                          </p>
+                        </div>
+                      </li>
+                    ))}
+                  </ol>
+                )}
+
+                {replyTarget === comment.id && (
+                  <div className="mt-3 flex flex-col gap-2 rounded-xl bg-zinc-100 p-3 dark:bg-zinc-800/70">
+                    <textarea
+                      rows={2}
+                      maxLength={500}
+                      autoFocus
+                      value={replyContent}
+                      onChange={(event) => setReplyContent(event.target.value)}
+                      className={`${inputClassName} resize-y`}
+                      placeholder="Write a reply…"
+                      aria-label="Reply"
+                    />
+                    <div className="flex flex-col gap-2 sm:flex-row">
+                      <input
+                        type="password"
+                        minLength={4}
+                        maxLength={72}
+                        autoComplete="current-password"
+                        value={replyPassword}
+                        onChange={(event) => setReplyPassword(event.target.value)}
+                        className={inputClassName}
+                        placeholder="Owner password"
+                        aria-label="Owner password"
+                      />
+                      <button
+                        type="button"
+                        disabled={isReplying || !replyContent.trim() || replyPassword.length < 4}
+                        onClick={() => void submitReply(comment.id)}
+                        className="rounded-xl bg-zinc-900 px-3 py-2 text-sm font-medium whitespace-nowrap text-white transition hover:bg-zinc-700 disabled:opacity-50 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-white">
+                        {isReplying ? "Posting…" : "Post reply"}
+                      </button>
+                    </div>
+                  </div>
+                )}
 
                 {deleteTarget === comment.id && (
                   <div className="mt-3 flex flex-col gap-2 rounded-xl bg-zinc-100 p-3 sm:flex-row dark:bg-zinc-800/70">

@@ -31,6 +31,21 @@ Add the same two environment variables in **Vercel → Project Settings → Envi
 Variables**, plus `GUESTBOOK_ADMIN_PASSWORD` if you want owner moderation through the regular
 delete form. Then redeploy the site.
 
+## Replies
+
+Only the owner can reply. Open the guestbook with `?owner=1` (for example
+`https://jaeung.me/guestbook?owner=1`) to reveal a **Reply** button on each note, then enter
+`GUESTBOOK_ADMIN_PASSWORD` to post. The query flag only shows the button — the server checks the
+password on every reply, so the plain URL stays safe to share. Replies are one level deep and are
+posted under the site name from `data/meta.yml`, so nobody can post as the owner.
+
+## Rate limiting
+
+Posting is capped at 3 notes per 10 minutes per address. The check stores a salted SHA-256 hash of
+the IP in `ip_hash`, never the address itself, and runs before the password hash so a flood costs
+one indexed lookup rather than a key derivation. If the lookup itself fails the guestbook stays
+open rather than locking everyone out.
+
 ## Moderation
 
 Open **Supabase Dashboard → Table Editor → guestbook_comments**. To hide a note while keeping

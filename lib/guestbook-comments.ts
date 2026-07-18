@@ -43,6 +43,31 @@ export async function verifyCommentPassword(password: string, storedHash: string
   return timingSafeEqual(actual, expected);
 }
 
+/**
+ * Salted hash of the caller's IP. Storing the raw address would mean keeping
+ * personal data to solve a counting problem, and an unsalted hash of an IPv4
+ * address is trivially reversible — the whole space is only 2^32.
+ *
+ * Falls back to deriving the salt from the Supabase secret so rate limiting
+ * still works without extra configuration. Set GUESTBOOK_IP_SALT to rotate it
+ * independently.
+ */
+export function hashClientIp(request: Request) {
+  // Vercel appends the real client IP, so the last entry is the trustworthy one;
+  // earlier entries are caller-supplied and can be forged.
+  const forwarded = request.headers.get("x-forwarded-for");
+  const ip =
+    forwarded?.split(",").pop()?.trim() || request.headers.get("x-real-ip")?.trim() || "unknown";
+
+  const salt =
+    process.env.GUESTBOOK_IP_SALT ??
+    process.env.SUPABASE_SECRET_KEY ??
+    process.env.SUPABASE_SERVICE_ROLE_KEY ??
+    "";
+
+  return createHash("sha256").update(`guestbook:${salt}:${ip}`).digest("hex");
+}
+
 export function verifyGuestbookAdminPassword(password: string) {
   const adminPassword = process.env.GUESTBOOK_ADMIN_PASSWORD;
   if (!adminPassword) return false;

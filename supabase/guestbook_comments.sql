@@ -26,6 +26,12 @@ create table if not exists public.guestbook_comments (
   emoji text check (emoji is null or char_length(emoji) between 1 and 24),
   content varchar(500) not null check (char_length(content) between 1 and 500),
   password_hash text not null,
+  -- Salted hash of the poster's IP, used only to rate-limit. The raw address is
+  -- never stored, so this identifies repeat posters without keeping personal data.
+  ip_hash text,
+  -- Set only on the owner's replies. One level deep: the API refuses to reply to
+  -- a row that already has a parent.
+  parent_id uuid references public.guestbook_comments (id) on delete cascade,
   created_at timestamptz not null default now(),
   deleted_at timestamptz
 );
@@ -44,4 +50,22 @@ revoke all on table public.guestbook_comments from anon, authenticated;
 alter table public.guestbook_comments
   add column if not exists emoji text
   check (emoji is null or char_length(emoji) between 1 and 24);
+
+-- Migration for a table created before rate limiting and replies existed.
+alter table public.guestbook_comments
+  add column if not exists ip_hash text;
+
+alter table public.guestbook_comments
+  add column if not exists parent_id uuid
+  references public.guestbook_comments (id) on delete cascade;
+
+-- Serves the "how many posts from this address recently?" rate-limit lookup.
+create index if not exists guestbook_comments_rate_limit_idx
+  on public.guestbook_comments (ip_hash, created_at desc)
+  where ip_hash is not null;
+
+-- Serves the reply fetch for a page of top-level notes.
+create index if not exists guestbook_comments_parent_idx
+  on public.guestbook_comments (parent_id, created_at)
+  where deleted_at is null and parent_id is not null;
 

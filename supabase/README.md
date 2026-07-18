@@ -33,11 +33,9 @@ delete form. Then redeploy the site.
 
 ## Replies
 
-Only the owner can reply. Open the guestbook with `?owner=1` (for example
-`https://jaeung.me/guestbook?owner=1`) to reveal a **Reply** button on each note, then enter
-`GUESTBOOK_ADMIN_PASSWORD` to post. The query flag only shows the button — the server checks the
-password on every reply, so the plain URL stays safe to share. Replies are one level deep and are
-posted under the site name from `data/meta.yml`, so nobody can post as the owner.
+Only the owner can reply. Every note shows a **Reply** button, and posting one requires
+`GUESTBOOK_ADMIN_PASSWORD`; the server rejects anything else with a 403. Replies are one level
+deep and are posted under the site name from `data/meta.yml`, so nobody can post as the owner.
 
 ## Rate limiting
 

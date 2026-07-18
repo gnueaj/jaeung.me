@@ -1,7 +1,7 @@
 "use client";
 
 import { GUESTBOOK_EMOJI_SUGGESTIONS, normalizeGuestbookEmoji } from "@/lib/guestbook-emoji";
-import { FormEvent, useEffect, useRef, useState, useSyncExternalStore } from "react";
+import { FormEvent, useEffect, useRef, useState } from "react";
 
 type GuestbookComment = {
   id: string;
@@ -21,10 +21,6 @@ type GuestbookPagination = {
 };
 
 const COMMENTS_PAGE_SIZE = 10;
-
-// The owner flag comes from the URL and cannot change without a reload, so the
-// store never has to notify anyone.
-const subscribeToNothing = () => () => {};
 
 const inputClassName =
   "w-full rounded-xl border border-zinc-200 bg-white px-3 py-2 text-sm text-zinc-900 outline-none transition placeholder:text-zinc-400 focus:border-primary focus:ring-2 focus:ring-primary/15 dark:border-zinc-700 dark:bg-zinc-950 dark:text-zinc-100 dark:placeholder:text-zinc-500";
@@ -64,19 +60,6 @@ export default function Guestbook() {
   const [replyPassword, setReplyPassword] = useState("");
   const [isReplying, setIsReplying] = useState(false);
   const emojiRef = useRef<HTMLDivElement>(null);
-
-  // `?owner=1` only reveals the reply controls; the server still demands the
-  // admin password, so this is a convenience rather than a security boundary.
-  // Keeping it out of the default view means visitors never see a button that
-  // isn't theirs to use.
-  //
-  // Read through useSyncExternalStore rather than an effect: the server snapshot
-  // is false, so the markup matches on hydration and there is no state write.
-  const isOwnerMode = useSyncExternalStore(
-    subscribeToNothing,
-    () => new URLSearchParams(window.location.search).get("owner") === "1",
-    () => false,
-  );
 
   // Dismiss the badge picker the way any popover should: click away or Escape.
   useEffect(() => {
@@ -298,19 +281,19 @@ export default function Guestbook() {
                   </div>
 
                   <div className="flex shrink-0 items-center gap-1">
-                    {isOwnerMode && (
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setReplyTarget((current) => (current === comment.id ? null : comment.id));
-                          setReplyContent("");
-                          setMessage("");
-                        }}
-                        aria-expanded={replyTarget === comment.id}
-                        className="hover:text-primary px-1 py-0.5 text-xs text-zinc-400 transition dark:text-zinc-500">
-                        Reply
-                      </button>
-                    )}
+                    {/* Shown to everyone. The password check on the server is
+                        the real gate, so there is nothing to hide behind a flag. */}
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setReplyTarget((current) => (current === comment.id ? null : comment.id));
+                        setReplyContent("");
+                        setMessage("");
+                      }}
+                      aria-expanded={replyTarget === comment.id}
+                      className="hover:text-primary px-1 py-0.5 text-xs text-zinc-400 transition dark:text-zinc-500">
+                      Reply
+                    </button>
                     <button
                       type="button"
                       onClick={() => {

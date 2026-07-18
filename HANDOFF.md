@@ -11,25 +11,27 @@
 **이 레포는** Jiwon Choi의 개인 블로그(`jiwnchoi.me`)를 **Jaeung Lee의 사이트(`jaeung.me`)로 리브랜딩** 중인 프로젝트입니다.
 Next.js 16 + Nextra 4 기반이고 Vercel에 배포됩니다.
 
-| 단계                                                     | 상태                                    |
-| -------------------------------------------------------- | --------------------------------------- |
-| Git 연결 (`github.com/gnueaj/jaeung.me`)                 | ✅ 완료                                 |
-| **Phase 2 — 리팩토링** (아이덴티티 중앙화 + 빌드 안정화) | ✅ **완료**                             |
-| **Phase 3 — Vercel 배포**                                | ✅ 배포 성공 (`*.vercel.app` 동작 확인) |
-| Phase 3 — `jaeung.me` 도메인 연결 (Namecheap DNS)        | 🔄 진행/확인 필요 (§7)                  |
-| **Phase 1 — 콘텐츠 교체 (Jiwon → Jaeung)**               | ⬜ **다음에 할 일 (가장 중요)**         |
+| 단계                                                     | 상태                                      |
+| -------------------------------------------------------- | ----------------------------------------- |
+| Git 연결 (`github.com/gnueaj/jaeung.me`)                 | ✅ 완료                                   |
+| **Phase 2 — 리팩토링** (아이덴티티 중앙화 + 빌드 안정화) | ✅ **완료**                               |
+| **Phase 3 — Vercel 배포**                                | ✅ 배포 성공                              |
+| **Phase 3 — `jaeung.me` 도메인 연결 (Namecheap DNS)**    | ✅ **완료 — https://jaeung.me 서비스 중** |
+| **Phase 1 — 콘텐츠 교체 (Jiwon → Jaeung)**               | ⬜ **다음에 할 일 (가장 중요·시급)**      |
 
 **커밋 히스토리 (origin/main)**
 
 ```
-1ef0036  fix: import siteConfig in page.tsx metadata (Vercel build fix)   ← HEAD
+a15ec0f  docs: add HANDOFF.md for session continuity                       ← HEAD
+1ef0036  fix: import siteConfig in page.tsx metadata (Vercel build fix)
 ad9227a  build: pin pnpm@10.15.1 via packageManager for Vercel
 411c293  refactor: centralize site identity + stabilize build (Phase 2)
 77aa881  Initial commit: import jiwnchoi.me blog UI as base for jaeung.me  ← 원본 백업
 ```
 
-> ⚠️ **현재 사이트에 보이는 내용은 아직 Jiwon 님 것입니다.** (이름·자기소개·경력·프로젝트·블로그 글 전부)
-> Phase 1이 남은 이유가 이것이며, 도메인 연결 전에 끝내는 걸 권장합니다.
+> 🚨 **가장 시급한 일**: `https://jaeung.me`가 **이미 공개 서비스 중인데, 표시되는 내용은 아직 Jiwon 님 것**입니다
+> (이름·자기소개·경력·프로젝트·블로그 글 전부). 즉 **다른 사람의 이력이 내 도메인에 공개된 상태**이므로
+> **Phase 1 콘텐츠 교체(§5)를 최우선으로** 진행해야 합니다.
 
 ---
 
@@ -223,21 +225,21 @@ jaeung.me/
 
 ## 7. 도메인 연결 (`jaeung.me` @ Namecheap)
 
-**DNS 값의 출처 = Vercel**: Project → Settings → Domains → `jaeung.me` 추가하면 **입력할 레코드를 화면에 표시**해줍니다. 아래는 일반값이니 **실제로는 Vercel 화면 값**을 쓰세요.
+✅ **연결 완료 — `https://jaeung.me` 정상 서비스 중** (HTTP 200, `server: Vercel`, SSL/HSTS 자동 발급 확인).
 
-**Namecheap 절차**: Domain List → `jaeung.me` **Manage** → **Advanced DNS** 탭
+**실제 적용된 DNS 레코드** (Namecheap → Advanced DNS):
 
-1. ⚠️ 기본 파킹 레코드 **먼저 삭제** (`CNAME www → parkingpage.namecheap.com`, `URL Redirect`, 파킹 `A` 레코드) — 안 지우면 충돌
-2. ADD NEW RECORD로 추가:
+| Type         | Host  | Value                  | 비고                  |
+| ------------ | ----- | ---------------------- | --------------------- |
+| A Record     | `@`   | `216.198.79.1`         | Vercel이 지정한 값    |
+| CNAME Record | `www` | `cname.vercel-dns.com` | www → apex 리다이렉트 |
 
-| Type         | Host  | Value                  | TTL       |
-| ------------ | ----- | ---------------------- | --------- |
-| A Record     | `@`   | `76.76.21.21`          | Automatic |
-| CNAME Record | `www` | `cname.vercel-dns.com` | Automatic |
+> 📌 참고: Vercel의 A 레코드 IP는 계정/시점에 따라 다릅니다 (구 문서엔 `76.76.21.21`로 많이 나오지만
+> 여기선 `216.198.79.1`이 안내됨). **항상 Vercel Settings → Domains 화면에 표시된 값**을 사용하세요.
 
-3. 저장(초록 ✓) → 전파 수분~30분 → Vercel에 "Valid Configuration" → **SSL 자동 발급**
-
-> Nameserver를 Vercel로 바꾸는 방식도 있으나, 이메일 등 다른 DNS까지 넘어가므로 위 A+CNAME 방식이 안전합니다.
+**나중에 도메인을 다시 만질 일이 생기면**: Namecheap → Domain List → Manage → Advanced DNS.
+기본 파킹 레코드(`CNAME www → parkingpage.namecheap.com`, `URL Redirect`)가 있으면 충돌하므로 삭제해야 합니다.
+Nameserver를 Vercel로 위임하는 방식도 있으나, 이메일 등 다른 DNS까지 넘어가므로 현재의 A+CNAME 방식이 안전합니다.
 
 ---
 

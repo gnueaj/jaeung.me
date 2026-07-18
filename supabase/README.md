@@ -39,7 +39,7 @@ deep and are posted under the site name from `data/meta.yml`, so nobody can post
 
 ## Rate limiting
 
-Posting is capped at 3 notes per 10 minutes per address. The check stores a salted SHA-256 hash of
+Posting is capped at 3 notes per minute per address. The check stores a salted SHA-256 hash of
 the IP in `ip_hash`, never the address itself, and runs before the password hash so a flood costs
 one indexed lookup rather than a key derivation. If the lookup itself fails the guestbook stays
 open rather than locking everyone out.

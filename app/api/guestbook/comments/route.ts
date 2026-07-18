@@ -22,7 +22,7 @@ const COMMENTS_PAGE_SIZE = 10;
 // At most this many notes from one address per window. Generous for a person
 // signing a guestbook, useless for a script.
 const RATE_LIMIT_MAX_POSTS = 3;
-const RATE_LIMIT_WINDOW_MINUTES = 10;
+const RATE_LIMIT_WINDOW_MINUTES = 1;
 
 const AUTHOR_REPLY_EMOJI = "👾";
 

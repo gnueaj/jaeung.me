@@ -113,28 +113,26 @@ div.nextra-code {
   background-color: var(--color-primary);
 }
 
+/* One symmetric peak, so the rise and fall meet with nothing flat between them.
+   An earlier version peaked at 40% with a second bump at 70%, which left most
+   of the cycle sitting near rest and read as a pause between the two pulses. */
 @keyframes me-nav-cta-pulse {
   0%,
   100% {
     transform: translateY(0) scale(1);
     background-color: transparent;
   }
-  40% {
+  50% {
     transform: translateY(-2px) scale(1.02);
     background-color: color-mix(in oklab, var(--color-primary) 22%, transparent);
     color: var(--color-primary);
   }
-  70% {
-    transform: translateY(0) scale(1.01);
-    background-color: color-mix(in oklab, var(--color-primary) 10%, transparent);
-    color: var(--color-primary);
-  }
 }
 
-/* `color` is only set on the middle keyframes, so it interpolates from — and
+/* `color` is only set on the middle keyframe, so it interpolates from — and
    settles back to — the tab's normal colour once the pulse ends. */
 .menu .menu-item > a.me-nav-cta {
-  animation: me-nav-cta-pulse 1.35s ease-in-out 2;
+  animation: me-nav-cta-pulse 0.9s ease-in-out 2;
 }
 
 @media (prefers-reduced-motion: reduce) {

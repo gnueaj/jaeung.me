@@ -1,17 +1,13 @@
 news:
-  - date: 2025.08.12
-    description: "🚀 Excited to join Match Group as a Software Engineer!"
-  - date: 2025.05.13
+  - date: "2026.07.18"
     description: "🎉 New personal website launched!"
-  # - date: 2024.05.16
-  #   description: 'I’m attending VIS 2024 (Tampa, FL) in person to present my paper "Bavisitter"!, See you there!'
-  # - date: 2024.06.15
-  #   description: '"Bavisitter" has been accepted to IEEE VIS 2024! See you in Tampa!'
-  # - date: 2024.01.31
-  #   description: "🏆 Honored to receive an outstanding TA award!"
-  # - date: 2024.01.02
-  #   description: "Excited to start a software engineer internship at NAVER Corp!"
-  # - date: 2023.10.16
-  #   description: "I'm attending VIS 2023 (Melbourne, Austrailia) in person!"
-  # - date: 2023.06.01
-  #   description: "I’m attending EuroVis 2023 (Leipzig, Germany) in person to present my poster “Multi-Criteria Optimization for Automatic Dashboard Design"
+  - date: "2026.03"
+    description: "🚀 Joined the AI Center at Samsung Research as a Research Engineer."
+# Kept for later — uncomment to bring publication news back.
+#
+#  - date: "2026.05.26"
+#    description: "📄 Released the preprint *Measuring the Depth of LLM Unlearning via Activation Patching*."
+#  - date: "2026.02.03"
+#    description: "📄 Released *Suppression or Deletion: A Restoration-Based Representation-Level Analysis of Machine Unlearning*, to appear at WWW 2026."
+#  - date: "2025.08.18"
+#    description: "📄 Released *Unlearning Comparator*, now published in IEEE TVCG."

@@ -15,23 +15,25 @@ Next.js 16 + Nextra 4 기반이고 Vercel에 배포됩니다.
 | -------------------------------------------------------- | ----------------------------------------- |
 | Git 연결 (`github.com/gnueaj/jaeung.me`)                 | ✅ 완료                                   |
 | **Phase 2 — 리팩토링** (아이덴티티 중앙화 + 빌드 안정화) | ✅ **완료**                               |
-| **Phase 3 — Vercel 배포**                                | ✅ 배포 성공                              |
-| **Phase 3 — `jaeung.me` 도메인 연결 (Namecheap DNS)**    | ✅ **완료 — https://jaeung.me 서비스 중** |
-| **Phase 1 — 콘텐츠 교체 (Jiwon → Jaeung)**               | ⬜ **다음에 할 일 (가장 중요·시급)**      |
+| **Phase 3 — Vercel 배포 + `jaeung.me` 도메인**           | ✅ **완료 — https://jaeung.me 서비스 중** |
+| **Phase 1 — 콘텐츠 교체 (Jiwon → Jaeung)**               | 🔶 **대부분 완료 / 갤러리·블로그 남음**   |
+| UI 다듬기 (사진·파비콘·여백·테마 토글)                   | ✅ 완료                                   |
 
-**커밋 히스토리 (origin/main)**
+커밋 히스토리는 `git log --oneline` 으로 확인하세요. 기준점만 적어두면:
+`77aa881` = 원본(jiwnchoi) 백업, `411c293` = Phase 2 리팩토링.
 
-```
-a15ec0f  docs: add HANDOFF.md for session continuity                       ← HEAD
-1ef0036  fix: import siteConfig in page.tsx metadata (Vercel build fix)
-ad9227a  build: pin pnpm@10.15.1 via packageManager for Vercel
-411c293  refactor: centralize site identity + stabilize build (Phase 2)
-77aa881  Initial commit: import jiwnchoi.me blog UI as base for jaeung.me  ← 원본 백업
-```
+### ✅ 이번까지 끝난 것
 
-> 🚨 **가장 시급한 일**: `https://jaeung.me`가 **이미 공개 서비스 중인데, 표시되는 내용은 아직 Jiwon 님 것**입니다
-> (이름·자기소개·경력·프로젝트·블로그 글 전부). 즉 **다른 사람의 이력이 내 도메인에 공개된 상태**이므로
-> **Phase 1 콘텐츠 교체(§5)를 최우선으로** 진행해야 합니다.
+- **프로필/이력 데이터** — `data/` 의 meta·career·educations·publications·authors·misc·skills·news·sections 전부 Jaeung 기준으로 교체
+- **자기소개 본문** — `content/index.mdx` (Samsung Research AI Center, unlearning 연구 소개)
+- **UI** — 세로형 프로필 사진, 보라색 외계인 파비콘 세트, 카피라이트 제거, 블로그 탭 숨김, 사이드바 여백/테마 토글 배치 정리
+
+### 🔶 아직 Jiwon 님 콘텐츠가 남은 곳 (사이트가 라이브라 주의)
+
+1. **`content/projects/**`— 프로젝트 갤러리 11개 폴더가 거의 그대로입니다.**`bavisitter`만 실제 공저 논문이고, 나머지(`waltzboard` `intentable` `vanas` `projectionensemble` `cloz` `milk` `vacode`등)는 Jiwon 님 작업입니다.
+→`type: private` 인 3개(`bobai` `datalab` `swipytics`)는 갤러리에 안 뜨지만, **나머지 8개는 jaeung.me에 공개 중**입니다.
+2. **`content/blog/posts/*.mdx`** — Jiwon 님 글 2편. 내비에서는 숨겼지만 **`/blog` URL은 여전히 접근 가능**합니다.
+3. `data/authors.yml`, `data/publications.yml` 의 Jiwon 언급은 **정상**입니다 (Bavisitter 실제 공저자).
 
 ---
 
@@ -114,12 +116,11 @@ jaeung.me/
 │       └── asset/[[...assetPath]]/route.tsx   # content/ 내 이미지 런타임 서빙 (/api/asset/...)
 │
 ├── components/                   # 사이트 골격 UI
-│   ├── Copyright.tsx             # ★ "© {올해} {meta.name}" 동적 렌더
 │   ├── ContactButtons.tsx        # meta.contacts → 아이콘 링크 자동 생성
-│   ├── Navigation.tsx            # 섹션 내비 + 스크롤 스파이
+│   ├── Navigation.tsx            # 섹션 내비 + 스크롤 스파이 + main/page 구분선
 │   ├── Giscus.tsx                # 댓글 (env 미설정 시 렌더 안 함)
 │   ├── Card / Date / MDXContent / Responsive / ScrollToTopButton / TagBadge / ThemeSwitch
-│   ├── layout.tsx                # Footer
+│   ├── layout.tsx                # Footer = 테마 토글 자리 (사이드바 하단)
 │   ├── items/                    # FullItem, SimpleItem, PublicationItem(저자 강조)
 │   └── index.ts                  # 배럴 export
 │
@@ -146,8 +147,7 @@ jaeung.me/
 │   └── (data-*.ts, index.ts = 생성물, gitignore)
 │
 ├── public/                       # 정적 파일
-│   ├── profilepic.png (917KB)    # ⚠️ 현재 Jiwon 사진 — 교체 대상
-│   ├── jaeung.jpg (2.0MB)        # ★ 준비된 Jaeung 사진 (용량 큼 → 압축 후 사용)
+│   ├── profilepic.jpg (154KB)    # Jaeung 프로필 사진 (1000×1250, 4:5 세로형)
 │   ├── favicon*.png/.ico, apple-touch-icon, android-chrome-*  # 교체 대상
 │   ├── site.webmanifest          # 이름 하드코딩 — 교체 대상
 │   └── giscus_light.css / giscus_dark.css
@@ -161,42 +161,37 @@ jaeung.me/
 
 ---
 
-## 5. 🎯 다음 작업 — Phase 1: 콘텐츠 교체 (Jiwon → Jaeung)
+## 5. 🎯 남은 작업 — Phase 1 마무리
 
-> **사용자(재웅님)가 실제 이력을 직접 제공하기로 확정**되어 있습니다. 데이터 받고 아래를 채우면 됩니다.
-> 사이트 성격 = **학술 + 개발 혼합** (원본 구조 유지, Publications/Talks 등 학술 섹션 유지 결정됨).
+`data/*.yml` 과 `content/index.mdx` 는 **이미 Jaeung 기준으로 교체 완료**입니다. 남은 건 아래 둘.
 
-### 5-1. `data/*.yml` (여기만 고쳐도 대부분 반영됨)
+### 5-1. 프로젝트 갤러리 (`content/projects/**`) ← 최우선
 
-| 파일                     | 할 일                                                                                                                                                                                                                                                                           |
-| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `meta.yml`               | `name`, `position`, `affiliation` → Jaeung. `contacts`: email `dlwodnd00@gmail.com`, github `gnueaj`, **linkedin `jaeunglee`** (URL 자동 조합됨). 없는 채널(scholar/twitter/instagram)은 **키 자체를 삭제**. `authorHighlight` → 논문에 표기되는 이름 그대로 (예: `Jaeung Lee`) |
-| `career.yml`             | 경력 전면 교체 (현재 Match Group/NAVER/SKKU = Jiwon 것)                                                                                                                                                                                                                         |
-| `educations.yml`         | 학력 교체                                                                                                                                                                                                                                                                       |
-| `publications.yml`       | 본인 논문만 (**Bavisitter는 실제 공저자**라 유지 가능). `authors` 배열의 이름은 `authors.yml`과 정확히 일치해야 링크됨                                                                                                                                                          |
-| `authors.yml`            | 남길 논문의 공저자 링크만. Jaeung 링크는 `https://www.linkedin.com/in/jaeunglee/` 로 갱신                                                                                                                                                                                       |
-| `misc.yml`               | honors/services/scholarships/talks 교체 또는 비우기                                                                                                                                                                                                                             |
-| `news.yml`, `skills.yml` | 교체                                                                                                                                                                                                                                                                            |
-| `sections.yml`           | 비우는 섹션이 생기면 여기서 해당 항목 제거 (내비에서 사라짐)                                                                                                                                                                                                                    |
+현재 11개 폴더가 대부분 Jiwon 님 작업이고, **jaeung.me에 공개 중**입니다.
 
-### 5-2. 콘텐츠(MDX)
+| 폴더                                                                          | 처리                                       |
+| ----------------------------------------------------------------------------- | ------------------------------------------ |
+| `bavisitter`                                                                  | **유지** (실제 공저 논문)                  |
+| `waltzboard` `intentable` `vanas` `projectionensemble` `cloz` `milk` `vacode` | 삭제 대상 (Jiwon 님 것, 갤러리에 노출 중)  |
+| `bobai` `datalab` `swipytics`                                                 | `type: private` 라 갤러리엔 안 뜸 — 정리만 |
 
-- **`content/index.mdx`** — frontmatter `title` + 자기소개 본문 교체. 안 쓰는 섹션 컴포넌트(`<Publications/>` 등)는 여기서도 제거.
-- **`content/projects/<slug>/`** — Jiwon 프로젝트 폴더 10개 삭제 → 본인 것으로. 폴더 1개 = `index.mdx`(frontmatter: `title`, `shortTitle`, `description`, `type: paper|project`, `selected`, `tags`, `date`) + 이미지 1장. 이미지는 MDX에서 `![alt](./파일명.png)` 상대경로.
-- **`content/blog/posts/*.mdx`** — Jiwon 글 2개 삭제 → 본인 글. frontmatter: `title`, `date`, `description`, `tags`, `type: post`.
-- **`content/ko/`** — 전부 빈 파일. **삭제 권장**.
+**새 프로젝트 추가 방법**: 폴더 1개 = `index.mdx` + 이미지 1장
+frontmatter: `title`, `shortTitle`, `description`, `type: paper|project|private`, `selected`, `tags`, `date`
+이미지는 MDX에서 `![alt](./파일명.png)` 상대경로 (런타임에 `/api/asset/` 로 서빙됨).
+갤러리 노출 여부는 `type` 으로 결정 — `content/projects/index.mdx` 가 `paper` / `project` 두 그룹을 렌더합니다.
 
-### 5-3. 정적 에셋 (`public/`)
+### 5-2. 블로그 (`content/blog/`)
 
-- `jaeung.jpg`(2MB)를 **압축·정사각 리사이즈(예: 512×512)** 후 **`profilepic.png`를 덮어쓰기**
-  (파일명 유지가 편함 — `app/layout.tsx`와 `app/api/og/route.tsx` 두 곳이 `/profilepic.png`를 참조)
-- favicon 세트 재생성 ([realfavicongenerator.net](https://realfavicongenerator.net) 등)
-- `site.webmanifest`의 `name`/`short_name` 교체
+- 내비 탭은 **숨김 처리됨** (`data/sections.yml` 에 주석으로 보존 — 주석 풀면 복구)
+- 다만 **`/blog` URL은 접근 가능**하고 Jiwon 님 글 2편(`tailwind-css-responsive`, `vegalite-ko`)이 남아 있음
+- 완전히 비우려면 `content/blog/posts/*.mdx` 2개 삭제 (템플릿 구조는 유지됨)
+- 새 글: `content/blog/posts/<slug>.mdx`, frontmatter `title`, `date`, `description`, `tags`, `type: post`
 
-### 5-4. 마무리
+### 5-3. 선택 정리
 
-- `site.config.ts` 기본값 또는 Vercel 환경변수를 Jaeung 값으로 (§6)
-- `pnpm build` 통과 확인 → 커밋 → 푸시 → Vercel 자동 배포
+- `content/ko/` — 전부 0바이트 빈 파일. 삭제 권장
+- favicon: 현재 **보라색 외계인(v3)** 적용됨. 재생성이 필요하면 SVG 원본은 남아있지 않으니 새로 만들어야 함
+- 본문 최하단 감사인사 → `content/index.mdx` 맨 아래에 추가 (푸터의 카피라이트는 제거됨)
 
 ---
 
@@ -268,7 +263,7 @@ Nameserver를 Vercel로 위임하는 방식도 있으나, 이메일 등 다른 D
 ## 9. 선택 개선 항목 (여유 될 때)
 
 - `content/ko/` 빈 파일 삭제 (영어 단일 운영)
-- `public/profilepic.png`·`jaeung.jpg` 용량 최적화 (WebP 고려)
+- `public/profilepic.jpg` (154KB) WebP 전환 (선택 — 이미 충분히 가벼움)
 - `app/sitemap.ts` 추가 + `app/robots.ts`에 sitemap 연결 (SEO)
 - GitHub Actions CI (`lint`+`build` 자동 검증) — 현재 없음. Vercel이 빌드 검증을 해주므로 **필수는 아님**
 - `content/index.mdx`의 섹션 나열을 `data/sections.yml` 기반으로 자동화

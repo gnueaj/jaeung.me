@@ -23,7 +23,7 @@ export const siteConfig = {
   name: process.env.NEXT_PUBLIC_SITE_NAME ?? "Jaeung Lee",
 
   /** Short subtitle — OG image subtitle + default meta description fallback. */
-  tagline: process.env.NEXT_PUBLIC_SITE_TAGLINE ?? "Software Engineer",
+  tagline: process.env.NEXT_PUBLIC_SITE_TAGLINE ?? "Research Engineer @ Samsung Research",
 
   /** Google Analytics measurement id (e.g. "G-XXXXXXXXXX"). Unset ⇒ GA is not loaded. */
   gaId: process.env.NEXT_PUBLIC_GA_ID,

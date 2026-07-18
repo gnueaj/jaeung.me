@@ -165,7 +165,7 @@ export default function Navigation({ sections }: { sections: Section[] }) {
             About
           </button>
         </li> */}
-        <div className="divider divider-horizontal md:divider-vertical divider-primary mx-1 flex-shrink-0" />
+        <div className="divider divider-horizontal md:divider-vertical divider-primary mx-1 flex-shrink-0 md:my-1" />
         {sections
           .filter((s) => s.type === "page")
           .map((section) => (

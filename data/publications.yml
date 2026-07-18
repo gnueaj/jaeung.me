@@ -1,14 +1,42 @@
 publications:
-  - id: waltzboard
-    title: "Waltzboard: Multi-Criteria Automated Dashboard Design for Exploratory Analysis"
+  - id: measuring-unlearning-depth
+    title: "Measuring the Depth of LLM Unlearning via Activation Patching"
     authors:
-      - Jiwon Choi
+      - Jaeung Lee
+      - Dohyun Kim
       - Jaemin Jo
-    type: conference
-    venue: "Proceedings of 2025 IEEE Pacific Visualization Conference (IEEE PacificVis), Taipei, Taiwan, 2025."
+    type: preprint
+    venue: "Preprint, 2026."
     url:
-      git: https://github.com/jiwnchoi/Waltzboard
-      video: https://youtu.be/fOweAPS-lz4
+      pdf: https://arxiv.org/abs/2605.24614
+      web: https://gnueaj.github.io/unlearning-depth-score/
+
+  - id: suppression-or-deletion
+    title: "Suppression or Deletion: A Restoration-Based Representation-Level Analysis of Machine Unlearning"
+    authors:
+      - Yurim Jang
+      - Jaeung Lee
+      - Dohyun Kim
+      - Jaemin Jo
+      - Simon S. Woo
+    type: conference
+    venue: "Proceedings of the ACM Web Conference 2026 (WWW '26), Dubai, United Arab Emirates, 2026."
+    url:
+      pdf: https://arxiv.org/abs/2602.18505
+
+  - id: unlearning-comparator
+    title: "Unlearning Comparator: A Visual Analytics System for Comparative Evaluation of Machine Unlearning Methods"
+    authors:
+      - Jaeung Lee
+      - Suhyeon Yu
+      - Yurim Jang
+      - Simon S. Woo
+      - Jaemin Jo
+    type: journal
+    venue: "IEEE Transactions on Visualization and Computer Graphics, vol. 32, no. 3, pp. 2852–2867, 2026."
+    url:
+      pdf: https://ieeexplore.ieee.org/document/11364307
+      git: https://github.com/gnueaj/Machine-Unlearning-Comparator
 
   - id: bavisitter
     title: "Bavisitter: Integrating Design Guidelines into Large Language Models for Visualization Authoring"
@@ -17,44 +45,6 @@ publications:
       - Jaeung Lee
       - Jaemin Jo
     type: conference
-    venue: "Proceedings of Conference on 2024 IEEE Visualization and Visual Analytics (IEEE VIS), St. Pete Beach, USA, 2024."
+    venue: "Proceedings of Conference on 2024 IEEE Visualization & Visual Analytics (IEEE VIS), St. Pete Beach, USA."
     url:
-      pdf: https://github.com/jiwnchoi/Bavisitter/blob/main/assets/bavisitter.pdf
-      git: https://github.com/jiwnchoi/Bavisitter
-      video: https://youtu.be/AuRkGbia3yQ
-
-  - id: projectionensemble
-    title: "Projection Ensemble: Visualizing the Robust Structures of Multidimensional Projections"
-    authors:
-      - Myeongwon Jung
-      - Jiwon Choi
-      - Jaemin Jo
-    type: conference
-    venue: "Proceedings of Conference on 2023 IEEE Visualization and Visual Analytics (IEEE VIS), Melbourne, Australia, 2023."
-    url:
-      pdf: https://ieeexplore.ieee.org/abstract/document/10360924/
-      git: https://github.com/jjmmwon/ProjectionEnsemble
-
-  - id: intentable
-    title: "Intentable: A Mixed-Initiative System for Intent-Based Chart Captioning"
-    authors:
-      - Jiwon Choi
-      - Jaemin Jo
-    type: conference
-    venue: "Proceedings of Conference on 2022 IEEE Visualization and Visual Analytics (IEEE VIS), Oklahoma City, USA, 2022."
-    url:
-      pdf: https://github.com/jiwnchoi/Intentable/files/9109841/Intentable_A.Mixed-Initiative.System.for.Intent-Based.Chart.Captioning.pdf
-      git: https://github.com/jiwnchoi/Intentable
-
-  - id: vanas
-    title: "VANAS: A Visual Analytics System for Neural Architecture Search"
-    authors:
-      - Jiwon Choi
-      - Gwon Hong
-      - Jaemin Jo
-    type: conference
-    venue: "Proceedings of HCI Korea 2022, Seoul, Korea, 2022."
-    url:
-      web: https://jiwnchoi.github.io/VANAS/
-      pdf: https://github.com/jason-choi-SKKU/VANAS/files/7750682/VANAS.pdf
-      git: https://github.com/jiwnchoi/VANAS
+      git: https://github.com/jiwnchoi/bavisitter

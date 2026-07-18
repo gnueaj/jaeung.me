@@ -50,3 +50,6 @@ _pagefind
 
 
 data/*.ts
+
+# LinkedIn exports may contain private contact and account data
+data/Basic_LinkedInDataExport_*.zip*

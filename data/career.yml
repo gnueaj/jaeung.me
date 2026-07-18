@@ -1,70 +1,19 @@
 career:
-  - id: matchgroup
+  - id: samsung-research
     name: >
-      [Match Group](https://mtch.com)
-    title: Software Engineer @ [MG AI, Match Group - EMEA/APAC](https://hyperconnect.com/en/tech/aiml)
-    from: 2025.08.12
+      [Samsung Electronics](https://www.samsung.com)
+    title: Research Engineer @ Samsung Research, AI Center
+    from: "2026.03"
     to: Present
     location: Seoul, Korea
     description: >
-      Research and develop novel ML-powered user experiences for online dating applications (e.g., Hinge, Tinder).
+      Research Engineer at the AI Center of Samsung Research.
 
-  - id: navercloud
+  - id: deep-daiv
     name: >
-      [NAVER Cloud](https://navercloudcorp.com/en)
-    title: Research Engineer Intern @ [Vision Understanding, HyperCLOVA](https://clova.ai/en)
-    from: 2025.02.03
-    to: 2025.05.02
-    location: Seongnam, Korea
+      [deep daiv.](https://www.instagram.com/deep.daiv/)
+    title: Project Mentor
+    from: "2024.02"
+    to: "2025.01"
     description: >
-      **DataLab**: Progressive Exploratory Data Analysis System for VLM Data Filtering and Curation
-
-      - Designed an interactive system for efficiently exploring large-scale datasets for ML researchers.
-
-      - Reduced resource occupation to 0.1%, expanded exploration range by 10x, and cut loading time to under 5%.
-
-  # - Conducted expert interviews to identify pain points in data filtering workflows
-
-  # - Designed and implemented an interactive interface for efficiently exploring large-scale visual instruction datasets
-
-  # - Developed visualization tools to evaluate filtering algorithm effectiveness and support iterative refinement
-
-  # - Built full-stack system with React frontend and FastAPI backend to process large-scale vision-language datasets interactively
-
-  - id: naver
-    name: >
-      [NAVER](https://www.navercorp.com/en)
-    title: Software Engineer Intern @ [nBilly, Smart Studio, ETECH](https://smartstudio.tech/homebuilder/)
-    from: 2024.01.02
-    to: 2024.02.26
-    location: Seongnam, Korea
-    description: >
-      **BoBAI**: Color Design Recommendation and Assignment System Leveraging In-browser ML Inference
-
-      - Conducted PoC research on systems leveraging in-browser inference ML techniques.
-
-      - Designed an automated color recommendation and assignment system for the existing no-code landing page design system.
-
-  # - Conducted formative research through expert interviews and thematic analysis to define user needs
-
-  # - Designed novel workflow combining expert knowledge with automation algorithms for color designing of landing page
-
-  # - Developed color recommendation and assignment algorithms optimized for landing page design
-
-  # - Implemented browser-based machine learning pipeline with text encoder, vector database, and MCTS modules
-
-  # - Created React component library for the interactive color design interface
-
-  - id: skku
-    name: >
-      [Sungkyunkwan University](https://www.skku.edu)
-    title: Research Assistant @ [Interactive Data Computing Lab (IDCLab)](https://idclab.skku.edu)
-    from: 2021.05.01
-    to: 2025.01.31
-    location: Suwon, Korea
-    description: >
-      Published three papers on the top-tier venue of visualization (IEEE VIS, two first-authored, one co-authored), one second-tier venue (IEEE PacificVis, first-authored), and authored one under-review preprint.
-
-      - Machine learning-based automated data analysis and visual analytics systems (Machine Learning for Visualization)
-
-      - Visualization techniques for understanding complex data and models (Visualization for Machine Learning)
+      Mentored projects in explainable AI (XAI) and computer vision.

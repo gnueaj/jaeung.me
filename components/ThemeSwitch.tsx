@@ -5,7 +5,15 @@ import { HugeiconsIcon } from "@hugeicons/react";
 import { useTheme } from "next-themes";
 import { useMounted } from "nextra/hooks";
 
-export default function ThemeSwitch({ className }: { className?: string }) {
+export default function ThemeSwitch({
+  className,
+  size = 18,
+  showLabel = false,
+}: {
+  className?: string;
+  size?: number;
+  showLabel?: boolean;
+}) {
   const { setTheme, resolvedTheme } = useTheme();
   const mounted = useMounted();
   const isDark = resolvedTheme === "dark";
@@ -15,11 +23,16 @@ export default function ThemeSwitch({ className }: { className?: string }) {
   return (
     <button
       className={className}
-      aria-label="Toggle Dark Mode"
+      aria-label="Toggle dark mode"
+      title="Toggle dark mode"
       onClick={() => setTheme(isDark ? "light" : "dark")}>
-      <HugeiconsIcon icon={IconToUse} size={12} />
-      <span className="dark:hidden">Light</span>
-      <span className="hidden dark:inline">Dark</span>
+      <HugeiconsIcon icon={IconToUse} size={size} />
+      {showLabel && (
+        <>
+          <span className="dark:hidden">Light</span>
+          <span className="hidden dark:inline">Dark</span>
+        </>
+      )}
     </button>
   );
 }

@@ -1,18 +1,44 @@
 educations:
-  - id: skku-sw
-    name: Sungkyunkwan University
-    title: M.Eng. in Computer Science and Engineering
-    from: 2023.09.01
-    to: 2025.02.28
+  - id: skku-masters
+    name: >
+      [Sungkyunkwan University](https://www.skku.edu/eng/)
+    title: M.S. in Computer Science and Engineering
+    from: "2024.09"
+    to: "2026.02"
     location: Suwon, Korea
     description: >
-      Data Visualization and Human-Computer (AI) Interaction, Advisor: Prof. Jaemin Jo
+      **Interactive Data Computing Lab (IDCLab)**
 
-  - id: skku-cse
-    name: Sungkyunkwan University
-    title: B.Sc. in Computer Science Education
-    from: 2019.03.02
-    to: 2023.08.31
-    location: Seoul, Korea
+      - Advisor: Prof. Jaemin Jo
+
+      - Graduated early
+
+      - Thesis: *Unlearning Comparator: A Visual Analytics System for Comparative Evaluation of Machine Unlearning Methods*
+
+      - Teaching Assistant: Fundamentals of Machine Learning (2024 Fall, 2025 Spring, 2025 Fall). [Course materials](https://github.com/gnueaj/machine-learning-exams-SKKU)
+
+  - id: skku-bachelors
+    name: >
+      [Sungkyunkwan University](https://www.skku.edu/eng/)
+    title: B.S. in Computer Science and Engineering
+    from: "2018.03"
+    to: "2024.08"
+    location: Suwon, Korea
     description: >
-      Public Teacher Certificate in Computer Science Education
+      - Ranked 1st in the cohort
+
+      - Military service in the Republic of Korea Army (July 2020–January 2022)
+
+  - id: skku-undergraduate-researcher
+    name: >
+      [Sungkyunkwan University](https://www.skku.edu/eng/)
+    title: Undergraduate Researcher @ VSCLab
+    from: "2023.07"
+    to: "2023.12"
+    location: Suwon, Korea
+    description: >
+      **VSCLab** (now V-Lab at Yonsei University)
+
+      - Advisor: Prof. Eunbyung Park
+
+      - Project: [Satellite Image Building Area Segmentation](https://github.com/gnueaj/Satellite-Image-Building-Area-Segmentation)

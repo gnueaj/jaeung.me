@@ -1,17 +1,17 @@
-name: Jiwon Jason Choi
-position: Software Engineer & Research Scientist
-affiliation: ML, HCI, and Visualization
+name: Jaeung Lee
+position: Research Engineer @ Samsung Research
+affiliation: Visualization, ML and AI Safety
 
 # Author name to highlight (bold + primary color) in the Publications list.
 # Must match exactly how the name appears in publications.yml authors.
-authorHighlight: Jiwon Choi
+authorHighlight: Jaeung Lee
 
 # Contact Information
+# Keys map to icons in components/ContactButtons.tsx; delete a key to hide it.
 contacts:
-  email: jiwnchoi@gmail.com
-  github: jiwnchoi
-  linkedin: jiwnchoi
-  twitter: jiwnchoi
-  website: jiwnchoi.me
-  scholar: E54I6OkAAAAJ
-  instagram: jiwnchoi
+  email: dlwodnd00@gmail.com
+  github: gnueaj
+  linkedin: jaeunglee
+  scholar: 9afcPdYAAAAJ
+  instagram: gnueaj_
+  website: jaeung.me

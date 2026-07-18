@@ -40,10 +40,18 @@ function getCustomMetadata(metadata: NetraMetadata): NetraMetadata {
     metadataBase: new URL(siteConfig.url),
     title,
     icons: {
-      apple: "/apple-touch-icon.png",
+      apple: "/apple-touch-icon.png?v=purple-alien-v2",
       icon: [
-        { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
-        { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
+        {
+          url: "/favicon-32x32.png?v=purple-alien-v2",
+          sizes: "32x32",
+          type: "image/png",
+        },
+        {
+          url: "/favicon-16x16.png?v=purple-alien-v2",
+          sizes: "16x16",
+          type: "image/png",
+        },
       ],
     },
     manifest: "/site.webmanifest",

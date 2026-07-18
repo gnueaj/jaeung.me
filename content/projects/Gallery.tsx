@@ -49,7 +49,9 @@ export default async function Gallery({
 
   return (
     <>
-      <h2 className="not-prose mt-4 mb-4 text-3xl font-bold md:mt-0">{title}</h2>
+      <h2 className="not-prose mt-4 mb-4 text-3xl font-bold text-zinc-900 md:mt-0 dark:text-zinc-100">
+        {title}
+      </h2>
       <div
         className="mb-16 grid auto-rows-auto grid-cols-1 gap-6"
         style={{

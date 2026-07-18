@@ -8,7 +8,7 @@
 }
 
 [data-theme="light"] {
-  --bg: var(--color-zinc-50);
+  --bg: var(--color-zinc-100);
   --card-bg: var(--color-white);
 }
 [data-theme="dark"] {
@@ -16,8 +16,10 @@
   --card-bg: var(--color-zinc-900);
 }
 
+/* The -my-2/py-2 pair fakes a full-bleed background band behind the mobile
+   sticky nav. On md+ it just cancels the sidebar's flex gap, so drop it there. */
 .me-nav-header {
-  @apply sticky top-0 z-10 -my-2 bg-[var(--bg)] py-2;
+  @apply sticky top-0 z-10 -my-2 bg-[var(--bg)] py-2 md:my-0 md:py-0;
 }
 
 div.nextra-code {
@@ -53,7 +55,7 @@ div.nextra-code {
 }
 
 .me-card {
-  @apply m-0 flex w-full rounded-2xl bg-white md:rounded-4xl dark:bg-zinc-900;
+  @apply m-0 flex w-full rounded-2xl border border-zinc-200/80 bg-white md:rounded-4xl dark:border-zinc-800 dark:bg-zinc-900;
 }
 
 .me-hover {
@@ -61,23 +63,23 @@ div.nextra-code {
 }
 
 .me-prose {
-  @apply prose prose-zinc prose-base prose-p:mt-0 prose-p:mb-2 prose-img:rounded-lg dark:prose-invert prose-a:decoration-dotted prose-img:md:px-8 prose-img:my-2 prose-a:text-zinc-900 prose-a:font-normal prose-a:dark:text-white max-w-none;
+  @apply prose prose-zinc prose-base prose-p:mt-0 prose-p:mb-2 prose-img:rounded-lg dark:prose-invert prose-a:decoration-dotted prose-img:md:px-8 prose-img:my-2 prose-a:text-zinc-900 prose-a:font-normal prose-a:dark:text-zinc-100 max-w-none;
   padding-inline: 0;
   @apply prose-headings:mb-4;
   @apply prose-ul:m-0 prose-li:m-0 prose-li:mb-1 prose-ul:mt-2;
   @apply p-8 md:p-16;
   @apply text-zinc-800 dark:text-zinc-200;
-  @apply prose-strong:*:text-zinc-900 dark:prose-strong:text-white;
+  @apply prose-strong:*:text-zinc-900 dark:prose-strong:text-zinc-100;
 
   /* h1 */
-  @apply prose-h1:text-zinc-900 dark:prose-h1:text-white;
+  @apply prose-h1:text-zinc-900 dark:prose-h1:text-zinc-100;
   @apply prose-h1:mt-2 prose-h1:md:mt-4 prose-h1:font-bold prose-h1:text-3xl;
 
   /* h2 */
-  @apply prose-h2:text-zinc-800 dark:prose-h2:text-zinc-200;
+  @apply prose-h2:text-zinc-800 dark:prose-h2:text-zinc-100;
 
   /* h3 */
-  @apply prose-h3:text-zinc-800 dark:prose-h3:text-zinc-200 prose-h3:mb-2;
+  @apply prose-h3:text-zinc-800 dark:prose-h3:text-zinc-100 prose-h3:mb-2;
   :where(ol > li):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
     padding-inline-start: 0;
   }
@@ -94,6 +96,30 @@ div.nextra-code {
 .menu {
   --menu-active-bg: var(--color-primary);
   --menu-active-text: var(--color-primary-content);
+}
+
+/* Override daisyUI's neutral menu hover with the site's violet palette. */
+.menu .menu-item > a:is(:hover, :focus-visible):not(.me-highlight) {
+  color: var(--color-primary);
+  background-color: color-mix(in oklab, var(--color-primary) 12%, transparent);
+}
+
+[data-theme="dark"] .menu .menu-item > a:is(:hover, :focus-visible):not(.me-highlight) {
+  background-color: color-mix(in oklab, var(--color-primary) 18%, transparent);
+}
+
+.menu .menu-item > a.me-highlight:hover {
+  color: var(--color-primary-content);
+  background-color: var(--color-primary);
+}
+
+.btn.me-violet-hover:is(:hover, :focus-visible) {
+  color: var(--color-primary);
+  background-color: color-mix(in oklab, var(--color-primary) 12%, transparent);
+}
+
+[data-theme="dark"] .btn.me-violet-hover:is(:hover, :focus-visible) {
+  background-color: color-mix(in oklab, var(--color-primary) 18%, transparent);
 }
 
 html {
@@ -133,12 +159,12 @@ body {
   --color-base-200: oklch(98% 0 0);
   --color-base-300: oklch(95% 0 0);
   --color-base-content: oklch(21% 0.006 285.885);
-  --color-primary: oklch(75% 0.183 55.934);
-  --color-primary-content: oklch(98% 0.016 73.684);
-  --color-secondary: oklch(55% 0.195 38.402);
-  --color-secondary-content: oklch(98% 0.016 73.684);
-  --color-accent: oklch(77% 0.152 181.912);
-  --color-accent-content: oklch(38% 0.063 188.416);
+  --color-primary: oklch(54.1% 0.281 293.009);
+  --color-primary-content: oklch(100% 0 0);
+  --color-secondary: oklch(49.1% 0.27 292.581);
+  --color-secondary-content: oklch(100% 0 0);
+  --color-accent: oklch(70.2% 0.183 293.541);
+  --color-accent-content: oklch(21% 0.006 285.885);
   --color-neutral: oklch(14% 0.005 285.823);
   --color-neutral-content: oklch(92% 0.004 286.32);
   --color-info: oklch(74% 0.16 232.661);
@@ -168,12 +194,12 @@ body {
   --color-base-200: oklch(23.26% 0.014 253.1);
   --color-base-300: oklch(21.15% 0.012 254.09);
   --color-base-content: oklch(97.807% 0.029 256.847);
-  --color-primary: oklch(75% 0.183 55.934);
-  --color-primary-content: oklch(98% 0.016 73.684);
-  --color-secondary: oklch(55% 0.195 38.402);
-  --color-secondary-content: oklch(98% 0.016 73.684);
-  --color-accent: oklch(77% 0.152 181.912);
-  --color-accent-content: oklch(38% 0.063 188.416);
+  --color-primary: oklch(70.2% 0.183 293.541);
+  --color-primary-content: oklch(21% 0.006 285.885);
+  --color-secondary: oklch(81.1% 0.111 293.571);
+  --color-secondary-content: oklch(21% 0.006 285.885);
+  --color-accent: oklch(60.6% 0.25 292.717);
+  --color-accent-content: oklch(14% 0.005 285.823);
   --color-neutral: oklch(14% 0.005 285.823);
   --color-neutral-content: oklch(92% 0.004 286.32);
   --color-info: oklch(74% 0.16 232.661);

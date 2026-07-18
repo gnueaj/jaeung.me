@@ -1,4 +1,8 @@
 skills:
+  - type: Research
+    description: >
+      **Machine Learning**, **Visualization**, **Explainable AI (XAI)**, **Computer Vision**
+
   - type: Frontend
     description: >
       **React**, **TypeScript**, Visualization (**D3**, visx, Vega, vis.gl, ...)
@@ -9,12 +13,12 @@ skills:
 
   - type: AI/ML
     description: >
-      **PyTorch**, HuggingFace, NLP
+      **PyTorch**, Hugging Face, NLP
 
   - type: Design
     description: >
       **Figma**, Illustrator, Photoshop, Prototyping, User Research
 
-  - type: Language
+  - type: Certificate
     description: >
-      Korean (Native), English (Fluent)
+      **Samsung S/W Certificate (PRO)**, Samsung Electronics (Sep 2022)

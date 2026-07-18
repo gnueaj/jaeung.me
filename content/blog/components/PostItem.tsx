@@ -22,10 +22,10 @@ export default function PostItem({ post }: { post: PageMapItem }) {
 
   return (
     <Link href={post.route.replace("/content", "")} target="_self">
-      <li className="-m-4 flex justify-between gap-8 rounded-lg p-4 transition-colors duration-300 hover:bg-zinc-100 dark:hover:bg-zinc-800/50">
+      <li className="hover:bg-primary/10 dark:hover:bg-primary/20 -m-4 flex justify-between gap-8 rounded-lg p-4 transition-colors duration-300">
         <div className="flex flex-col gap-2">
           <Date date={post.frontMatter?.date} day={true} className="ml-0.5 text-xs" />
-          <h3 className="text-lg font-semibold">{post.title}</h3>
+          <h3 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100">{post.title}</h3>
           <p className="text-sm">{post.frontMatter?.description ?? ""}</p>
           <ul className="mt-1 flex gap-2">
             {tags.map((tag) => (

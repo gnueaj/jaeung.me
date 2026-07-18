@@ -27,8 +27,8 @@ export default async function Card({
       <div
         className={twMerge([
           "group h-[230px] overflow-hidden rounded-xl border transition-all duration-300 ease-in-out hover:-translate-y-1",
-          "hover:shadow-primary/50 border-zinc-200 bg-white hover:border-zinc-300 hover:shadow-lg",
-          "dark:border-zinc-800 dark:bg-zinc-900 dark:hover:border-zinc-700",
+          "hover:shadow-primary/50 hover:border-primary/50 border-zinc-200 bg-white hover:shadow-lg",
+          "dark:hover:border-primary/60 dark:border-zinc-800 dark:bg-zinc-900",
           "relative mt-2",
         ])}>
         {imagePath && (
@@ -46,7 +46,9 @@ export default async function Card({
           </div>
         )}
         <div className="absolute bottom-0 z-1 flex flex-col gap-2 p-4">
-          <h3 className="text-base font-bold no-underline">{title}</h3>
+          <h3 className="text-base font-bold text-zinc-900 no-underline dark:text-zinc-100">
+            {title}
+          </h3>
           {description && (
             <p className="line-clamp-2 text-xs text-zinc-500 dark:text-zinc-400">{description}</p>
           )}

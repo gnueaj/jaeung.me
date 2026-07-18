@@ -72,9 +72,9 @@ const URL_ICON = {
 };
 
 const URL_FULLNAME = {
-  pdf: "PDF",
+  pdf: "Paper",
   git: "GitHub",
-  web: "Demo",
+  web: "Project",
   video: "Video",
 };
 

@@ -17,7 +17,10 @@ export default async function MDXContent({ mdxSource, className, ...props }: MDX
         ...props.components,
         span: (props) => <span className={`not-prose ${className ?? ""}`} {...props} />,
         h3: (props) => (
-          <h3 className={`not-prose text-lg font-bold ${className ?? ""}`} {...props} />
+          <h3
+            className={`not-prose text-lg font-bold text-zinc-800 dark:text-zinc-100 ${className ?? ""}`}
+            {...props}
+          />
         ),
         p: (props) => <p className={`not-prose ${className ?? ""}`} {...props} />,
       }}

@@ -32,7 +32,7 @@ function formatTitle(title: string | null, maxLength: number = 24, defaultString
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
-    const imageURL = `/profilepic.png`;
+    const imageURL = `/profilepic.jpg`;
     const absoluteImageURL = new URL(imageURL, request.url);
 
     // ?title=<title>

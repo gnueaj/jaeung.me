@@ -1,3 +1,4 @@
+export { default as AttributionFooter } from "./AttributionFooter";
 export { default as Card } from "./Card";
 export { default as Date } from "./Date";
 export { default as Giscus } from "./Giscus";

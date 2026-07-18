@@ -67,7 +67,7 @@ div.nextra-code {
   padding-inline: 0;
   @apply prose-headings:mb-4;
   @apply prose-ul:m-0 prose-li:m-0 prose-li:mb-1 prose-ul:mt-2;
-  @apply px-7 py-8 md:px-14 md:pt-10 md:pb-16;
+  @apply px-7 py-8 md:px-14 md:pt-10 md:pb-12;
   @apply text-zinc-800 dark:text-zinc-200;
   @apply prose-strong:*:text-zinc-900 dark:prose-strong:text-zinc-100;
 

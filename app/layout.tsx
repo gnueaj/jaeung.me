@@ -12,7 +12,7 @@ import "nextra-theme-blog/style.css";
 
 import { Footer } from "@/components/layout";
 
-import { Navigation, Responsive, ScrollToTopButton } from "@/components";
+import { AttributionFooter, Navigation, Responsive, ScrollToTopButton } from "@/components";
 import ContactButtons from "@/components/ContactButtons";
 import { data } from "@/data";
 import { siteConfig } from "@/site.config";
@@ -88,16 +88,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
               data-pagefind-body>
               {children}
             </article>
-            <footer className="mt-3 px-4 pb-4 text-center text-[11px] text-zinc-500 md:pb-0 dark:text-zinc-400">
-              Copyright © 2025{" "}
-              <a
-                href="https://jiwnchoi.me"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="me-hover">
-                Jiwon Jason Choi
-              </a>
-            </footer>
+            <AttributionFooter />
           </main>
 
           <Responsive

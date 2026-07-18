@@ -3,13 +3,10 @@ import { type Section } from "@/data";
 import clsx from "clsx";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Responsive from "./Responsive";
 
-function useVisibleSections(sections: Section[]) {
-  const [visibleSections, setVisibleSections] = useState<Record<string, boolean>>(
-    Object.fromEntries(sections.filter((s) => s.type === "main").map((s) => [s.key, false])),
-  );
+function useSectionRefs(sections: Section[]) {
   const sectionRefs = useRef<HTMLElement[]>([]);
 
   useEffect(() => {
@@ -17,40 +14,13 @@ function useVisibleSections(sections: Section[]) {
       .filter((s) => s.type === "main")
       .map((s) => document.getElementById(s.key))
       .filter((el): el is HTMLElement => !!el);
-    if (!sectionRefs.current.length) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        setVisibleSections((prev) => {
-          const newVisible = { ...prev };
-          let changed = false;
-          entries.forEach((entry) => {
-            const sectionKey = entry.target.id;
-            if (
-              prev.hasOwnProperty(sectionKey) &&
-              newVisible[sectionKey] !== entry.isIntersecting
-            ) {
-              newVisible[sectionKey] = entry.isIntersecting;
-              changed = true;
-            }
-          });
-          return changed ? newVisible : prev;
-        });
-      },
-      { threshold: 0.1, root: null, rootMargin: "-160px 0px -50% 0px" },
-    );
-
-    sectionRefs.current.forEach((el) => el && observer.observe(el));
-    return () => {
-      sectionRefs.current.forEach((el) => el && observer.unobserve(el));
-      observer.disconnect();
-    };
   }, [sections]);
-  return { visibleSections, sectionRefs: sectionRefs };
+
+  return sectionRefs;
 }
 
 export default function Navigation({ sections }: { sections: Section[] }) {
-  const { visibleSections, sectionRefs } = useVisibleSections(sections);
+  const sectionRefs = useSectionRefs(sections);
   const router = useRouter();
   const pathname = usePathname();
   const [hash, setHash] = useState<string>("");
@@ -66,28 +36,58 @@ export default function Navigation({ sections }: { sections: Section[] }) {
   const isProgrammaticScroll = useRef(false);
   const programmaticScrollTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  // // Go Top
-  // useEffect(() => {
-  //   const hash = window.location.hash;
-  //   if (hash) return;
-
-  //   const isMd = window.matchMedia("(min-width: 768px)").matches;
-  //   window.scrollTo({
-  //     top: pathname === "/" ? 0 : isMd ? 0 : 160,
-  //     behavior: "instant",
-  //   });
-  // }, [pathname]);
-
-  // Scroll Change Effect
+  // Scroll-spy: use heading positions instead of observing the small heading
+  // elements inside a narrow IntersectionObserver band.
   useEffect(() => {
-    if (isProgrammaticScroll.current) return;
-    const firstVisibleKey = sectionRefs.current.find((el) => el && visibleSections[el.id])?.id;
-    if (firstVisibleKey && activated !== firstVisibleKey) {
-      // Scroll-spy: reflect the first visible section in the active hash.
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setHash(firstVisibleKey);
+    if (pathname !== "/") return;
+
+    let animationFrame: number | null = null;
+    const updateActiveSection = () => {
+      animationFrame = null;
+      if (isProgrammaticScroll.current) return;
+
+      const isMd = window.matchMedia("(min-width: 768px)").matches;
+      const activationOffset = isMd ? 80 : 140;
+      let nextSection = "about";
+
+      for (const section of sectionRefs.current) {
+        if (section.getBoundingClientRect().top <= activationOffset) {
+          nextSection = section.id;
+        } else {
+          break;
+        }
+      }
+
+      setHash((current) => (current === nextSection ? current : nextSection));
+    };
+
+    const scheduleUpdate = () => {
+      if (animationFrame === null) {
+        animationFrame = window.requestAnimationFrame(updateActiveSection);
+      }
+    };
+
+    window.addEventListener("scroll", scheduleUpdate, { passive: true });
+    window.addEventListener("resize", scheduleUpdate);
+    scheduleUpdate();
+
+    return () => {
+      window.removeEventListener("scroll", scheduleUpdate);
+      window.removeEventListener("resize", scheduleUpdate);
+      if (animationFrame !== null) window.cancelAnimationFrame(animationFrame);
+    };
+  }, [pathname, sectionRefs]);
+
+  const releaseProgrammaticScroll = useCallback(() => {
+    if (programmaticScrollTimeoutRef.current) {
+      clearTimeout(programmaticScrollTimeoutRef.current);
     }
-  }, [visibleSections, sections, activated, sectionRefs]);
+
+    programmaticScrollTimeoutRef.current = setTimeout(() => {
+      isProgrammaticScroll.current = false;
+      window.dispatchEvent(new Event("scroll"));
+    }, 800);
+  }, []);
 
   const handleMainSectionClick = (sectionKey: string) => {
     if (programmaticScrollTimeoutRef.current) clearTimeout(programmaticScrollTimeoutRef.current);
@@ -107,9 +107,9 @@ export default function Navigation({ sections }: { sections: Section[] }) {
         behavior: "smooth",
       });
       router.replace("/", { scroll: false });
+      releaseProgrammaticScroll();
       return;
     } else {
-      console.log("sectionKey", sectionKey);
       const element = document.getElementById(sectionKey);
       if (element) {
         const isMd = window.matchMedia("(min-width: 768px)").matches;
@@ -121,9 +121,7 @@ export default function Navigation({ sections }: { sections: Section[] }) {
       }
     }
 
-    programmaticScrollTimeoutRef.current = setTimeout(() => {
-      isProgrammaticScroll.current = false;
-    }, 500);
+    releaseProgrammaticScroll();
   };
 
   return (

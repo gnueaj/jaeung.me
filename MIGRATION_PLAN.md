@@ -1,5 +1,9 @@
 # jaeung.me 마이그레이션 & 리팩토링 계획
 
+> 📌 **현재 상태와 다음 할 일은 [`HANDOFF.md`](./HANDOFF.md) 를 먼저 보세요.**
+> 이 문서는 **최초 계획 및 의사결정 히스토리** 기록입니다. §2 폴더구조·§4 하드코딩 목록 등 일부는
+> Phase 2 리팩토링 **이전** 기준이라 현재와 다릅니다 (§9에 리팩토링 실행 결과 정리).
+
 > 원본: [`jiwnchoi/jiwnchoi`](https://jiwnchoi.me) 개인 블로그 (Jiwon Choi)
 > 목표: 이 UI/구조를 재사용하여 **Jaeung Lee**의 개인 사이트로 리브랜딩 → **jaeung.me** 배포 + 배포 파이프라인 구축
 > 원격 저장소: https://github.com/gnueaj/jaeung.me.git (연결 완료)

@@ -98,6 +98,14 @@ div.nextra-code {
   @apply relative;
 }
 
+/* The avatars sit at z-10 and paint over this, so the run can be long and blunt
+   and still look tucked away: it disappears behind the parent's circle at the
+   top and under the reply's at the corner. bg-primary/10 was translucent and
+   would have let the line show through, hence the opaque mix below. */
+.me-reply-avatar {
+  background: color-mix(in oklab, var(--color-primary) 10%, var(--card-bg));
+}
+
 .me-reply-thread > li::before {
   content: "";
   position: absolute;
@@ -110,11 +118,11 @@ div.nextra-code {
      reads as one line rather than a stack of detached hooks. Lengthening this
      is what separates a reply from the note it answers — `height` has to grow
      by the same amount so the elbow still lands on the avatar. */
-  top: -1.75rem;
-  /* Stops exactly at the reply avatar's left edge rather than tucking under it. */
-  width: 0.875rem;
+  top: -2.4rem;
+  /* Runs past the reply avatar's left edge so the corner ends underneath it. */
+  width: 1.3rem;
   /* top + height leaves the corner level with the 1.75rem avatar's centre. */
-  height: 2.65rem;
+  height: 3.3rem;
   border-left: 2px solid var(--color-zinc-200);
   border-bottom: 2px solid var(--color-zinc-200);
   /* Kept well under the 0.875rem width; at the old 0.85rem the curve ate the

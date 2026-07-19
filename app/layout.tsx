@@ -58,7 +58,16 @@ export default async function RootLayout({ children }: { children: React.ReactNo
                 priority
               />
               <div className="flex w-full flex-col overflow-hidden overflow-x-hidden md:items-center">
-                <p className="mb-2 truncate text-lg font-semibold">{meta.name}</p>
+                <div className="mb-1 flex w-full items-center justify-between gap-2 md:mb-2 md:block">
+                  <p className="min-w-0 truncate text-lg font-semibold md:text-center">
+                    {meta.name}
+                  </p>
+                  <ThemeSwitch
+                    size={18}
+                    homeOnly
+                    className="btn btn-ghost me-violet-hover flex h-9 min-h-0 w-9 shrink-0 items-center justify-center rounded-lg p-0 md:hidden"
+                  />
+                </div>
                 <p className="mb-1 text-xs text-zinc-500 md:text-center dark:text-zinc-400">
                   {meta.position}
                 </p>
@@ -72,16 +81,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
               <section
                 className="me-card sticky top-0 w-full flex-col p-2 md:block md:p-4"
                 style={{ zIndex: 1000 }}>
-                <div className="flex min-w-0 items-center gap-1 md:block">
-                  <div className="min-w-0 flex-1">
-                    <Navigation sections={sections} />
-                  </div>
-                  <ThemeSwitch
-                    size={18}
-                    homeOnly
-                    className="btn btn-ghost me-violet-hover flex h-9 min-h-0 w-9 shrink-0 items-center justify-center rounded-lg p-0 md:hidden"
-                  />
-                </div>
+                <Navigation sections={sections} />
               </section>
             </div>
           </aside>

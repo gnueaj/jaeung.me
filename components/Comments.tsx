@@ -299,7 +299,7 @@ export default function Comments({
                 <div className="flex items-start gap-3">
                   <span
                     aria-hidden="true"
-                    className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-zinc-100 text-lg dark:bg-zinc-800">
+                    className="relative z-10 flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-zinc-100 text-lg dark:bg-zinc-800">
                     {comment.emoji ?? "👾"}
                   </span>
 
@@ -352,7 +352,7 @@ export default function Comments({
                         <div className="flex items-start gap-3">
                           <span
                             aria-hidden="true"
-                            className="bg-primary/10 flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-base">
+                            className="me-reply-avatar relative z-10 flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-base">
                             {reply.emoji ?? "👾"}
                           </span>
                           <div className="min-w-0 flex-1">

@@ -346,7 +346,7 @@ export default function Comments({
                 </div>
 
                 {comment.replies.length > 0 && (
-                  <ol className="me-reply-thread mt-8">
+                  <ol className="me-reply-thread mt-5">
                     {comment.replies.map((reply) => (
                       <li key={reply.id}>
                         <div className="flex items-start gap-3">

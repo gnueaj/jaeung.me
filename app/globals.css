@@ -110,11 +110,11 @@ div.nextra-code {
      reads as one line rather than a stack of detached hooks. Lengthening this
      is what separates a reply from the note it answers — `height` has to grow
      by the same amount so the elbow still lands on the avatar. */
-  top: -1.9rem;
+  top: -1.75rem;
   /* Stops exactly at the reply avatar's left edge rather than tucking under it. */
   width: 0.875rem;
   /* top + height leaves the corner level with the 1.75rem avatar's centre. */
-  height: 2.8rem;
+  height: 2.65rem;
   border-left: 2px solid var(--color-zinc-200);
   border-bottom: 2px solid var(--color-zinc-200);
   /* Kept well under the 0.875rem width; at the old 0.85rem the curve ate the

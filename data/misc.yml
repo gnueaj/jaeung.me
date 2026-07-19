@@ -1,30 +1,4 @@
 honors:
-  - id: 2023-ai-challenge
-    name: AI Challenge, Ministry of Science and ICT
-    title: 2nd Place, Best Award
-    location: Korea
-    date: "2023.08"
-    description: >
-      **Project:** Developed a semantic segmentation model to detect buildings in satellite imagery.
-
-      - Ranked 2nd among approximately 1,000 participants
-
-      - Received the Institute of Information & Communications Technology Planning & Evaluation (IITP) Director's Award
-
-services:
-  - id: skku-machine-learning-ta
-    name: Sungkyunkwan University
-    title: Teaching Assistant, Fundamentals of Machine Learning
-    location: Suwon, Korea
-    date:
-      from: "2024.09"
-      to: "2025.12"
-    description: >
-      - Semesters: 2024 Fall, 2025 Spring, and 2025 Fall
-
-      - [Course materials](https://github.com/gnueaj/machine-learning-exams-SKKU)
-
-scholarships:
   - id: 2024-samsung-dx-scholarship
     name: Samsung Electronics
     title: DX Scholarship
@@ -39,9 +13,21 @@ scholarships:
     location: Suwon, Korea
     date: "2024.08"
     description: >
-      - Ranked 1st in Computer Science and Engineering
+      Ranked 1st in Computer Science and Engineering
 
-      - Full tuition for the entire master's program (2024–2025)
+      Full tuition for the entire master's program (2024–2025)
+
+  - id: 2023-ai-challenge
+    name: AI Challenge, Ministry of Science and ICT
+    title: 2nd Place, Best Award
+    location: Korea
+    date: "2023.08"
+    description: >
+      Developed a semantic segmentation model to detect buildings in satellite imagery.
+
+      - Ranked 2nd among approximately 1,000 participants
+
+      - Received the Institute of Information & Communications Technology Planning & Evaluation (IITP) Director's Award
 
   - id: 2023-skku-merit-scholarship
     name: Sungkyunkwan University
@@ -49,9 +35,9 @@ scholarships:
     location: Suwon, Korea
     date: "2023.08"
     description: >
-      - Awarded to the top 3% of Computer Science and Engineering students
+      Awarded to the top 3% of Computer Science and Engineering students
 
-      - Covered 70% of tuition (2023–2024)
+      Covered 70% of tuition (2023–2024)
 
   - id: 2018-skku-software-scholarship
     name: Sungkyunkwan University
@@ -61,11 +47,15 @@ scholarships:
     description: >
       Full tuition scholarship (2018–2019).
 
-talks:
-  - id: 2025-korea-visualization-workshop-talk
-    name: 3rd Korea Visualization Workshop (K-VIS 2025)
-    title: Speaker
-    location: Pohang, Korea
-    date: "2025.07.11"
+services:
+  - id: skku-machine-learning-ta
+    name: Sungkyunkwan University
+    title: Teaching Assistant, Fundamentals of Machine Learning
+    location: Suwon, Korea
+    date:
+      from: "2024.09"
+      to: "2025.12"
     description: >
-      **Talk:** *Unlearning Comparator: A Visual Analytics System for Comparative Evaluation of Machine Unlearning Methods*
+      - Semesters: 2024 Fall, 2025 Spring, and 2025 Fall
+
+      - [Course materials](https://github.com/gnueaj/machine-learning-exams-SKKU)

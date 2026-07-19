@@ -1,24 +1,20 @@
 skills:
   - type: Research
     description: >
-      **Machine Learning**, **Visualization**, **Explainable AI (XAI)**, **Computer Vision**
+      Visualization, Mechanistic Interpretability, NLP, ML
 
   - type: Frontend
     description: >
-      **React**, **TypeScript**, Visualization (**D3**, visx, Vega, vis.gl, ...)
+      React, TypeScript, Visualization (D3, Vega, ...)
 
   - type: Backend
     description: >
-      Python, **FastAPI**, Docker, PostgreSQL, Celery, Redis, AWS (S3, EC2, ...), CI/CD (GitHub Actions)
-
-  - type: AI/ML
-    description: >
-      **PyTorch**, Hugging Face, NLP
+      Python, FastAPI, Docker, PostgreSQL, AWS (S3, EC2, ...), CI/CD (GitHub Actions)
 
   - type: Design
     description: >
-      **Figma**, Illustrator, Photoshop, Prototyping, User Research
+      Figma, Design Study, User Research, Prototyping
 
   - type: Certificate
     description: >
-      **Samsung S/W Certificate (PRO)**, Samsung Electronics (Sep 2022)
+      Samsung S/W Certificate (PRO)

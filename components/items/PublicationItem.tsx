@@ -82,6 +82,23 @@ const URL_FULLNAME = {
 // happens to use in `data/publications.yml`.
 const URL_ORDER = ["web", "video", "git", "pdf"] as const;
 
+export async function PublicationLinks({ url }: { url: Publication["url"] }) {
+  return (
+    <div className="mt-2 flex flex-wrap gap-2">
+      {URL_ORDER.map((key) => {
+        const value = url[key];
+        return (
+          value && (
+            <PublicationButton key={key} href={value} icon={URL_ICON[key]}>
+              {URL_FULLNAME[key]}
+            </PublicationButton>
+          )
+        );
+      })}
+    </div>
+  );
+}
+
 export default async function PublicationItem(props: Publication) {
   const { title, authors, url, venue } = props;
 
@@ -89,21 +106,9 @@ export default async function PublicationItem(props: Publication) {
     <li className="m-0 flex flex-col p-0">
       <div className="flex flex-col">
         {typeof title === "string" ? <MDXContent mdxSource={`### ${title}`} /> : title}
-        <AuthorNames authorList={authors} />
+        {authors.length > 0 && <AuthorNames authorList={authors} />}
         <p className="not-prose text-sm text-zinc-500 dark:text-zinc-400">{venue}</p>
-
-        <div className="mt-2 flex flex-wrap gap-2">
-          {URL_ORDER.map((key) => {
-            const value = url[key];
-            return (
-              value && (
-                <PublicationButton key={key} href={value} icon={URL_ICON[key]}>
-                  {URL_FULLNAME[key]}
-                </PublicationButton>
-              )
-            );
-          })}
-        </div>
+        <PublicationLinks url={url} />
       </div>
     </li>
   );

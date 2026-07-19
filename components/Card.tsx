@@ -1,4 +1,3 @@
-import { formatDate } from "@/utils";
 import Image from "next/image";
 import Link from "next/link";
 import { twMerge } from "tailwind-merge";
@@ -10,17 +9,9 @@ interface CardProps {
   route: string;
   imagePath?: string | null;
   tags: string[];
-  date?: TDate;
 }
 
-export default async function Card({
-  title,
-  description,
-  route,
-  imagePath,
-  tags,
-  date,
-}: CardProps) {
+export default async function Card({ title, description, route, imagePath, tags }: CardProps) {
   const unoptimized = imagePath?.startsWith("/api/asset/") ?? false;
   return (
     <Link href={route.replace("/content", "")} prefetch={true} className="not-prose">
@@ -39,7 +30,7 @@ export default async function Card({
               sizes="500px"
               fill
               unoptimized={unoptimized}
-              className="not-prose absoute z-1 scale-[110%] border-none object-cover"
+              className="not-prose absolute z-1 scale-[110%] border-none object-cover"
               priority={true}
             />
             <div className="absolute inset-0 z-2 border-0 border-none bg-gradient-to-b from-transparent to-white transition-opacity duration-300 dark:from-black/10 dark:to-zinc-900" />
@@ -57,7 +48,6 @@ export default async function Card({
               <TagBadge key={`tag-${title}-${t}`} content={t} />
             ))}
           </p>
-          <p className="text-[11px] text-zinc-500 dark:text-zinc-400">{date && formatDate(date)}</p>
         </div>
       </div>
     </Link>

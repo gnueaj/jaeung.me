@@ -3,7 +3,5 @@ export { default as Educations } from "./Educations";
 export { default as Honors } from "./Honors";
 export { default as News } from "./News";
 export { default as Publications } from "./Publications";
-export { default as Scholarships } from "./Scholarships";
 export { default as Services } from "./Services";
 export { default as Skills } from "./Skills";
-export { default as Talks } from "./Talks";

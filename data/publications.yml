@@ -1,4 +1,11 @@
 publications:
+  - id: decode
+    title: "DECODE: Diagnosing Interpretability Failures in Automated Interpretation Process"
+    authors: []
+    type: ongoing
+    venue: "Ongoing work."
+    url: {}
+
   - id: measuring-unlearning-depth
     title: "Measuring the Depth of LLM Unlearning via Activation Patching"
     authors:

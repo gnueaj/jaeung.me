@@ -1,5 +1,4 @@
 import { Card } from "@/components";
-import { getTimeStamp } from "@/utils";
 import { existsSync } from "fs";
 import { getPageMap } from "nextra/page-map";
 import path from "path";
@@ -12,7 +11,7 @@ export default async function Gallery({
   contentPath,
   contentTypes = ["paper", "project"],
 }: {
-  title: string;
+  title?: string;
   contentPath: string;
   contentTypes: string[];
 }) {
@@ -42,21 +41,22 @@ export default async function Gallery({
           typeof item.frontMatter?.tags === "string"
             ? [item.frontMatter?.tags]
             : (item.frontMatter?.tags ?? []),
-        date: item.frontMatter?.date, // date 추가
+        order: Number(item.frontMatter?.order ?? 0),
       };
     })
-    .sort((a, b) => getTimeStamp(b.date) - getTimeStamp(a.date));
+    .sort((a, b) => b.order - a.order);
 
   return (
     <>
-      <h2 className="not-prose mt-4 mb-4 text-3xl font-bold text-zinc-900 md:mt-0 dark:text-zinc-100">
-        {title}
-      </h2>
-      <div
-        className="mb-16 grid auto-rows-auto grid-cols-1 gap-6"
-        style={{
-          gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))",
-        }}>
+      {title && (
+        <h2 className="not-prose mt-4 mb-4 text-3xl font-bold text-zinc-900 md:mt-0 dark:text-zinc-100">
+          {title}
+        </h2>
+      )}
+      {/* Two columns rather than auto-fill: the cards carry wide teaser images,
+          and letting the track count follow the viewport made them shrink to
+          thumbnails on large screens. */}
+      <div className="mb-16 grid auto-rows-auto grid-cols-1 gap-6 md:grid-cols-2">
         {items.map((item) => (
           <Card
             key={`project-card-${item.key}`}
@@ -65,7 +65,6 @@ export default async function Gallery({
             route={item.route}
             imagePath={item.imagePath}
             tags={item.tags}
-            date={item.date}
           />
         ))}
       </div>

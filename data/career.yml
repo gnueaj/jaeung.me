@@ -2,13 +2,14 @@ career:
   - id: samsung-research
     name: >
       [Samsung Electronics](https://www.samsung.com)
-    title: Research Engineer @ Samsung Research, AI Center
+    title: Research Engineer @ [Samsung Research](https://research.samsung.com)
     from: "2026.03"
     to: Present
     location: Seoul, Korea
     description: >
-      Designing and evaluating next-generation on-device architectures for
-      embedding and vision-language models.
+      #### AI System Team, AI Center
+
+      - Designing next-generation on-device architectures for vision-language and embedding models.
 
   - id: skku-research-assistant
     name: >
@@ -18,11 +19,21 @@ career:
     to: "2026.02"
     location: Suwon, Korea
     description: >
-      Advisor: Prof. Jaemin Jo
+      #### Research
 
-      - Researched machine unlearning evaluation through visual analytics.
+      - Researched visualization and Human-Computer (AI) Interaction for ML, AI safety, and mechanistic interpretability.
 
-      - Teaching Assistant: Fundamentals of Machine Learning (2024 Fall, 2025 Spring, 2025 Fall). [Course materials](https://github.com/gnueaj/machine-learning-exams-SKKU)
+      - Published four papers: two first-authored (IEEE TVCG, EMNLP) and two co-authored (IEEE VIS, WWW), with one ongoing work, [DECODE](/projects/decode).
+
+      - Built [PediaViz](/projects/pediaviz), a clinical visualization system for pediatric chronic care, with NAVER and Seoul National University Hospital.
+
+      #### Teaching Assistant
+
+      - Fundamentals of Machine Learning (2024 Fall, 2025 Spring, 2025 Fall).
+
+      - Wrote the assignments, exams, and lab sessions. [Course materials](https://github.com/gnueaj/machine-learning-exams-SKKU)
+
+      - Ranked 1st in student evaluation scores for three consecutive semesters.
 
   - id: deep-daiv
     name: >
@@ -31,8 +42,13 @@ career:
     from: "2024.02"
     to: "2025.01"
     description: >
-      Mentored projects in explainable AI (XAI) and computer vision.<br />
-      Reviewed AI-related content and newsletters before publication.
+      #### Project Mentoring
+
+      - Mentored explainable AI (XAI) and computer vision [projects](https://github.com/deep-daiv-XAI/.github) for 100+ members.
+
+      #### Content Review
+
+      - Reviewed AI articles and newsletters before publication for [deep daiv.](https://www.instagram.com/deep.daiv/), the largest Korean student AI community on Instagram with **40K+ followers**.
 
   - id: skku-undergraduate-researcher
     name: >
@@ -42,14 +58,10 @@ career:
     to: "2024.08"
     location: Suwon, Korea
     description: >
-      #### [Interactive Data Computing Lab](https://idclab.skku.edu) · Jan 2024 — Aug 2024
+      #### [Interactive Data Computing Lab](https://idclab.skku.edu) <span className="me-item-period">Jan 2024 — Aug 2024</span>
 
-      - Advisor: Prof. Jaemin Jo
+      - Contributed to [Bavisitter](https://github.com/jiwnchoi/bavisitter), a system that folds visualization design guidelines into LLM-based chart authoring.
 
-      - Project: Contributed to the [Bavisitter](https://github.com/jiwnchoi/bavisitter) research project.
+      #### VSCLab, now [V-Lab](https://v-laboratory.github.io/) @ Yonsei University <span className="me-item-period">Jul 2023 — Dec 2023</span>
 
-      #### VSCLab (now [V-Lab](https://v-laboratory.github.io/) at Yonsei University) · Jul 2023 — Dec 2023
-
-      - Advisor: Prof. Eunbyung Park
-
-      - Project: Developed [Satellite Image Building Area Segmentation](https://github.com/gnueaj/Satellite-Image-Building-Area-Segmentation).
+      - Built [Building Footprint Segmentation from Satellite Imagery](https://github.com/gnueaj/Satellite-Image-Building-Area-Segmentation), placing 2nd among roughly 1,000 participants.

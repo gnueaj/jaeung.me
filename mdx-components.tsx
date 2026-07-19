@@ -156,7 +156,13 @@ export const useMDXComponents: UseMDXComponents<typeof DEFAULT_COMPONENTS> = <
     ...DEFAULT_COMPONENTS,
     // @ts-expect-error -- fixme
     wrapper({ children, metadata }) {
-      const pub = publications.find((p) => p.title === metadata.title);
+      const publicationId =
+        typeof metadata.publicationId === "string" ? metadata.publicationId : null;
+      const pub = publicationId
+        ? publications.find((publication) => publication.id === publicationId)
+        : metadata.type === "paper"
+          ? publications.find((publication) => publication.title === metadata.title)
+          : null;
       return (
         <>
           {metadata.type !== "page" ? (
@@ -170,10 +176,12 @@ export const useMDXComponents: UseMDXComponents<typeof DEFAULT_COMPONENTS> = <
           ) : null}
 
           {children}
-          {metadata.type === "paper" && pub && (
+          {pub && (
             <>
               <div className="divider mt-8 mb-4" />
-              <PublicationItem {...pub} />
+              <ol className="me-list">
+                <PublicationItem {...pub} />
+              </ol>
             </>
           )}
 

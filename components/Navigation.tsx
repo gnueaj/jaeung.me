@@ -9,10 +9,9 @@ import Responsive from "./Responsive";
 // Anything here means the visitor grabbed the scroll back from us.
 const USER_TAKEOVER_EVENTS = ["wheel", "touchstart", "keydown"] as const;
 
-// Page tabs whose route still holds the original template author's content.
-// They render and animate exactly like a normal tab, but must not navigate yet.
-// Empty this set once /projects holds Jaeung's own work.
-const LOCKED_PAGE_KEYS = new Set(["projects"]);
+// Page tabs that render like normal tabs but must not navigate yet, for routes
+// still holding placeholder content. Empty now that /projects is Jaeung's own.
+const LOCKED_PAGE_KEYS = new Set<string>();
 
 // The tab that pulses once the visitor reaches the bottom of the home page.
 const CTA_PAGE_KEY = "guestbook";

@@ -1,6 +1,11 @@
 "use client";
 
-import { Delete02Icon, Edit02Icon, MessageCircleReplyIcon } from "@hugeicons/core-free-icons";
+import {
+  Delete02Icon,
+  Edit02Icon,
+  MessageCircleReplyIcon,
+  MoreVerticalIcon,
+} from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { GUESTBOOK_EMOJI_SUGGESTIONS, normalizeGuestbookEmoji } from "@/lib/guestbook-emoji";
 import { FormEvent, useEffect, useRef, useState } from "react";
@@ -89,7 +94,9 @@ export default function Comments({
   const [editContent, setEditContent] = useState("");
   const [editPassword, setEditPassword] = useState("");
   const [isEditing, setIsEditing] = useState(false);
+  const [actionMenuTarget, setActionMenuTarget] = useState<string | null>(null);
   const emojiRef = useRef<HTMLDivElement>(null);
+  const actionMenuRef = useRef<HTMLDivElement>(null);
   const skipInitialFetchRef = useRef(Boolean(initialData));
 
   // Dismiss the badge picker the way any popover should: click away or Escape.
@@ -110,6 +117,24 @@ export default function Comments({
       document.removeEventListener("keydown", onKeyDown);
     };
   }, [isEmojiOpen]);
+
+  useEffect(() => {
+    if (!actionMenuTarget) return;
+
+    const onPointerDown = (event: MouseEvent) => {
+      if (!actionMenuRef.current?.contains(event.target as Node)) setActionMenuTarget(null);
+    };
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setActionMenuTarget(null);
+    };
+
+    document.addEventListener("mousedown", onPointerDown);
+    document.addEventListener("keydown", onKeyDown);
+    return () => {
+      document.removeEventListener("mousedown", onPointerDown);
+      document.removeEventListener("keydown", onKeyDown);
+    };
+  }, [actionMenuTarget]);
 
   useEffect(() => {
     if (skipInitialFetchRef.current) {
@@ -158,6 +183,7 @@ export default function Comments({
     setDeletePassword("");
     setEditTarget(null);
     setEditPassword("");
+    setActionMenuTarget(null);
     setMessage("");
     setPage(nextPage);
   }
@@ -170,6 +196,7 @@ export default function Comments({
     setEditPassword("");
     setDeleteTarget(null);
     setDeletePassword("");
+    setActionMenuTarget(null);
     setMessage("");
   }
 
@@ -181,6 +208,7 @@ export default function Comments({
     setReplyTarget(null);
     setDeleteTarget(null);
     setDeletePassword("");
+    setActionMenuTarget(null);
     setMessage("");
   }
 
@@ -190,6 +218,7 @@ export default function Comments({
     setReplyTarget(null);
     setEditTarget(null);
     setEditPassword("");
+    setActionMenuTarget(null);
     setMessage("");
   }
 
@@ -347,6 +376,97 @@ export default function Comments({
   }
 
   const isBusy = !isConfigured || isSubmitting;
+  const renderActionControls = (comment: GuestbookComment, canReply: boolean) => {
+    const isMenuOpen = actionMenuTarget === comment.id;
+    const menuItemClassName =
+      "flex w-full items-center gap-2 rounded-lg px-2.5 py-2 text-left text-sm text-zinc-600 transition hover:bg-primary/10 hover:text-primary focus-visible:bg-primary/10 focus-visible:text-primary focus-visible:outline-none dark:text-zinc-300";
+
+    return (
+      <>
+        <div className="hidden shrink-0 items-center gap-1 sm:flex">
+          {canReply && (
+            <button
+              type="button"
+              onClick={() => toggleReply(comment.id)}
+              aria-expanded={replyTarget === comment.id}
+              aria-label="Reply"
+              title="Reply"
+              className={actionButtonClassName}>
+              <HugeiconsIcon icon={MessageCircleReplyIcon} size={16} />
+            </button>
+          )}
+          <button
+            type="button"
+            onClick={() => toggleEdit(comment)}
+            aria-expanded={editTarget === comment.id}
+            aria-label={canReply ? "Edit" : "Edit reply"}
+            title="Edit"
+            className={actionButtonClassName}>
+            <HugeiconsIcon icon={Edit02Icon} size={canReply ? 16 : 15} />
+          </button>
+          <button
+            type="button"
+            onClick={() => toggleDelete(comment.id)}
+            aria-expanded={deleteTarget === comment.id}
+            aria-label={canReply ? "Delete" : "Delete reply"}
+            title="Delete"
+            className={actionButtonClassName}>
+            <HugeiconsIcon icon={Delete02Icon} size={canReply ? 16 : 15} />
+          </button>
+        </div>
+
+        <div ref={isMenuOpen ? actionMenuRef : undefined} className="relative shrink-0 sm:hidden">
+          <button
+            type="button"
+            onClick={() =>
+              setActionMenuTarget((current) => (current === comment.id ? null : comment.id))
+            }
+            aria-haspopup="menu"
+            aria-expanded={isMenuOpen}
+            aria-label="Message actions"
+            title="Message actions"
+            className={actionButtonClassName}>
+            <HugeiconsIcon icon={MoreVerticalIcon} size={18} />
+          </button>
+
+          {isMenuOpen && (
+            <div
+              role="menu"
+              aria-label="Message actions"
+              className="absolute top-full right-0 z-30 mt-1 w-32 rounded-xl border border-zinc-200 bg-white p-1.5 shadow-lg dark:border-zinc-700 dark:bg-zinc-900">
+              {canReply && (
+                <button
+                  type="button"
+                  role="menuitem"
+                  onClick={() => toggleReply(comment.id)}
+                  className={menuItemClassName}>
+                  <HugeiconsIcon icon={MessageCircleReplyIcon} size={15} />
+                  Reply
+                </button>
+              )}
+              <button
+                type="button"
+                role="menuitem"
+                onClick={() => toggleEdit(comment)}
+                className={menuItemClassName}>
+                <HugeiconsIcon icon={Edit02Icon} size={15} />
+                Edit
+              </button>
+              <button
+                type="button"
+                role="menuitem"
+                onClick={() => toggleDelete(comment.id)}
+                className={menuItemClassName}>
+                <HugeiconsIcon icon={Delete02Icon} size={15} />
+                Delete
+              </button>
+            </div>
+          )}
+        </div>
+      </>
+    );
+  };
+
   const renderEditForm = (comment: GuestbookComment, parentId?: string) => (
     <form
       onSubmit={(event) => {
@@ -452,37 +572,9 @@ export default function Comments({
                     </p>
                   </div>
 
-                  <div className="flex shrink-0 items-center gap-1">
-                    {/* Shown to everyone. The password check on the server is
-                        the real gate, so there is nothing to hide behind a flag. */}
-                    <button
-                      type="button"
-                      onClick={() => toggleReply(comment.id)}
-                      aria-expanded={replyTarget === comment.id}
-                      aria-label="Reply"
-                      title="Reply"
-                      className={actionButtonClassName}>
-                      <HugeiconsIcon icon={MessageCircleReplyIcon} size={16} />
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => toggleEdit(comment)}
-                      aria-expanded={editTarget === comment.id}
-                      aria-label="Edit"
-                      title="Edit"
-                      className={actionButtonClassName}>
-                      <HugeiconsIcon icon={Edit02Icon} size={16} />
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => toggleDelete(comment.id)}
-                      aria-expanded={deleteTarget === comment.id}
-                      aria-label="Delete"
-                      title="Delete"
-                      className={actionButtonClassName}>
-                      <HugeiconsIcon icon={Delete02Icon} size={16} />
-                    </button>
-                  </div>
+                  {/* Shown to everyone. The password check on the server is
+                      the real gate, so there is nothing to hide behind a flag. */}
+                  {renderActionControls(comment, true)}
                 </div>
 
                 {editTarget === comment.id && renderEditForm(comment)}
@@ -514,26 +606,7 @@ export default function Comments({
                             </p>
                           </div>
 
-                          <div className="flex shrink-0 items-center gap-1">
-                            <button
-                              type="button"
-                              onClick={() => toggleEdit(reply)}
-                              aria-expanded={editTarget === reply.id}
-                              aria-label="Edit reply"
-                              title="Edit"
-                              className={actionButtonClassName}>
-                              <HugeiconsIcon icon={Edit02Icon} size={15} />
-                            </button>
-                            <button
-                              type="button"
-                              onClick={() => toggleDelete(reply.id)}
-                              aria-expanded={deleteTarget === reply.id}
-                              aria-label="Delete reply"
-                              title="Delete"
-                              className={actionButtonClassName}>
-                              <HugeiconsIcon icon={Delete02Icon} size={15} />
-                            </button>
-                          </div>
+                          {renderActionControls(reply, false)}
                         </div>
 
                         {editTarget === reply.id && renderEditForm(reply, comment.id)}

@@ -122,6 +122,21 @@ function validateCommentInput(input: unknown) {
   return { nickname, emoji, content, password, parentId: null, postSlug };
 }
 
+function validateEditInput(input: unknown) {
+  if (!input || typeof input !== "object") return null;
+
+  const body = input as Record<string, unknown>;
+  const id = typeof body.id === "string" ? body.id : "";
+  const content = typeof body.content === "string" ? body.content.trim() : "";
+  const password = typeof body.password === "string" ? body.password : "";
+
+  if (!id) return null;
+  if (!content || content.length > CONTENT_MAX_LENGTH || content.includes("\0")) return null;
+  if (password.length < PASSWORD_MIN_LENGTH || password.length > PASSWORD_MAX_LENGTH) return null;
+
+  return { id, content, password };
+}
+
 /**
  * Counts recent notes from the same address. Runs before the password hash so a
  * flood costs a cheap indexed lookup instead of a full scrypt derivation.
@@ -241,6 +256,54 @@ export async function POST(request: NextRequest) {
         status: 201,
       },
     );
+  } catch (error) {
+    if (error instanceof SyntaxError) {
+      return NextResponse.json({ error: "Invalid request." }, { status: 400 });
+    }
+    return errorResponse(error);
+  }
+}
+
+export async function PATCH(request: NextRequest) {
+  try {
+    const input = validateEditInput(await request.json());
+    if (!input) {
+      return NextResponse.json(
+        { error: "Check the message and editing password." },
+        { status: 400 },
+      );
+    }
+
+    const database = getCommentsDatabase();
+    const { data, error: readError } = await database
+      .from("guestbook_comments")
+      .select(`${COMMENT_FIELDS},password_hash`)
+      .eq("id", input.id)
+      .is("deleted_at", null)
+      .maybeSingle();
+
+    if (readError) throw readError;
+    if (!data) return NextResponse.json({ error: "Comment not found." }, { status: 404 });
+
+    const comment = data as CommentWithPasswordRow;
+    const isAuthor = await verifyCommentPassword(input.password, comment.password_hash);
+    const isAdmin = verifyGuestbookAdminPassword(input.password);
+    if (!isAuthor && !isAdmin) {
+      return NextResponse.json({ error: "Incorrect password." }, { status: 403 });
+    }
+
+    const { data: updated, error: updateError } = await database
+      .from("guestbook_comments")
+      .update({ content: input.content })
+      .eq("id", input.id)
+      .is("deleted_at", null)
+      .select(COMMENT_FIELDS)
+      .single();
+
+    if (updateError) throw updateError;
+    revalidateTag(GUESTBOOK_CACHE_TAG, { expire: 0 });
+
+    return NextResponse.json({ comment: publicComment(updated as unknown as CommentRow) });
   } catch (error) {
     if (error instanceof SyntaxError) {
       return NextResponse.json({ error: "Invalid request." }, { status: 400 });

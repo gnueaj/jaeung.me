@@ -11,7 +11,11 @@
       "Bash(curl -s --max-time 30 \"https://api.semanticscholar.org/graph/v1/paper/search?query=Bavisitter%20visualization%20authoring&fields=title,abstract,year,venue,externalIds\")",
       "WebFetch(domain:dblp.org)",
       "Bash(curl -s --max-time 25 \"https://dblp.org/search/publ/api?q=Bavisitter&format=json\")",
-      "WebFetch(domain:ieeexplore.ieee.org)"
+      "WebFetch(domain:ieeexplore.ieee.org)",
+      "Bash(grep -vE \"^-\\\\s*$|^---\")",
+      "Bash(grep -vE \"^\\\\s*$\")",
+      "Bash(grep -E \"\\(st|nd|rd|th\\)\\\\b|%|\\\\bone\\\\b|\\\\btwo\\\\b|\\\\bthree\\\\b|\\\\bfour\\\\b|[0-9]{3,}\")",
+      "Bash(grep -rhoiE \"\\\\b\\(one|two|three|four|five|six|seven|eight|nine|ten\\)\\\\b[^.]{0,45}\" data/career.yml data/educations.yml data/misc.yml)"
     ]
   }
 }

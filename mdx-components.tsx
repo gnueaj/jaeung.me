@@ -170,7 +170,10 @@ export const useMDXComponents: UseMDXComponents<typeof DEFAULT_COMPONENTS> = <
               <h1 className="dark:white text-zinc-900">
                 {metadata?.shortTitle ? metadata.shortTitle : metadata.title}
               </h1>
-              <p className="my-0 text-sm">{metadata.description}</p>
+              {/* Posts open with their own words, so repeating the frontmatter
+                  description here just says the same thing twice. It stays in
+                  the frontmatter for metadata and OG cards. */}
+              {metadata.type !== "post" && <p className="my-0 text-sm">{metadata.description}</p>}
               <div className="divider my-2" />
             </>
           ) : null}

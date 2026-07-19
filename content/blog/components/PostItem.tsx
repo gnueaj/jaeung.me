@@ -1,4 +1,5 @@
 import { Date, TagBadge } from "@/components";
+import { data } from "@/data";
 import { existsSync } from "fs";
 import Image from "next/image";
 import Link from "next/link";
@@ -26,14 +27,18 @@ export default function PostItem({ post }: { post: PageMapItem }) {
         <div className="flex flex-col gap-2">
           <Date date={post.frontMatter?.date} day={true} className="ml-0.5 text-xs" />
           <h3 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100">{post.title}</h3>
-          <p className="text-sm">{post.frontMatter?.description ?? ""}</p>
-          <ul className="mt-1 flex gap-2">
-            {tags.map((tag) => (
-              <li key={`tag-${post.title}-${tag}`}>
-                <TagBadge content={tag} />
-              </li>
-            ))}
-          </ul>
+          {tags.length > 0 && (
+            <ul className="mt-1 flex gap-2">
+              {tags.map((tag) => (
+                <li key={`tag-${post.title}-${tag}`}>
+                  <TagBadge content={tag} />
+                </li>
+              ))}
+            </ul>
+          )}
+          {/* A date and a title alone read like an index entry; the byline
+              makes each row look like a post. */}
+          <p className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">{data.meta().name}</p>
         </div>
         {teaserPath && (
           <div className="relative h-24 w-36 flex-shrink-0 overflow-hidden rounded-lg">

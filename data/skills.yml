@@ -1,7 +1,7 @@
 skills:
   - type: Research
     description: >
-      Visualization, Mechanistic Interpretability, NLP, ML
+      Visual Analytics, Mechanistic Interpretability, NLP, ML
 
   - type: Frontend
     description: >
@@ -9,7 +9,7 @@ skills:
 
   - type: Backend
     description: >
-      Python, FastAPI, Docker, PostgreSQL, AWS (S3, EC2, ...), CI/CD (GitHub Actions)
+      Python, FastAPI, Docker, PostgreSQL, AWS (S3, EC2, ...)
 
   - type: Design
     description: >

@@ -1,5 +1,9 @@
 {
   "permissions": {
-    "allow": ["Bash(python3 -c ' *)"]
+    "allow": [
+      "Bash(python3 -c ' *)",
+      "Bash(sed -n '/## Links/,$p' content/projects/pediaviz/index.mdx)",
+      "Bash(sed -n '/## Links/,$p' content/projects/decode/index.mdx)"
+    ]
   }
 }

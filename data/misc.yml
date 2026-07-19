@@ -15,7 +15,7 @@ honors:
     description: >
       Ranked 1st in Computer Science and Engineering
 
-      Full tuition for the entire master's program (2024–2025)
+      - Full tuition for the entire master's program (2024–2025)
 
   - id: 2023-ai-challenge
     name: AI Challenge, Ministry of Science and ICT
@@ -35,9 +35,9 @@ honors:
     location: Suwon, Korea
     date: "2023.08"
     description: >
-      Awarded to the top 3% of Computer Science and Engineering students
+      Awarded to the top 3% of Computer Science and Engineering
 
-      Covered 70% of tuition (2023–2024)
+      - Covered 70% of tuition (2023–2024)
 
   - id: 2018-skku-software-scholarship
     name: Sungkyunkwan University

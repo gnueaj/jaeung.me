@@ -14,18 +14,18 @@ career:
   - id: skku-research-assistant
     name: >
       [Sungkyunkwan University](https://www.skku.edu/eng/)
-    title: Research Assistant @ [Interactive Data Computing Lab](https://idclab.skku.edu)
+    title: Research Assistant @ [IDC Lab](https://idclab.skku.edu)
     from: "2024.09"
     to: "2026.02"
     location: Suwon, Korea
     description: >
       #### Research
 
-      - Researched visualization and Human-Computer (AI) Interaction for ML, AI safety, and mechanistic interpretability.
+      - Visualization and Human-Computer (AI) Interaction for ML, AI safety, and mechanistic interpretability.
 
-      - Published four papers: two first-authored (IEEE TVCG, EMNLP) and two co-authored (IEEE VIS, WWW), with one ongoing work, [DECODE](/projects/decode).
+      - Published four papers: two first-authored (IEEE TVCG, EMNLP) and two co-authored (IEEE VIS, WWW), with one ongoing work.
 
-      - Built [PediaViz](/projects/pediaviz), a clinical visualization system for pediatric chronic care, with NAVER and Seoul National University Hospital.
+      - Built [PediaViz](/projects/pediaviz), a clinical visualization system for pediatric chronic care, with NAVER and SNU Hospital.
 
       #### Teaching Assistant
 
@@ -58,10 +58,10 @@ career:
     to: "2024.08"
     location: Suwon, Korea
     description: >
-      #### [Interactive Data Computing Lab](https://idclab.skku.edu) <span className="me-item-period">Jan 2024 — Aug 2024</span>
+      #### [IDC Lab](https://idclab.skku.edu) <span className="me-item-period">Jan 2024 — Aug 2024</span>
 
       - Contributed to [Bavisitter](https://github.com/jiwnchoi/bavisitter), a system that folds visualization design guidelines into LLM-based chart authoring.
 
       #### VSCLab, now [V-Lab](https://v-laboratory.github.io/) @ Yonsei University <span className="me-item-period">Jul 2023 — Dec 2023</span>
 
-      - Built [Building Footprint Segmentation from Satellite Imagery](https://github.com/gnueaj/Satellite-Image-Building-Area-Segmentation), placing 2nd among roughly 1,000 participants.
+      - Built [Satellite Image Building Area Segmentation](https://github.com/gnueaj/Satellite-Image-Building-Area-Segmentation), placing 2nd among roughly 1,000 participants.

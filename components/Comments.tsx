@@ -42,7 +42,19 @@ async function responseError(response: Response) {
 function formatCommentDate(value: string) {
   const date = new Date(value);
   if (Number.isNaN(date.getTime())) return "";
-  return new Intl.DateTimeFormat("en", { dateStyle: "medium" }).format(date);
+
+  const isCurrentYear = date.getFullYear() === new Date().getFullYear();
+  const dateLabel = new Intl.DateTimeFormat("en", {
+    month: "short",
+    day: "numeric",
+    ...(!isCurrentYear && { year: "numeric" as const }),
+  }).format(date);
+  const timeLabel = new Intl.DateTimeFormat("en", {
+    hour: "numeric",
+    minute: "2-digit",
+  }).format(date);
+
+  return `${dateLabel} · ${timeLabel}`;
 }
 
 export type CommentsInitialData = {

@@ -3,7 +3,15 @@
     "allow": [
       "Bash(python3 -c ' *)",
       "Bash(sed -n '/## Links/,$p' content/projects/pediaviz/index.mdx)",
-      "Bash(sed -n '/## Links/,$p' content/projects/decode/index.mdx)"
+      "Bash(sed -n '/## Links/,$p' content/projects/decode/index.mdx)",
+      "Bash(curl -s http://localhost:3000/projects/decode)",
+      "WebFetch(domain:arxiv.org)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:api.semanticscholar.org)",
+      "Bash(curl -s --max-time 30 \"https://api.semanticscholar.org/graph/v1/paper/search?query=Bavisitter%20visualization%20authoring&fields=title,abstract,year,venue,externalIds\")",
+      "WebFetch(domain:dblp.org)",
+      "Bash(curl -s --max-time 25 \"https://dblp.org/search/publ/api?q=Bavisitter&format=json\")",
+      "WebFetch(domain:ieeexplore.ieee.org)"
     ]
   }
 }

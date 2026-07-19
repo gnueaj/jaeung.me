@@ -12,7 +12,6 @@ interface CardProps {
 }
 
 export default async function Card({ title, description, route, imagePath, tags }: CardProps) {
-  const unoptimized = imagePath?.startsWith("/api/asset/") ?? false;
   return (
     <Link href={route.replace("/content", "")} prefetch={true} className="not-prose">
       <div
@@ -29,9 +28,7 @@ export default async function Card({ title, description, route, imagePath, tags 
               alt={`${title} thumbnail`}
               sizes="500px"
               fill
-              unoptimized={unoptimized}
               className="not-prose absolute z-1 scale-[110%] border-none object-cover"
-              priority={true}
             />
             <div className="absolute inset-0 z-2 border-0 border-none bg-gradient-to-b from-transparent to-white transition-opacity duration-300 dark:from-black/10 dark:to-zinc-900" />
           </div>

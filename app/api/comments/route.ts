@@ -1,13 +1,17 @@
 import { normalizeGuestbookEmoji } from "@/lib/guestbook-emoji";
 import {
   CommentsNotConfiguredError,
+  GUESTBOOK_CACHE_TAG,
+  getCachedGuestbookPage,
   getCommentsDatabase,
   hashClientIp,
   hashCommentPassword,
+  type GuestbookCommentData,
   verifyCommentPassword,
   verifyGuestbookAdminPassword,
 } from "@/lib/guestbook-comments";
 import { siteConfig } from "@/site.config";
+import { revalidateTag } from "next/cache";
 import { NextRequest, NextResponse } from "next/server";
 
 export const runtime = "nodejs";
@@ -54,17 +58,7 @@ type CommentWithPasswordRow = CommentRow & {
   password_hash: string;
 };
 
-type PublicComment = {
-  id: string;
-  nickname: string;
-  emoji: string | null;
-  content: string;
-  createdAt: string;
-  isAuthorReply: boolean;
-  replies: PublicComment[];
-};
-
-const publicComment = (row: CommentRow, replies: CommentRow[] = []): PublicComment => ({
+const publicComment = (row: CommentRow, replies: CommentRow[] = []): GuestbookCommentData => ({
   id: row.id,
   nickname: row.nickname,
   emoji: row.emoji,
@@ -156,57 +150,12 @@ export async function GET(request: NextRequest) {
   try {
     const requestedPage = Number.parseInt(request.nextUrl.searchParams.get("page") ?? "1", 10);
     const page = Number.isFinite(requestedPage) && requestedPage > 0 ? requestedPage : 1;
-    const from = (page - 1) * COMMENTS_PAGE_SIZE;
-    const to = from + COMMENTS_PAGE_SIZE - 1;
     const postSlug = readSlug(request.nextUrl.searchParams.get("postSlug"));
-    const database = getCommentsDatabase();
-    // Paginate over top-level notes only, so a heavily-replied note still
-    // counts as one entry and page sizes stay predictable.
-    const scoped = database
-      .from("guestbook_comments")
-      .select(COMMENT_FIELDS, { count: "exact" })
-      .is("deleted_at", null)
-      .is("parent_id", null);
-    const { data, error, count } = await (
-      postSlug ? scoped.eq("post_slug", postSlug) : scoped.is("post_slug", null)
-    )
-      .order("created_at", { ascending: false })
-      .range(from, to);
-
-    if (error) throw error;
-
-    const comments = (data ?? []) as unknown as CommentRow[];
-
-    // One extra query for the whole page rather than one per note.
-    const repliesByParent = new Map<string, CommentRow[]>();
-    if (comments.length > 0) {
-      const { data: replyData, error: replyError } = await database
-        .from("guestbook_comments")
-        .select(COMMENT_FIELDS)
-        .is("deleted_at", null)
-        .in(
-          "parent_id",
-          comments.map((comment) => comment.id),
-        )
-        .order("created_at", { ascending: true });
-
-      if (replyError) throw replyError;
-
-      for (const reply of (replyData ?? []) as unknown as CommentRow[]) {
-        if (!reply.parent_id) continue;
-        const existing = repliesByParent.get(reply.parent_id);
-        if (existing) existing.push(reply);
-        else repliesByParent.set(reply.parent_id, [reply]);
-      }
-    }
-
-    const total = count ?? 0;
+    const { comments, total } = await getCachedGuestbookPage(page, COMMENTS_PAGE_SIZE, postSlug);
 
     return NextResponse.json(
       {
-        comments: comments.map((comment) =>
-          publicComment(comment, repliesByParent.get(comment.id) ?? []),
-        ),
+        comments,
         pagination: {
           page,
           pageSize: COMMENTS_PAGE_SIZE,
@@ -284,6 +233,8 @@ export async function POST(request: NextRequest) {
 
     if (error) throw error;
 
+    revalidateTag(GUESTBOOK_CACHE_TAG, { expire: 0 });
+
     return NextResponse.json(
       { comment: publicComment(data as unknown as CommentRow) },
       {
@@ -333,6 +284,7 @@ export async function DELETE(request: NextRequest) {
       .is("deleted_at", null);
 
     if (deleteError) throw deleteError;
+    revalidateTag(GUESTBOOK_CACHE_TAG, { expire: 0 });
     return new NextResponse(null, { status: 204 });
   } catch (error) {
     if (error instanceof SyntaxError) {

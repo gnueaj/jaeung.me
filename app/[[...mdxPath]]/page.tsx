@@ -1,4 +1,4 @@
-import { Comments } from "@/components";
+import { CommentsServer } from "@/components";
 import { useMDXComponents as getMDXComponents } from "@/mdx-components";
 import { data } from "@/data";
 import { siteConfig } from "@/site.config";
@@ -96,7 +96,7 @@ const Page: FC<PageProps> = async (props) => {
       {postSlug && (
         <section className="mt-12 border-t border-zinc-200 pt-8 dark:border-zinc-800">
           <h2 className="mt-0">Comments</h2>
-          <Comments
+          <CommentsServer
             postSlug={postSlug}
             emptyTitle="No comments yet."
             emptyHint="Be the first to leave one."

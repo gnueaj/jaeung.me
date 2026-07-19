@@ -3,7 +3,7 @@
 import { GUESTBOOK_EMOJI_SUGGESTIONS, normalizeGuestbookEmoji } from "@/lib/guestbook-emoji";
 import { FormEvent, useEffect, useRef, useState } from "react";
 
-type GuestbookComment = {
+export type GuestbookComment = {
   id: string;
   nickname: string;
   emoji: string | null;
@@ -13,7 +13,7 @@ type GuestbookComment = {
   replies: GuestbookComment[];
 };
 
-type GuestbookPagination = {
+export type GuestbookPagination = {
   page: number;
   pageSize: number;
   total: number;
@@ -36,7 +36,12 @@ function formatCommentDate(value: string) {
   return new Intl.DateTimeFormat("en", { dateStyle: "medium" }).format(date);
 }
 
-type CommentsProps = {
+export type CommentsInitialData = {
+  comments: GuestbookComment[];
+  pagination: GuestbookPagination;
+};
+
+export type CommentsProps = {
   /**
    * Scopes the thread. Omitted on the guestbook, which is the site-wide thread;
    * a blog post passes its route so each post gets its own.
@@ -44,21 +49,23 @@ type CommentsProps = {
   postSlug?: string;
   emptyTitle?: string;
   emptyHint?: string;
+  initialData?: CommentsInitialData;
 };
 
 export default function Comments({
   postSlug,
   emptyTitle = "No messages yet.",
   emptyHint = "Be the first to sign the guestbook.",
+  initialData,
 }: CommentsProps = {}) {
   const scopeQuery = postSlug ? `&postSlug=${encodeURIComponent(postSlug)}` : "";
-  const [comments, setComments] = useState<GuestbookComment[]>([]);
+  const [comments, setComments] = useState<GuestbookComment[]>(initialData?.comments ?? []);
   const [nickname, setNickname] = useState("");
   const [emoji, setEmoji] = useState<string | null>(null);
   const [content, setContent] = useState("");
   const [password, setPassword] = useState("");
   const [website, setWebsite] = useState("");
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(!initialData);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isConfigured, setIsConfigured] = useState(true);
   const [message, setMessage] = useState("");
@@ -66,15 +73,16 @@ export default function Comments({
   const [deletePassword, setDeletePassword] = useState("");
   const [isDeleting, setIsDeleting] = useState(false);
   const [isEmojiOpen, setIsEmojiOpen] = useState(false);
-  const [page, setPage] = useState(1);
-  const [totalComments, setTotalComments] = useState(0);
-  const [totalPages, setTotalPages] = useState(1);
+  const [page, setPage] = useState(initialData?.pagination.page ?? 1);
+  const [totalComments, setTotalComments] = useState(initialData?.pagination.total ?? 0);
+  const [totalPages, setTotalPages] = useState(initialData?.pagination.totalPages ?? 1);
   const [reloadKey, setReloadKey] = useState(0);
   const [replyTarget, setReplyTarget] = useState<string | null>(null);
   const [replyContent, setReplyContent] = useState("");
   const [replyPassword, setReplyPassword] = useState("");
   const [isReplying, setIsReplying] = useState(false);
   const emojiRef = useRef<HTMLDivElement>(null);
+  const skipInitialFetchRef = useRef(Boolean(initialData));
 
   // Dismiss the badge picker the way any popover should: click away or Escape.
   useEffect(() => {
@@ -96,6 +104,11 @@ export default function Comments({
   }, [isEmojiOpen]);
 
   useEffect(() => {
+    if (skipInitialFetchRef.current) {
+      skipInitialFetchRef.current = false;
+      return;
+    }
+
     let cancelled = false;
 
     void fetch(`/api/comments?page=${page}${scopeQuery}`, { cache: "no-store" })

@@ -1,9 +1,26 @@
 import { createClient } from "@supabase/supabase-js";
 import { createHash, randomBytes, scrypt as scryptCallback, timingSafeEqual } from "node:crypto";
+import { unstable_cache } from "next/cache";
 import { promisify } from "node:util";
 
 const scrypt = promisify(scryptCallback);
 const HASH_LENGTH = 64;
+export const GUESTBOOK_CACHE_TAG = "guestbook-comments";
+
+export type GuestbookCommentData = {
+  id: string;
+  nickname: string;
+  emoji: string | null;
+  content: string;
+  createdAt: string;
+  isAuthorReply: boolean;
+  replies: GuestbookCommentData[];
+};
+
+export type GuestbookPageData = {
+  comments: GuestbookCommentData[];
+  total: number;
+};
 
 export class CommentsNotConfiguredError extends Error {
   constructor() {
@@ -25,6 +42,38 @@ export function getCommentsDatabase() {
     },
   });
 }
+
+async function queryGuestbookPage(
+  page: number,
+  pageSize: number,
+  postSlug: string | null,
+): Promise<GuestbookPageData> {
+  const database = getCommentsDatabase();
+  const { data, error } = await database.rpc("get_guestbook_page", {
+    p_page: page,
+    p_page_size: pageSize,
+    p_post_slug: postSlug,
+  });
+
+  if (error) throw error;
+  if (!data || typeof data !== "object" || Array.isArray(data)) {
+    throw new Error("The guestbook query returned an invalid response.");
+  }
+
+  const payload = data as Record<string, unknown>;
+  const total = Number(payload.total);
+  return {
+    comments: Array.isArray(payload.comments) ? (payload.comments as GuestbookCommentData[]) : [],
+    total: Number.isFinite(total) && total >= 0 ? total : 0,
+  };
+}
+
+// The public first page is read far more often than it changes. Cache each page
+// briefly, then expire every page immediately after a post, reply, or deletion.
+export const getCachedGuestbookPage = unstable_cache(queryGuestbookPage, ["guestbook-page-v1"], {
+  revalidate: 30,
+  tags: [GUESTBOOK_CACHE_TAG],
+});
 
 export async function hashCommentPassword(password: string) {
   const salt = randomBytes(16).toString("hex");

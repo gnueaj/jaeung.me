@@ -81,3 +81,84 @@ create index if not exists guestbook_comments_post_slug_idx
   on public.guestbook_comments (post_slug, created_at desc)
   where deleted_at is null and parent_id is null;
 
+-- Fetches a page, its replies, and the total top-level count in one database
+-- round trip. `is not distinct from` makes null the site-wide guestbook scope
+-- while a non-null slug selects one blog post's thread.
+create or replace function public.get_guestbook_page(
+  p_page integer default 1,
+  p_page_size integer default 10,
+  p_post_slug text default null
+)
+returns jsonb
+language sql
+stable
+set search_path = public
+as $$
+  with normalized as (
+    select
+      greatest(coalesce(p_page, 1), 1) as page,
+      least(greatest(coalesce(p_page_size, 10), 1), 50) as page_size
+  ),
+  top_level as (
+    select c.*
+    from public.guestbook_comments c
+    where c.deleted_at is null
+      and c.parent_id is null
+      and c.post_slug is not distinct from p_post_slug
+    order by c.created_at desc
+    limit (select page_size from normalized)
+    offset (select (page - 1) * page_size from normalized)
+  ),
+  serialized as (
+    select
+      c.created_at,
+      jsonb_build_object(
+        'id', c.id,
+        'nickname', c.nickname,
+        'emoji', c.emoji,
+        'content', c.content,
+        'createdAt', c.created_at,
+        'isAuthorReply', false,
+        'replies', coalesce(
+          (
+            select jsonb_agg(
+              jsonb_build_object(
+                'id', r.id,
+                'nickname', r.nickname,
+                'emoji', r.emoji,
+                'content', r.content,
+                'createdAt', r.created_at,
+                'isAuthorReply', true,
+                'replies', '[]'::jsonb
+              )
+              order by r.created_at asc
+            )
+            from public.guestbook_comments r
+            where r.parent_id = c.id
+              and r.deleted_at is null
+          ),
+          '[]'::jsonb
+        )
+      ) as item
+    from top_level c
+  )
+  select jsonb_build_object(
+    'comments', coalesce(
+      (select jsonb_agg(item order by created_at desc) from serialized),
+      '[]'::jsonb
+    ),
+    'total', (
+      select count(*)
+      from public.guestbook_comments c
+      where c.deleted_at is null
+        and c.parent_id is null
+        and c.post_slug is not distinct from p_post_slug
+    )
+  );
+$$;
+
+-- The browser never calls RPC directly; only the server-side secret may run it.
+revoke all on function public.get_guestbook_page(integer, integer, text)
+  from public, anon, authenticated;
+grant execute on function public.get_guestbook_page(integer, integer, text)
+  to service_role;

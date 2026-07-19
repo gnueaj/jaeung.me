@@ -9,6 +9,10 @@ Supabase key and can delete only their own notes with the password they chose wh
 2. Open **SQL Editor** in the Supabase Dashboard.
 3. Paste and run [`guestbook_comments.sql`](./guestbook_comments.sql).
 
+The script is safe to re-run. Existing projects should run the latest full file once more after
+pulling changes because it also installs `get_guestbook_page`, the single-query function used by
+the optimized comment loader.
+
 ## 2. Configure local development
 
 Copy these values into `.env.local`:
@@ -30,6 +34,20 @@ browser code.
 Add the same two environment variables in **Vercel → Project Settings → Environment
 Variables**, plus `GUESTBOOK_ADMIN_PASSWORD` if you want owner moderation through the regular
 delete form. Then redeploy the site.
+
+### Function region
+
+Keep the Vercel Function region close to the Supabase database region. Check the database region
+in Supabase first, then open **Vercel → Project Settings → Functions → Function Regions** and
+select the closest match. For a Supabase project in Seoul (`ap-northeast-2`), select Vercel's
+Seoul region (`icn1`). A region change applies to the next deployment.
+
+## Loading performance
+
+The first page is server-rendered so visitors do not wait for client hydration before seeing
+messages. Page reads call `get_guestbook_page` once for top-level messages, replies, and the total
+count. Results are cached for 30 seconds and the cache is expired immediately after posting,
+replying, or deleting, so moderation and new messages remain consistent.
 
 ## Blog comments
 

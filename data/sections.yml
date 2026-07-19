@@ -29,12 +29,12 @@ sections:
     shortTitle: Project
     type: page
 
-  - key: guestbook
-    title: Guestbook
-    shortTitle: Guest
-    type: page
-
   - key: blog
     title: Blog
     shortTitle: Blog
+    type: page
+
+  - key: guestbook
+    title: Guestbook
+    shortTitle: Guest
     type: page

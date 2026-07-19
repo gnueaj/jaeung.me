@@ -1,5 +1,7 @@
 "use client";
 
+import { Delete02Icon, Edit02Icon, MessageCircleReplyIcon } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
 import { GUESTBOOK_EMOJI_SUGGESTIONS, normalizeGuestbookEmoji } from "@/lib/guestbook-emoji";
 import { FormEvent, useEffect, useRef, useState } from "react";
 
@@ -24,6 +26,8 @@ const COMMENTS_PAGE_SIZE = 10;
 
 const inputClassName =
   "w-full rounded-xl border border-zinc-200 bg-white px-3 py-2 text-sm text-zinc-900 outline-none transition placeholder:text-zinc-400 focus:border-primary focus:ring-2 focus:ring-primary/15 dark:border-zinc-700 dark:bg-zinc-950 dark:text-zinc-100 dark:placeholder:text-zinc-500";
+const actionButtonClassName =
+  "flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-zinc-400 transition hover:bg-primary/10 hover:text-primary focus-visible:bg-primary/10 focus-visible:text-primary focus-visible:outline-none dark:text-zinc-500";
 
 async function responseError(response: Response) {
   const payload = (await response.json().catch(() => null)) as { error?: string } | null;
@@ -81,6 +85,10 @@ export default function Comments({
   const [replyContent, setReplyContent] = useState("");
   const [replyPassword, setReplyPassword] = useState("");
   const [isReplying, setIsReplying] = useState(false);
+  const [editTarget, setEditTarget] = useState<string | null>(null);
+  const [editContent, setEditContent] = useState("");
+  const [editPassword, setEditPassword] = useState("");
+  const [isEditing, setIsEditing] = useState(false);
   const emojiRef = useRef<HTMLDivElement>(null);
   const skipInitialFetchRef = useRef(Boolean(initialData));
 
@@ -148,8 +156,41 @@ export default function Comments({
     setIsLoading(true);
     setDeleteTarget(null);
     setDeletePassword("");
+    setEditTarget(null);
+    setEditPassword("");
     setMessage("");
     setPage(nextPage);
+  }
+
+  function toggleReply(id: string) {
+    const shouldOpen = replyTarget !== id;
+    setReplyTarget(shouldOpen ? id : null);
+    setReplyContent("");
+    setEditTarget(null);
+    setEditPassword("");
+    setDeleteTarget(null);
+    setDeletePassword("");
+    setMessage("");
+  }
+
+  function toggleEdit(comment: GuestbookComment) {
+    const shouldOpen = editTarget !== comment.id;
+    setEditTarget(shouldOpen ? comment.id : null);
+    setEditContent(shouldOpen ? comment.content : "");
+    setEditPassword("");
+    setReplyTarget(null);
+    setDeleteTarget(null);
+    setDeletePassword("");
+    setMessage("");
+  }
+
+  function toggleDelete(id: string) {
+    setDeleteTarget((current) => (current === id ? null : id));
+    setDeletePassword("");
+    setReplyTarget(null);
+    setEditTarget(null);
+    setEditPassword("");
+    setMessage("");
   }
 
   async function submitComment(event: FormEvent<HTMLFormElement>) {
@@ -219,6 +260,48 @@ export default function Comments({
     }
   }
 
+  async function editComment(id: string, parentId?: string) {
+    setIsEditing(true);
+    setMessage("");
+
+    try {
+      const response = await fetch("/api/comments", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id, content: editContent, password: editPassword }),
+      });
+
+      if (!response.ok) throw new Error(await responseError(response));
+
+      const payload = (await response.json()) as { comment: GuestbookComment };
+      setComments((current) =>
+        parentId
+          ? current.map((comment) =>
+              comment.id === parentId
+                ? {
+                    ...comment,
+                    replies: comment.replies.map((reply) =>
+                      reply.id === id ? { ...reply, content: payload.comment.content } : reply,
+                    ),
+                  }
+                : comment,
+            )
+          : current.map((comment) =>
+              comment.id === id ? { ...comment, content: payload.comment.content } : comment,
+            ),
+      );
+
+      setEditTarget(null);
+      setEditContent("");
+      setEditPassword("");
+      setMessage("Message updated.");
+    } catch (error) {
+      setMessage(error instanceof Error ? error.message : "Could not update the message.");
+    } finally {
+      setIsEditing(false);
+    }
+  }
+
   async function deleteComment(id: string, parentId?: string) {
     setIsDeleting(true);
     setMessage("");
@@ -264,6 +347,58 @@ export default function Comments({
   }
 
   const isBusy = !isConfigured || isSubmitting;
+  const renderEditForm = (comment: GuestbookComment, parentId?: string) => (
+    <form
+      onSubmit={(event) => {
+        event.preventDefault();
+        void editComment(comment.id, parentId);
+      }}
+      className="mt-2 flex flex-col gap-2 rounded-xl bg-zinc-100 p-3 dark:bg-zinc-800/70">
+      <textarea
+        rows={2}
+        required
+        maxLength={500}
+        autoFocus
+        value={editContent}
+        onChange={(event) => setEditContent(event.target.value)}
+        className={`${inputClassName} resize-y`}
+        placeholder="Edit message…"
+        aria-label="Edit message"
+      />
+      <div className="flex flex-col gap-2 sm:flex-row">
+        <input
+          type="password"
+          required
+          minLength={4}
+          maxLength={72}
+          autoComplete="current-password"
+          value={editPassword}
+          onChange={(event) => setEditPassword(event.target.value)}
+          className={inputClassName}
+          placeholder={comment.isAuthorReply ? "Owner password" : "Editing password"}
+          aria-label="Editing password"
+        />
+        <div className="flex shrink-0 gap-2">
+          <button
+            type="button"
+            onClick={() => {
+              setEditTarget(null);
+              setEditContent("");
+              setEditPassword("");
+            }}
+            className="rounded-xl px-3 py-2 text-sm font-medium text-zinc-500 transition hover:bg-zinc-200 dark:text-zinc-400 dark:hover:bg-zinc-700">
+            Cancel
+          </button>
+          <button
+            type="submit"
+            disabled={isEditing || !editContent.trim() || editPassword.length < 4}
+            className="rounded-xl bg-zinc-900 px-3 py-2 text-sm font-medium whitespace-nowrap text-white transition hover:bg-zinc-700 disabled:opacity-50 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-white">
+            {isEditing ? "Saving…" : "Save"}
+          </button>
+        </div>
+      </div>
+    </form>
+  );
 
   return (
     <section className="not-prose mt-5 flex flex-col gap-5">
@@ -322,31 +457,38 @@ export default function Comments({
                         the real gate, so there is nothing to hide behind a flag. */}
                     <button
                       type="button"
-                      onClick={() => {
-                        setReplyTarget((current) => (current === comment.id ? null : comment.id));
-                        setReplyContent("");
-                        setMessage("");
-                      }}
+                      onClick={() => toggleReply(comment.id)}
                       aria-expanded={replyTarget === comment.id}
-                      className="hover:text-primary px-1 py-0.5 text-xs text-zinc-400 transition dark:text-zinc-500">
-                      Reply
+                      aria-label="Reply"
+                      title="Reply"
+                      className={actionButtonClassName}>
+                      <HugeiconsIcon icon={MessageCircleReplyIcon} size={16} />
                     </button>
                     <button
                       type="button"
-                      onClick={() => {
-                        setDeleteTarget((current) => (current === comment.id ? null : comment.id));
-                        setDeletePassword("");
-                        setMessage("");
-                      }}
+                      onClick={() => toggleEdit(comment)}
+                      aria-expanded={editTarget === comment.id}
+                      aria-label="Edit"
+                      title="Edit"
+                      className={actionButtonClassName}>
+                      <HugeiconsIcon icon={Edit02Icon} size={16} />
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => toggleDelete(comment.id)}
                       aria-expanded={deleteTarget === comment.id}
-                      className="hover:text-primary px-1 py-0.5 text-xs text-zinc-400 transition dark:text-zinc-500">
-                      Delete
+                      aria-label="Delete"
+                      title="Delete"
+                      className={actionButtonClassName}>
+                      <HugeiconsIcon icon={Delete02Icon} size={16} />
                     </button>
                   </div>
                 </div>
 
+                {editTarget === comment.id && renderEditForm(comment)}
+
                 {comment.replies.length > 0 && (
-                  <ol className="me-reply-thread mt-12">
+                  <ol className="me-reply-thread">
                     {comment.replies.map((reply) => (
                       <li key={reply.id}>
                         <div className="flex items-start gap-3">
@@ -372,20 +514,29 @@ export default function Comments({
                             </p>
                           </div>
 
-                          <button
-                            type="button"
-                            onClick={() => {
-                              setDeleteTarget((current) =>
-                                current === reply.id ? null : reply.id,
-                              );
-                              setDeletePassword("");
-                              setMessage("");
-                            }}
-                            aria-expanded={deleteTarget === reply.id}
-                            className="hover:text-primary shrink-0 px-1 py-0.5 text-xs text-zinc-400 transition dark:text-zinc-500">
-                            Delete
-                          </button>
+                          <div className="flex shrink-0 items-center gap-1">
+                            <button
+                              type="button"
+                              onClick={() => toggleEdit(reply)}
+                              aria-expanded={editTarget === reply.id}
+                              aria-label="Edit reply"
+                              title="Edit"
+                              className={actionButtonClassName}>
+                              <HugeiconsIcon icon={Edit02Icon} size={15} />
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => toggleDelete(reply.id)}
+                              aria-expanded={deleteTarget === reply.id}
+                              aria-label="Delete reply"
+                              title="Delete"
+                              className={actionButtonClassName}>
+                              <HugeiconsIcon icon={Delete02Icon} size={15} />
+                            </button>
+                          </div>
                         </div>
+
+                        {editTarget === reply.id && renderEditForm(reply, comment.id)}
 
                         {deleteTarget === reply.id && (
                           <div className="mt-2 flex flex-col gap-2 rounded-xl bg-zinc-100 p-3 sm:flex-row dark:bg-zinc-800/70">

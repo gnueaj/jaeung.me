@@ -101,7 +101,11 @@ div.nextra-code {
 .me-reply-thread > li::before {
   content: "";
   position: absolute;
-  left: -1.25rem;
+  /* Lines up with the centre of the parent's 2.25rem avatar: the list is inset
+     by pl-8 (2rem), and the avatar's centre sits 1.125rem from the same edge,
+     so the run has to come back 0.875rem. Change the list's padding and this
+     has to move with it. */
+  left: -0.875rem;
   /* Reaches up past the 1rem gap and slightly into the item above, so the run
      reads as one line rather than a stack of detached hooks. Lengthening this
      is what separates a reply from the note it answers — `height` has to grow

@@ -10,10 +10,9 @@ import { ThemeProvider } from "next-themes";
 import Image from "next/image";
 import "nextra-theme-blog/style.css";
 
-import { Footer } from "@/components/layout";
-
-import { AttributionFooter, Navigation, Responsive, ScrollToTopButton } from "@/components";
+import { AttributionFooter, Navigation, ScrollToTopButton } from "@/components";
 import ContactButtons from "@/components/ContactButtons";
+import ThemeSwitch from "@/components/ThemeSwitch";
 import { data } from "@/data";
 import { siteConfig } from "@/site.config";
 
@@ -73,15 +72,25 @@ export default async function RootLayout({ children }: { children: React.ReactNo
               <section
                 className="me-card sticky top-0 w-full flex-col p-2 md:block md:p-4"
                 style={{ zIndex: 1000 }}>
-                <Navigation sections={sections} />
+                <div className="flex min-w-0 items-center gap-1 md:block">
+                  <div className="min-w-0 flex-1">
+                    <Navigation sections={sections} />
+                  </div>
+                  <ThemeSwitch
+                    size={18}
+                    homeOnly
+                    className="btn btn-ghost me-violet-hover flex h-9 min-h-0 w-9 shrink-0 items-center justify-center rounded-lg p-0 md:hidden"
+                  />
+                </div>
               </section>
             </div>
-            <Responsive
-              base={null}
-              md={<Footer className="mt-auto w-full text-zinc-500 dark:text-zinc-400" />}
-            />
           </aside>
-          <main className="w-full grow md:-mr-4">
+          <main className="relative w-full grow md:-mr-4">
+            <ThemeSwitch
+              size={18}
+              homeOnly
+              className="btn btn-ghost me-violet-hover absolute top-3 right-3 z-20 hidden h-9 min-h-0 w-9 items-center justify-center rounded-lg p-0 md:flex"
+            />
             <article
               className="me-prose me-card drawer-content w-full flex-col"
               dir="ltr"
@@ -90,11 +99,6 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             </article>
             <AttributionFooter />
           </main>
-
-          <Responsive
-            base={<Footer className="w-full p-4 text-zinc-500 dark:text-zinc-400" />}
-            md={null}
-          />
         </ThemeProvider>
         <ScrollToTopButton />
       </body>

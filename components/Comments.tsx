@@ -36,7 +36,22 @@ function formatCommentDate(value: string) {
   return new Intl.DateTimeFormat("en", { dateStyle: "medium" }).format(date);
 }
 
-export default function Guestbook() {
+type CommentsProps = {
+  /**
+   * Scopes the thread. Omitted on the guestbook, which is the site-wide thread;
+   * a blog post passes its route so each post gets its own.
+   */
+  postSlug?: string;
+  emptyTitle?: string;
+  emptyHint?: string;
+};
+
+export default function Comments({
+  postSlug,
+  emptyTitle = "No messages yet.",
+  emptyHint = "Be the first to sign the guestbook.",
+}: CommentsProps = {}) {
+  const scopeQuery = postSlug ? `&postSlug=${encodeURIComponent(postSlug)}` : "";
   const [comments, setComments] = useState<GuestbookComment[]>([]);
   const [nickname, setNickname] = useState("");
   const [emoji, setEmoji] = useState<string | null>(null);
@@ -83,7 +98,7 @@ export default function Guestbook() {
   useEffect(() => {
     let cancelled = false;
 
-    void fetch(`/api/guestbook/comments?page=${page}`, { cache: "no-store" })
+    void fetch(`/api/comments?page=${page}${scopeQuery}`, { cache: "no-store" })
       .then(async (response) => {
         if (!response.ok) {
           if (response.status === 503 && !cancelled) setIsConfigured(false);
@@ -113,7 +128,7 @@ export default function Guestbook() {
     return () => {
       cancelled = true;
     };
-  }, [page, reloadKey]);
+  }, [page, reloadKey, scopeQuery]);
 
   function goToPage(nextPage: number) {
     if (nextPage < 1 || nextPage > totalPages || nextPage === page) return;
@@ -130,10 +145,10 @@ export default function Guestbook() {
     setMessage("");
 
     try {
-      const response = await fetch("/api/guestbook/comments", {
+      const response = await fetch("/api/comments", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ nickname, emoji, content, password, website }),
+        body: JSON.stringify({ nickname, emoji, content, password, website, postSlug }),
       });
 
       if (!response.ok) throw new Error(await responseError(response));
@@ -164,7 +179,7 @@ export default function Guestbook() {
     setMessage("");
 
     try {
-      const response = await fetch("/api/guestbook/comments", {
+      const response = await fetch("/api/comments", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ parentId, content: replyContent, password: replyPassword }),
@@ -196,7 +211,7 @@ export default function Guestbook() {
     setMessage("");
 
     try {
-      const response = await fetch("/api/guestbook/comments", {
+      const response = await fetch("/api/comments", {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ id, password: deletePassword }),
@@ -255,12 +270,8 @@ export default function Guestbook() {
         </p>
       ) : comments.length === 0 ? (
         <div className="rounded-2xl border border-dashed border-zinc-300 py-10 text-center dark:border-zinc-700">
-          <p className="m-0 text-sm font-medium text-zinc-600 dark:text-zinc-300">
-            No messages yet.
-          </p>
-          <p className="m-0 mt-1 text-xs text-zinc-400 dark:text-zinc-500">
-            Be the first to sign the guestbook.
-          </p>
+          <p className="m-0 text-sm font-medium text-zinc-600 dark:text-zinc-300">{emptyTitle}</p>
+          <p className="m-0 mt-1 text-xs text-zinc-400 dark:text-zinc-500">{emptyHint}</p>
         </div>
       ) : (
         <>
@@ -322,7 +333,7 @@ export default function Guestbook() {
                 </div>
 
                 {comment.replies.length > 0 && (
-                  <ol className="m-0 mt-3 flex list-none flex-col gap-3 border-l-2 border-zinc-200 p-0 pl-4 dark:border-zinc-800">
+                  <ol className="me-reply-thread mt-3">
                     {comment.replies.map((reply) => (
                       <li key={reply.id}>
                         <div className="flex items-start gap-3">

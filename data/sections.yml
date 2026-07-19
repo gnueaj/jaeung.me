@@ -34,8 +34,7 @@ sections:
     shortTitle: Guest
     type: page
 
-# Blog remains hidden until its content is ready.
-#  - key: blog
-#    title: Blog
-#    shortTitle: Blog
-#    type: page
+  - key: blog
+    title: Blog
+    shortTitle: Blog
+    type: page

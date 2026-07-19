@@ -1,3 +1,4 @@
+import { Comments } from "@/components";
 import { useMDXComponents as getMDXComponents } from "@/mdx-components";
 import { data } from "@/data";
 import { siteConfig } from "@/site.config";
@@ -71,14 +72,37 @@ function getCustomMetadata(metadata: NetraMetadata): NetraMetadata {
 // @ts-expect-error nextra's wrapper type is not exported
 const Wrapper = getMDXComponents().wrapper;
 
+/**
+ * Blog posts get their own comment thread, keyed by route. Everything else —
+ * the home page, /projects, the blog index — has no thread, and the guestbook
+ * mounts its own site-wide one from MDX.
+ */
+function getPostSlug(mdxPath: string[] | undefined) {
+  if (!mdxPath || mdxPath.length < 3) return null;
+  const [section, collection] = mdxPath;
+  if (section !== "blog" || collection !== "posts") return null;
+  return mdxPath.join("/");
+}
+
 const Page: FC<PageProps> = async (props) => {
   const params = await props.params;
   const result = await importPage(params.mdxPath, params.lang);
   const { default: MDXContent, toc, metadata } = result;
+  const postSlug = getPostSlug(params.mdxPath);
 
   return (
     <Wrapper toc={toc} metadata={metadata}>
       <MDXContent {...props} params={params} />
+      {postSlug && (
+        <section className="mt-12 border-t border-zinc-200 pt-8 dark:border-zinc-800">
+          <h2 className="mt-0">Comments</h2>
+          <Comments
+            postSlug={postSlug}
+            emptyTitle="No comments yet."
+            emptyHint="Be the first to leave one."
+          />
+        </section>
+      )}
     </Wrapper>
   );
 };

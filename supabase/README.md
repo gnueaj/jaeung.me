@@ -31,6 +31,12 @@ Add the same two environment variables in **Vercel → Project Settings → Envi
 Variables**, plus `GUESTBOOK_ADMIN_PASSWORD` if you want owner moderation through the regular
 delete form. Then redeploy the site.
 
+## Blog comments
+
+Blog posts share this table. A post's comments carry its route in `post_slug`; the site-wide
+guestbook leaves that column null, which is what separates the two threads. Replies inherit
+their parent's slug on the server, so a reply can never be filed under a different post.
+
 ## Replies
 
 Only the owner can reply. Every note shows a **Reply** button, and posting one requires

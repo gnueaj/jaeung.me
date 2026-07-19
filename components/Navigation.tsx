@@ -48,6 +48,7 @@ export default function Navigation({ sections }: { sections: Section[] }) {
 
   const isProgrammaticScroll = useRef(false);
   const programmaticScrollTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const teardownReleaseRef = useRef<(() => void) | null>(null);
 
   // Scroll-spy: use heading positions instead of observing the small heading
   // elements inside a narrow IntersectionObserver band.
@@ -112,14 +113,24 @@ export default function Navigation({ sections }: { sections: Section[] }) {
     // to false, kills the pulse, and jitters as the visitor scrolls down again.
     if (list.scrollWidth <= list.clientWidth) return;
 
+    // Responsive renders both the mobile and desktop copy of every tab and hides
+    // one with CSS, so pick whichever is actually laid out.
     const link = Array.from(list.querySelectorAll<HTMLElement>('[data-nav-cta="true"]')).find(
       (el) => el.offsetParent !== null,
     );
     if (!link) return;
 
-    // Centre it by moving the list's own scroll offset, never the page.
-    const left = link.offsetLeft + link.offsetWidth / 2 - list.clientWidth / 2;
-    list.scrollTo({ left: Math.max(0, left), behavior: "smooth" });
+    // Measure against the list's own box rather than offsetLeft. offsetLeft is
+    // relative to the nearest *positioned* ancestor, which here is the sticky
+    // <section> wrapping the nav, not the scroller — so it silently drifts by
+    // the wrapper's padding and any future layout change around it.
+    const listRect = list.getBoundingClientRect();
+    const linkRect = link.getBoundingClientRect();
+    const linkLeftWithinContent = linkRect.left - listRect.left + list.scrollLeft;
+    const centred = linkLeftWithinContent + linkRect.width / 2 - list.clientWidth / 2;
+    const maxScroll = list.scrollWidth - list.clientWidth;
+
+    list.scrollTo({ left: Math.min(Math.max(0, centred), maxScroll), behavior: "smooth" });
   }, [isAtPageBottom, pathname]);
 
   // A fixed timeout was wrong in both directions: it unlocked mid-flight on long
@@ -127,22 +138,29 @@ export default function Navigation({ sections }: { sections: Section[] }) {
   // the rest of the window on short ones. Unlock when the smooth scroll actually
   // settles, or the moment the visitor scrolls themselves.
   const releaseProgrammaticScroll = useCallback(() => {
-    if (programmaticScrollTimeoutRef.current) {
-      clearTimeout(programmaticScrollTimeoutRef.current);
-      programmaticScrollTimeoutRef.current = null;
-    }
+    // Tear down the previous attempt first. Clearing only the timeout used to
+    // leave its window listeners attached, so tapping two tabs in quick
+    // succession left a stale `finish` alive that unlocked the *new* scroll
+    // mid-flight and let the spy snap the highlight to whatever was passing by.
+    teardownReleaseRef.current?.();
 
     const finish = () => {
+      teardownReleaseRef.current?.();
+      isProgrammaticScroll.current = false;
+      window.dispatchEvent(new Event("scroll"));
+    };
+
+    const teardown = () => {
       if (programmaticScrollTimeoutRef.current) {
         clearTimeout(programmaticScrollTimeoutRef.current);
         programmaticScrollTimeoutRef.current = null;
       }
       window.removeEventListener("scrollend", finish);
       USER_TAKEOVER_EVENTS.forEach((event) => window.removeEventListener(event, finish));
-
-      isProgrammaticScroll.current = false;
-      window.dispatchEvent(new Event("scroll"));
+      teardownReleaseRef.current = null;
     };
+
+    teardownReleaseRef.current = teardown;
 
     window.addEventListener("scrollend", finish);
     USER_TAKEOVER_EVENTS.forEach((event) =>
@@ -151,6 +169,9 @@ export default function Navigation({ sections }: { sections: Section[] }) {
     // Safety net for browsers without `scrollend`.
     programmaticScrollTimeoutRef.current = setTimeout(finish, 1200);
   }, []);
+
+  // Nothing should stay attached to window once the nav unmounts.
+  useEffect(() => () => teardownReleaseRef.current?.(), []);
 
   const handleMainSectionClick = (sectionKey: string) => {
     if (programmaticScrollTimeoutRef.current) clearTimeout(programmaticScrollTimeoutRef.current);
@@ -176,8 +197,12 @@ export default function Navigation({ sections }: { sections: Section[] }) {
       const element = document.getElementById(sectionKey);
       if (element) {
         const isMd = window.matchMedia("(min-width: 768px)").matches;
+        // Document position via the rect, not offsetTop: the latter is measured
+        // from the nearest positioned ancestor, so it breaks the moment anything
+        // between the heading and <body> gains position: relative/sticky.
+        const documentTop = element.getBoundingClientRect().top + window.scrollY;
         window.scrollTo({
-          top: element.offsetTop - (isMd ? 20 : 100),
+          top: documentTop - (isMd ? 20 : 100),
           behavior: "smooth",
         });
         router.replace(`/#${sectionKey}`, { scroll: false });

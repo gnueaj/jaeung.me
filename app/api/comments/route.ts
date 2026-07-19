@@ -26,7 +26,19 @@ const RATE_LIMIT_WINDOW_MINUTES = 1;
 
 const AUTHOR_REPLY_EMOJI = "👾";
 
-const COMMENT_FIELDS = "id,nickname,emoji,content,created_at,parent_id";
+const COMMENT_FIELDS = "id,nickname,emoji,content,created_at,parent_id,post_slug";
+
+// Guestbook notes carry no slug; blog comments carry the post's route. Kept in
+// one table so replies, deletion, rate limiting and moderation have one
+// implementation rather than two that drift.
+function readSlug(value: unknown): string | null {
+  if (typeof value !== "string") return null;
+  const trimmed = value.trim();
+  if (!trimmed || trimmed.length > 200) return null;
+  // Route-shaped only, so the column can never become a second content field.
+  if (!/^[a-z0-9/_-]+$/i.test(trimmed)) return null;
+  return trimmed;
+}
 
 type CommentRow = {
   id: string;
@@ -35,6 +47,7 @@ type CommentRow = {
   content: string;
   created_at: string;
   parent_id: string | null;
+  post_slug: string | null;
 };
 
 type CommentWithPasswordRow = CommentRow & {
@@ -86,6 +99,7 @@ function validateCommentInput(input: unknown) {
   const password = typeof body.password === "string" ? body.password : "";
   const website = typeof body.website === "string" ? body.website.trim() : "";
   const parentId = typeof body.parentId === "string" && body.parentId ? body.parentId : null;
+  const postSlug = readSlug(body.postSlug);
 
   if (website) return null;
   if (!content || content.length > CONTENT_MAX_LENGTH || content.includes("\0")) return null;
@@ -100,6 +114,7 @@ function validateCommentInput(input: unknown) {
       content,
       password,
       parentId,
+      postSlug,
     };
   }
 
@@ -110,7 +125,7 @@ function validateCommentInput(input: unknown) {
   // Optional. Any single emoji is fine; anything else is dropped.
   const emoji = normalizeGuestbookEmoji(body.emoji);
 
-  return { nickname, emoji, content, password, parentId: null };
+  return { nickname, emoji, content, password, parentId: null, postSlug };
 }
 
 /**
@@ -143,14 +158,18 @@ export async function GET(request: NextRequest) {
     const page = Number.isFinite(requestedPage) && requestedPage > 0 ? requestedPage : 1;
     const from = (page - 1) * COMMENTS_PAGE_SIZE;
     const to = from + COMMENTS_PAGE_SIZE - 1;
+    const postSlug = readSlug(request.nextUrl.searchParams.get("postSlug"));
     const database = getCommentsDatabase();
     // Paginate over top-level notes only, so a heavily-replied note still
     // counts as one entry and page sizes stay predictable.
-    const { data, error, count } = await database
+    const scoped = database
       .from("guestbook_comments")
       .select(COMMENT_FIELDS, { count: "exact" })
       .is("deleted_at", null)
-      .is("parent_id", null)
+      .is("parent_id", null);
+    const { data, error, count } = await (
+      postSlug ? scoped.eq("post_slug", postSlug) : scoped.is("post_slug", null)
+    )
       .order("created_at", { ascending: false })
       .range(from, to);
 
@@ -213,6 +232,7 @@ export async function POST(request: NextRequest) {
     }
 
     const database = getCommentsDatabase();
+    let postSlug = input.postSlug;
 
     if (input.parentId) {
       // Replies are owner-only, and the password is the sole gate.
@@ -222,7 +242,7 @@ export async function POST(request: NextRequest) {
 
       const { data: parent, error: parentError } = await database
         .from("guestbook_comments")
-        .select("id,parent_id")
+        .select("id,parent_id,post_slug")
         .eq("id", input.parentId)
         .is("deleted_at", null)
         .maybeSingle();
@@ -233,6 +253,9 @@ export async function POST(request: NextRequest) {
       if (parent.parent_id) {
         return NextResponse.json({ error: "Cannot reply to a reply." }, { status: 400 });
       }
+      // Inherit the thread's slug instead of trusting the request, so a reply
+      // can never be filed under a different post than the note it answers.
+      postSlug = parent.post_slug as string | null;
     } else {
       const ipHash = hashClientIp(request);
       if (await isRateLimited(database, ipHash)) {
@@ -252,6 +275,7 @@ export async function POST(request: NextRequest) {
         content: input.content,
         password_hash: passwordHash,
         parent_id: input.parentId,
+        post_slug: postSlug,
         // Replies come from the owner, so there is nothing to rate-limit.
         ip_hash: input.parentId ? null : hashClientIp(request),
       })

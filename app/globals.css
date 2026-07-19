@@ -85,6 +85,37 @@ div.nextra-code {
   }
 }
 
+/* Reply thread connector. Each reply draws its own elbow: a vertical run down
+   from the note above, curving right to meet the reply's avatar — the rounded
+   corner is just border-bottom-left-radius on a two-sided border, so it needs
+   no SVG. The vertical segment starts above the item, inside the flex gap, so
+   consecutive replies read as one continuous line. */
+.me-reply-thread {
+  @apply relative m-0 flex list-none flex-col gap-3 p-0 pl-8;
+}
+
+.me-reply-thread > li {
+  @apply relative;
+}
+
+.me-reply-thread > li::before {
+  content: "";
+  position: absolute;
+  left: -1.25rem;
+  /* Reaches up through the 0.75rem gap into the item above. */
+  top: -0.9rem;
+  width: 1.15rem;
+  /* Lands level with the centre of the 1.75rem avatar. */
+  height: 1.8rem;
+  border-left: 2px solid var(--color-zinc-200);
+  border-bottom: 2px solid var(--color-zinc-200);
+  border-bottom-left-radius: 0.85rem;
+}
+
+[data-theme="dark"] .me-reply-thread > li::before {
+  border-color: var(--color-zinc-700);
+}
+
 .me-list {
   @apply m-0 mb-0 flex flex-col px-0 pl-0;
 }
@@ -130,9 +161,12 @@ div.nextra-code {
 }
 
 /* `color` is only set on the middle keyframe, so it interpolates from — and
-   settles back to — the tab's normal colour once the pulse ends. */
+   settles back to — the tab's normal colour once the pulse ends.
+
+   The delay matters on mobile: the tab strip has to scroll sideways to bring
+   this tab into view first, so without it the pulse burns down off-screen. */
 .menu .menu-item > a.me-nav-cta {
-  animation: me-nav-cta-pulse 0.9s ease-in-out 2;
+  animation: me-nav-cta-pulse 0.9s ease-in-out 0.35s 3;
 }
 
 @media (prefers-reduced-motion: reduce) {

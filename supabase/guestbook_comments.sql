@@ -32,6 +32,8 @@ create table if not exists public.guestbook_comments (
   -- Set only on the owner's replies. One level deep: the API refuses to reply to
   -- a row that already has a parent.
   parent_id uuid references public.guestbook_comments (id) on delete cascade,
+  -- Null for the site-wide guestbook; a post route for a blog post's thread.
+  post_slug text,
   created_at timestamptz not null default now(),
   deleted_at timestamptz
 );
@@ -68,4 +70,14 @@ create index if not exists guestbook_comments_rate_limit_idx
 create index if not exists guestbook_comments_parent_idx
   on public.guestbook_comments (parent_id, created_at)
   where deleted_at is null and parent_id is not null;
+
+-- Migration for a table created before blog comments existed. Null means the
+-- site-wide guestbook; a route means that post's own thread.
+alter table public.guestbook_comments
+  add column if not exists post_slug text;
+
+-- Serves a blog post's thread listing.
+create index if not exists guestbook_comments_post_slug_idx
+  on public.guestbook_comments (post_slug, created_at desc)
+  where deleted_at is null and parent_id is null;
 

@@ -34,26 +34,22 @@ career:
       Mentored projects in explainable AI (XAI) and computer vision.<br />
       Reviewed AI-related content and newsletters before publication.
 
-  - id: skku-idclab-undergraduate-researcher
-    name: >
-      [Sungkyunkwan University](https://www.skku.edu/eng/)
-    title: Undergraduate Researcher @ [Interactive Data Computing Lab](https://idclab.skku.edu)
-    from: "2024.01"
-    to: "2024.08"
-    location: Suwon, Korea
-    description: >
-      Advisor: Prof. Jaemin Jo
-
-      - Contributed to the [Bavisitter](https://github.com/jiwnchoi/bavisitter) research project.
-
   - id: skku-undergraduate-researcher
     name: >
       [Sungkyunkwan University](https://www.skku.edu/eng/)
-    title: Undergraduate Researcher @ VSCLab (now [V-Lab](https://v-laboratory.github.io/) at Yonsei University)
+    title: Undergraduate Researcher
     from: "2023.07"
-    to: "2023.12"
+    to: "2024.08"
     location: Suwon, Korea
     description: >
-      Advisor: Prof. Eunbyung Park
+      #### [Interactive Data Computing Lab](https://idclab.skku.edu) · Jan 2024 — Aug 2024
 
-      - Project: [Satellite Image Building Area Segmentation](https://github.com/gnueaj/Satellite-Image-Building-Area-Segmentation)
+      - Advisor: Prof. Jaemin Jo
+
+      - Project: Contributed to the [Bavisitter](https://github.com/jiwnchoi/bavisitter) research project.
+
+      #### VSCLab (now [V-Lab](https://v-laboratory.github.io/) at Yonsei University) · Jul 2023 — Dec 2023
+
+      - Advisor: Prof. Eunbyung Park
+
+      - Project: Developed [Satellite Image Building Area Segmentation](https://github.com/gnueaj/Satellite-Image-Building-Area-Segmentation).

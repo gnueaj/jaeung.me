@@ -110,13 +110,16 @@ div.nextra-code {
      reads as one line rather than a stack of detached hooks. Lengthening this
      is what separates a reply from the note it answers — `height` has to grow
      by the same amount so the elbow still lands on the avatar. */
-  top: -1.5rem;
-  width: 1.15rem;
+  top: -1.9rem;
+  /* Stops exactly at the reply avatar's left edge rather than tucking under it. */
+  width: 0.875rem;
   /* top + height leaves the corner level with the 1.75rem avatar's centre. */
-  height: 2.4rem;
+  height: 2.8rem;
   border-left: 2px solid var(--color-zinc-200);
   border-bottom: 2px solid var(--color-zinc-200);
-  border-bottom-left-radius: 0.85rem;
+  /* Kept well under the 0.875rem width; at the old 0.85rem the curve ate the
+     whole stub and the elbow stopped reading as a corner. */
+  border-bottom-left-radius: 0.55rem;
 }
 
 [data-theme="dark"] .me-reply-thread > li::before {

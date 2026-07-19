@@ -17,23 +17,39 @@ const LOCKED_PAGE_KEYS = new Set(["projects"]);
 // The tab that pulses once the visitor reaches the bottom of the home page.
 const CTA_PAGE_KEY = "guestbook";
 
-function useSectionRefs(sections: Section[]) {
+function useSectionRefs(sections: Section[], pathname: string) {
   const sectionRefs = useRef<HTMLElement[]>([]);
 
   useEffect(() => {
-    sectionRefs.current = sections
-      .filter((s) => s.type === "main")
-      .map((s) => document.getElementById(s.key))
-      .filter((el): el is HTMLElement => !!el);
-  }, [sections]);
+    // This nav lives in the root layout, so it survives client-side route
+    // changes and its mount-time lookup outlives the page it ran against.
+    // Arriving on /blog or /guestbook first resolved nothing — those routes
+    // have no section headings — and coming back to / left the list empty, so
+    // the spy had nothing to iterate and reported "about" on every scroll.
+    const resolve = () => {
+      sectionRefs.current = sections
+        .filter((s) => s.type === "main")
+        .map((s) => document.getElementById(s.key))
+        .filter((el): el is HTMLElement => !!el);
+      return sectionRefs.current.length > 0;
+    };
+
+    if (resolve()) return;
+
+    // On a route change the MDX body can mount a frame behind the nav.
+    const frame = requestAnimationFrame(() => {
+      if (resolve()) window.dispatchEvent(new Event("scroll"));
+    });
+    return () => cancelAnimationFrame(frame);
+  }, [sections, pathname]);
 
   return sectionRefs;
 }
 
 export default function Navigation({ sections }: { sections: Section[] }) {
-  const sectionRefs = useSectionRefs(sections);
   const router = useRouter();
   const pathname = usePathname();
+  const sectionRefs = useSectionRefs(sections, pathname);
   const [hash, setHash] = useState<string>("");
   const [isAtPageBottom, setIsAtPageBottom] = useState(false);
   const navigationListRef = useRef<HTMLUListElement>(null);

@@ -95,7 +95,7 @@ div.nextra-code {
    spacing silently stayed at zero however large that utility grew. */
 .me-reply-thread {
   @apply relative flex list-none flex-col gap-4 p-0 pl-8;
-  margin: 2rem 0 0;
+  margin: 0.75rem 0 0;
 }
 
 .me-reply-thread > li {
@@ -122,11 +122,11 @@ div.nextra-code {
      reads as one line rather than a stack of detached hooks. Lengthening this
      is what separates a reply from the note it answers — `height` has to grow
      by the same amount so the elbow still lands on the avatar. */
-  top: -2.5rem;
+  top: -3.15rem;
   /* Runs past the reply avatar's left edge so the corner ends underneath it. */
   width: 1.3rem;
   /* top + height leaves the corner level with the 1.75rem avatar's centre. */
-  height: 3.4rem;
+  height: 4.05rem;
   border-left: 2px solid var(--color-zinc-200);
   border-bottom: 2px solid var(--color-zinc-200);
   /* Kept well under the 0.875rem width; at the old 0.85rem the curve ate the

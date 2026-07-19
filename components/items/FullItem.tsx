@@ -14,10 +14,14 @@ export default async function FullItem(props: FullItemProps) {
   return (
     <li className="m-0 my-0 mt-0 mb-0 flex flex-col gap-1 p-0" {...rest}>
       <div className="flex flex-col justify-between gap-1 md:flex-row">
-        <div className="flex w-full grow flex-col">
-          {typeof heading === "string" ? <MDXContent mdxSource={`### ${heading}`} /> : heading}
+        <div className="flex w-full grow flex-col gap-0.5">
+          {typeof heading === "string" ? (
+            <MDXContent mdxSource={`### ${heading}`} className="m-0 leading-snug" />
+          ) : (
+            heading
+          )}
           {typeof subheading === "string" ? (
-            <MDXContent mdxSource={subheading} className="italic" />
+            <MDXContent mdxSource={subheading} className="m-0 leading-snug italic" />
           ) : (
             subheading
           )}

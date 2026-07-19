@@ -91,7 +91,7 @@ div.nextra-code {
    no SVG. The vertical segment starts above the item, inside the flex gap, so
    consecutive replies read as one continuous line. */
 .me-reply-thread {
-  @apply relative m-0 flex list-none flex-col gap-3 p-0 pl-8;
+  @apply relative m-0 flex list-none flex-col gap-4 p-0 pl-8;
 }
 
 .me-reply-thread > li {
@@ -102,11 +102,14 @@ div.nextra-code {
   content: "";
   position: absolute;
   left: -1.25rem;
-  /* Reaches up through the 0.75rem gap into the item above. */
-  top: -0.9rem;
+  /* Reaches up past the 1rem gap and slightly into the item above, so the run
+     reads as one line rather than a stack of detached hooks. Lengthening this
+     is what separates a reply from the note it answers — `height` has to grow
+     by the same amount so the elbow still lands on the avatar. */
+  top: -1.5rem;
   width: 1.15rem;
-  /* Lands level with the centre of the 1.75rem avatar. */
-  height: 1.8rem;
+  /* top + height leaves the corner level with the 1.75rem avatar's centre. */
+  height: 2.4rem;
   border-left: 2px solid var(--color-zinc-200);
   border-bottom: 2px solid var(--color-zinc-200);
   border-bottom-left-radius: 0.85rem;

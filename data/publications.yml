@@ -16,6 +16,7 @@ publications:
     venue: "Preprint, 2026."
     url:
       pdf: https://arxiv.org/abs/2605.24614
+      git: https://github.com/gnueaj/unlearning-depth-score
       web: https://gnueaj.github.io/unlearning-depth-score/
 
   - id: suppression-or-deletion

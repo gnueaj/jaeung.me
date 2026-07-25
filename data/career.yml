@@ -27,11 +27,13 @@ career:
 
       - Built [PediaViz](/projects/pediaviz), a clinical visualization system for pediatric chronic care, with NAVER and SNU Hospital.
 
+      - Released [pytorch-cka](/projects/cka), an open-source PyTorch library for layer-wise model similarity (CKA) with 5K+ downloads.
+
       #### Teaching Assistant
 
       - Fundamentals of Machine Learning (2024 Fall, 2025 Spring, 2025 Fall).
 
-      - Wrote the assignments, exams, and lab sessions. [Course materials](https://github.com/gnueaj/machine-learning-exams-SKKU)
+      - Wrote the assignments, exams, and lab sessions. [See course materials](https://github.com/gnueaj/machine-learning-exams-SKKU)
 
       - Ranked 1st in student evaluation scores for three consecutive semesters.
 

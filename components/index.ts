@@ -1,3 +1,4 @@
+export { default as VisitorCounter } from "./VisitorCounter";
 export { default as Comments } from "./Comments";
 export { default as CommentsServer } from "./CommentsServer";
 export { default as AttributionFooter } from "./AttributionFooter";

@@ -10,10 +10,14 @@ export default async function Gallery({
   title,
   contentPath,
   contentTypes = ["paper", "project"],
+  category,
 }: {
   title?: string;
   contentPath: string;
   contentTypes: string[];
+  // When set, only projects whose frontmatter category matches are shown, so
+  // one content folder can feed several titled sections.
+  category?: string;
 }) {
   const contentMap = (await getPageMap(contentPath)) as PageMapItem[]; // PageMapItem 타입 정의 필요
   const items = contentMap
@@ -21,7 +25,8 @@ export default async function Gallery({
       (item) =>
         contentTypes.includes(item.frontMatter?.type || "") &&
         item.name !== "index" &&
-        item.frontMatter?.type !== "private",
+        item.frontMatter?.type !== "private" &&
+        (!category || item.frontMatter?.category === category),
     )
     .map((item) => {
       const extensionPaths = extensions.map((ext) =>
@@ -41,6 +46,8 @@ export default async function Gallery({
           typeof item.frontMatter?.tags === "string"
             ? [item.frontMatter?.tags]
             : (item.frontMatter?.tags ?? []),
+        highlight:
+          typeof item.frontMatter?.highlight === "string" ? item.frontMatter.highlight : undefined,
         order: Number(item.frontMatter?.order ?? 0),
       };
     })
@@ -65,6 +72,7 @@ export default async function Gallery({
             route={item.route}
             imagePath={item.imagePath}
             tags={item.tags}
+            highlight={item.highlight}
           />
         ))}
       </div>

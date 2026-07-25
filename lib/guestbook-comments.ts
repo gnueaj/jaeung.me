@@ -75,6 +75,26 @@ export const getCachedGuestbookPage = unstable_cache(queryGuestbookPage, ["guest
   tags: [GUESTBOOK_CACHE_TAG],
 });
 
+/**
+ * Total non-deleted comments (top-level and replies) for a blog post. Returns 0
+ * when the comment store is not configured, so a missing backend just hides the
+ * count rather than breaking the blog list.
+ */
+export async function countPostComments(postSlug: string): Promise<number> {
+  try {
+    const database = getCommentsDatabase();
+    const { count, error } = await database
+      .from("guestbook_comments")
+      .select("id", { count: "exact", head: true })
+      .eq("post_slug", postSlug)
+      .is("deleted_at", null);
+    if (error) throw error;
+    return count ?? 0;
+  } catch {
+    return 0;
+  }
+}
+
 export async function hashCommentPassword(password: string) {
   const salt = randomBytes(16).toString("hex");
   const derivedKey = (await scrypt(password, salt, HASH_LENGTH)) as Buffer;

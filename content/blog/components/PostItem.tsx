@@ -1,5 +1,6 @@
 import { Date, TagBadge } from "@/components";
 import { data } from "@/data";
+import { countPostComments } from "@/lib/guestbook-comments";
 import { existsSync } from "fs";
 import Image from "next/image";
 import Link from "next/link";
@@ -14,12 +15,16 @@ function getTeaserImagePath(route: string) {
   return foundPath ? `/api/asset${foundPath}` : null;
 }
 
-export default function PostItem({ post }: { post: PageMapItem }) {
+export default async function PostItem({ post }: { post: PageMapItem }) {
   const teaserPath = getTeaserImagePath(post.route);
   const tags: string[] =
     typeof post.frontMatter?.tags === "string"
       ? [post.frontMatter?.tags]
       : (post.frontMatter?.tags ?? []);
+
+  // The comment thread is keyed by the post's route (see app/[[...mdxPath]]).
+  const postSlug = post.route.replace(/^\/content\//, "");
+  const commentCount = await countPostComments(postSlug);
 
   return (
     <Link href={post.route.replace("/content", "")} target="_self">
@@ -36,9 +41,15 @@ export default function PostItem({ post }: { post: PageMapItem }) {
               ))}
             </ul>
           )}
-          {/* A date and a title alone read like an index entry; the byline
-              makes each row look like a post. */}
-          <p className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">{data.meta().name}</p>
+          {/* A date and a title alone read like an index entry; the byline and
+              comment count make each row look like a post. */}
+          <p className="mt-1 flex items-center gap-2 text-xs text-zinc-500 dark:text-zinc-400">
+            <span>{data.meta().name}</span>
+            <span aria-hidden>·</span>
+            <span>
+              {commentCount} {commentCount === 1 ? "comment" : "comments"}
+            </span>
+          </p>
         </div>
         {teaserPath && (
           <div className="relative h-24 w-36 flex-shrink-0 overflow-hidden rounded-lg">

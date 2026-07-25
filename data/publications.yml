@@ -30,6 +30,7 @@ publications:
     venue: "Proceedings of the ACM Web Conference 2026 (WWW '26), Dubai, United Arab Emirates, 2026."
     url:
       pdf: https://arxiv.org/abs/2602.18505
+      git: https://github.com/Yurim990507/suppression-or-deletion
 
   - id: unlearning-comparator
     title: "Unlearning Comparator: A Visual Analytics System for Comparative Evaluation of Machine Unlearning Methods"
@@ -56,4 +57,5 @@ publications:
     type: conference
     venue: "Proceedings of Conference on 2024 IEEE Visualization & Visual Analytics (IEEE VIS), St. Pete Beach, USA."
     url:
+      pdf: https://ieeexplore.ieee.org/document/10771142/
       git: https://github.com/jiwnchoi/bavisitter

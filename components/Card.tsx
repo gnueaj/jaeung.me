@@ -9,9 +9,18 @@ interface CardProps {
   route: string;
   imagePath?: string | null;
   tags: string[];
+  // Optional pill in the image corner, e.g. a star count worth calling out.
+  highlight?: string;
 }
 
-export default async function Card({ title, description, route, imagePath, tags }: CardProps) {
+export default async function Card({
+  title,
+  description,
+  route,
+  imagePath,
+  tags,
+  highlight,
+}: CardProps) {
   return (
     <Link href={route.replace("/content", "")} prefetch={true} className="not-prose">
       <div
@@ -32,6 +41,11 @@ export default async function Card({ title, description, route, imagePath, tags 
             />
             <div className="absolute inset-0 z-2 border-0 border-none bg-gradient-to-b from-transparent to-white transition-opacity duration-300 dark:from-black/10 dark:to-zinc-900" />
           </div>
+        )}
+        {highlight && (
+          <span className="bg-primary/90 absolute top-3 right-3 z-3 rounded-full px-2 py-0.5 text-xs font-semibold text-white shadow-sm">
+            {highlight}
+          </span>
         )}
         <div className="absolute bottom-0 z-1 flex flex-col gap-2 p-4">
           <h3 className="text-base font-bold text-zinc-900 no-underline dark:text-zinc-100">

@@ -15,7 +15,17 @@
       "Bash(grep -vE \"^-\\\\s*$|^---\")",
       "Bash(grep -vE \"^\\\\s*$\")",
       "Bash(grep -E \"\\(st|nd|rd|th\\)\\\\b|%|\\\\bone\\\\b|\\\\btwo\\\\b|\\\\bthree\\\\b|\\\\bfour\\\\b|[0-9]{3,}\")",
-      "Bash(grep -rhoiE \"\\\\b\\(one|two|three|four|five|six|seven|eight|nine|ten\\)\\\\b[^.]{0,45}\" data/career.yml data/educations.yml data/misc.yml)"
+      "Bash(grep -rhoiE \"\\\\b\\(one|two|three|four|five|six|seven|eight|nine|ten\\)\\\\b[^.]{0,45}\" data/career.yml data/educations.yml data/misc.yml)",
+      "WebFetch(domain:pypi.org)",
+      "Bash(curl -s --max-time 25 \"https://pypistats.org/api/packages/pytorch-cka/recent\")",
+      "Bash(curl -s --max-time 25 \"https://api.github.com/repos/ryusudol/Centered-Kernel-Alignment\")",
+      "Bash(curl -s --max-time 25 \"https://api.pepy.tech/api/v2/projects/pytorch-cka\")",
+      "Bash(curl -s --max-time 25 \"https://pypistats.org/api/packages/pytorch-cka/overall?mirrors=false\")",
+      "Bash(curl -s --max-time 25 \"https://static.pepy.tech/badge/pytorch-cka\")",
+      "Bash(curl -s --max-time 25 \"https://pepy.tech/api/v2/projects/pytorch-cka\")",
+      "Bash(curl -s --max-time 25 \"https://api.github.com/repos/gnueaj/Machine-Unlearning-Comparator\")",
+      "Bash(curl -s -X POST http://localhost:3000/api/visits)",
+      "Bash(curl -s http://localhost:3000/blog)"
     ]
   }
 }

@@ -5,7 +5,7 @@ skills:
 
   - type: AI / ML
     description: >
-      PyTorch, Hugging Face
+      PyTorch, Hugging Face, scikit-learn, Matplotlib
 
   - type: Frontend
     description: >

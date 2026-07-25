@@ -90,6 +90,41 @@ div.nextra-code {
    corner is just border-bottom-left-radius on a two-sided border, so it needs
    no SVG. The vertical segment starts above the item, inside the flex gap, so
    consecutive replies read as one continuous line. */
+/* Waving-hand tilt for the alien icon beside the greeting. Pivots from the
+   bottom so it rocks like a wave rather than spinning in place; runs a couple
+   of times on load and again on hover, and holds still for reduced-motion. */
+@keyframes me-wave {
+  0%,
+  60%,
+  100% {
+    transform: rotate(0deg);
+  }
+  10%,
+  30%,
+  50% {
+    transform: rotate(14deg);
+  }
+  20%,
+  40% {
+    transform: rotate(-8deg);
+  }
+}
+
+.me-wave {
+  transform-origin: 70% 80%;
+  animation: me-wave 2.2s ease-in-out 0.4s 2;
+}
+
+.me-wave:hover {
+  animation: me-wave 2.2s ease-in-out 0 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .me-wave {
+    animation: none;
+  }
+}
+
 /* The gap lives here, not on a utility class at the call site: this rule sits
    outside Tailwind's layers, so its `margin` beat any `mt-*` utility and the
    spacing silently stayed at zero however large that utility grew. */

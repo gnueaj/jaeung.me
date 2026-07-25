@@ -27,7 +27,7 @@ career:
 
       - Built [PediaViz](/projects/pediaviz), a clinical visualization system for pediatric chronic care, with NAVER and SNU Hospital.
 
-      - Released [pytorch-cka](/projects/cka), an open-source PyTorch library for layer-wise model similarity (CKA) with **5K+ downloads**.
+      - Released [pytorch-cka](https://github.com/ryusudol/Centered-Kernel-Alignment), an open-source PyTorch library for layer-wise model similarity (CKA) with **5K+ downloads**.
 
       #### Teaching Assistant
 

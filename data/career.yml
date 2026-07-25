@@ -40,17 +40,17 @@ career:
   - id: deep-daiv
     name: >
       [deep daiv.](https://www.instagram.com/deep.daiv/)
-    title: Project Mentor & Content Reviewer
+    title: Content Reviewer & Project Mentor
     from: "2024.02"
     to: "2025.01"
     description: >
-      #### Project Mentoring
-
-      - Mentored explainable AI (XAI) and computer vision [projects](https://github.com/deep-daiv-XAI/.github) for 100+ members.
-
       #### Content Review
 
       - Reviewed AI articles and newsletters before publication for [deep daiv.](https://www.instagram.com/deep.daiv/), the largest Korean student AI community on Instagram with **40K+ followers**.
+
+      #### Project Mentoring
+
+      - Mentored explainable AI (XAI) and computer vision [projects](https://github.com/deep-daiv-XAI/.github) for 100+ members.
 
   - id: skku-undergraduate-researcher
     name: >

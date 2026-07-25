@@ -23,11 +23,11 @@ career:
 
       - Visualization and Human-Computer (AI) Interaction for ML, AI safety, and mechanistic interpretability.
 
-      - Published 4 papers: 2 first-authored (TVCG, EMNLP) and 2 co-authored (VIS, WWW), with another in progress.
+      - Published 4 papers: 2 first-authored ([TVCG](https://ieeexplore.ieee.org/document/11364307), [EMNLP](https://arxiv.org/abs/2605.24614)) and 2 co-authored ([VIS](https://ieeexplore.ieee.org/document/10771142/), [WWW](https://arxiv.org/abs/2602.18505)), with another in progress.
 
       - Built [PediaViz](/projects/pediaviz), a clinical visualization system for pediatric chronic care, with NAVER and SNU Hospital.
 
-      - Released [pytorch-cka](/projects/cka), an open-source PyTorch library for layer-wise model similarity (CKA) with 5K+ downloads.
+      - Released [pytorch-cka](/projects/cka), an open-source PyTorch library for layer-wise model similarity (CKA) with **5K+ downloads**.
 
       #### Teaching Assistant
 

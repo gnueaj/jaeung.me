@@ -11,6 +11,9 @@ interface CardProps {
   tags: string[];
   // Optional pill in the image corner, e.g. a star count worth calling out.
   highlight?: string;
+  // Extra zoom on the thumbnail, for figures that carry white margins the
+  // default 1.1 crop can't reach. 1 = no extra zoom beyond the base scale.
+  thumbnailScale?: number;
 }
 
 export default async function Card({
@@ -20,6 +23,7 @@ export default async function Card({
   imagePath,
   tags,
   highlight,
+  thumbnailScale,
 }: CardProps) {
   return (
     <Link href={route.replace("/content", "")} prefetch={true} className="not-prose">
@@ -37,15 +41,11 @@ export default async function Card({
               alt={`${title} thumbnail`}
               sizes="500px"
               fill
-              className="not-prose absolute z-1 scale-[110%] border-none object-cover"
+              style={{ transform: `scale(${1.1 * (thumbnailScale ?? 1)})` }}
+              className="not-prose absolute z-1 border-none object-cover"
             />
             <div className="absolute inset-0 z-2 border-0 border-none bg-gradient-to-b from-transparent to-white transition-opacity duration-300 dark:from-black/10 dark:to-zinc-900" />
           </div>
-        )}
-        {highlight && (
-          <span className="bg-primary/90 absolute top-3 right-3 z-3 rounded-full px-2 py-0.5 text-xs font-semibold text-white shadow-sm">
-            {highlight}
-          </span>
         )}
         <div className="absolute bottom-0 z-1 flex flex-col gap-2 p-4">
           <h3 className="text-base font-bold text-zinc-900 no-underline dark:text-zinc-100">
@@ -54,10 +54,15 @@ export default async function Card({
           {description && (
             <p className="line-clamp-2 text-xs text-zinc-500 dark:text-zinc-400">{description}</p>
           )}
-          <p className="mt-1 flex gap-2">
+          <p className="mt-1 flex flex-wrap items-center gap-2">
             {tags.map((t) => (
               <TagBadge key={`tag-${title}-${t}`} content={t} />
             ))}
+            {highlight && (
+              <span className="bg-primary/15 text-primary rounded-sm px-1 text-[11px] font-semibold">
+                {highlight}
+              </span>
+            )}
           </p>
         </div>
       </div>

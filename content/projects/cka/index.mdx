@@ -6,7 +6,9 @@ selected: true
 type: project
 tags: "Open Source"
 category: ml
-order: 8
+highlight: "5K+ downloads"
+thumbnailScale: 1.35
+order: 2
 ---
 
 import { PublicationLinks } from "@/components/items";
@@ -15,26 +17,12 @@ import { PublicationLinks } from "@/components/items";
 
 ## Project Overview
 
-**pytorch-cka** is a PyTorch library for measuring how similar the internal
-representations of neural networks are, using Centered Kernel Alignment (CKA) — the
-metric introduced by Kornblith et al. (ICML 2019). CKA compares the activations two
-layers produce over the same inputs, so it can answer how alike two models, or two
-layers within a model, really are — a common need when studying transfer, fine-tuning,
-and representational drift.
+pytorch-cka is a PyTorch library for measuring how similar the internal representations
+of two neural networks are, using Centered Kernel Alignment (CKA) from Kornblith et al.
+(ICML 2019). Built for scale, it uses vectorized operations and GPU acceleration to
+compute CKA across all 18 layers of ResNet-18 on CIFAR-10 up to 44x faster than existing
+implementations on an NVIDIA H100, while explicit memory deallocation keeps large
+comparisons within budget. It supports HuggingFace models, DataParallel, and DDP, ships
+heatmap and line-chart visualizations, and has surpassed 5K downloads on PyPI.
 
-The library is built for doing this at scale. Vectorized operations and GPU
-acceleration compute CKA across all 18 representational layers of ResNet-18 on CIFAR-10
-up to **44× faster** than existing implementations on an NVIDIA H100, while explicit
-memory deallocation keeps large layer-by-layer comparisons within budget. It works with
-HuggingFace models, `DataParallel`, and DDP, and ships heatmap and line-chart
-visualizations for reading the results.
-
-Published on PyPI as [`pytorch-cka`](https://pypi.org/project/pytorch-cka/), it has
-surpassed **5K downloads**.
-
-<PublicationLinks
-  url={{
-    git: "https://github.com/ryusudol/Centered-Kernel-Alignment",
-    web: "https://pypi.org/project/pytorch-cka/",
-  }}
-/>
+<PublicationLinks url={{ git: "https://github.com/ryusudol/Centered-Kernel-Alignment" }} />

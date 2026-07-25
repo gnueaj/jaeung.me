@@ -136,7 +136,17 @@ const DEFAULT_COMPONENTS = getNextraMDXComponents({
   h4: createHeading("h4"),
   h5: createHeading("h5"),
   h6: createHeading("h6"),
-  img: (props) => <Image {...props} placeholder="empty" />,
+  img: (props) => {
+    // The image optimizer flattens animated GIFs to their first frame, so serve
+    // those untouched to keep them moving; everything else stays optimized.
+    const src = props.src;
+    let rawSrc: string | undefined;
+    if (typeof src === "string") rawSrc = src;
+    else if (src && "src" in src) rawSrc = src.src;
+    else if (src && "default" in src) rawSrc = src.default.src;
+    const isAnimated = typeof rawSrc === "string" && rawSrc.includes(".gif");
+    return <Image {...props} placeholder="empty" unoptimized={isAnimated} />;
+  },
   pre: withIcons(Pre),
   summary: Summary,
   table: Table,

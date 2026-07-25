@@ -48,6 +48,7 @@ export default async function Gallery({
             : (item.frontMatter?.tags ?? []),
         highlight:
           typeof item.frontMatter?.highlight === "string" ? item.frontMatter.highlight : undefined,
+        thumbnailScale: Number(item.frontMatter?.thumbnailScale ?? 1),
         order: Number(item.frontMatter?.order ?? 0),
       };
     })
@@ -73,6 +74,7 @@ export default async function Gallery({
             imagePath={item.imagePath}
             tags={item.tags}
             highlight={item.highlight}
+            thumbnailScale={item.thumbnailScale}
           />
         ))}
       </div>

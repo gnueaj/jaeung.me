@@ -41,27 +41,28 @@ export default async function PostItem({ post }: { post: PageMapItem }) {
               ))}
             </ul>
           )}
-          {/* A date and a title alone read like an index entry; the byline and
-              comment count make each row look like a post. */}
-          <p className="mt-1 flex items-center gap-2 text-xs text-zinc-500 dark:text-zinc-400">
-            <span>{data.meta().name}</span>
-            <span aria-hidden>·</span>
-            <span>
-              {commentCount} {commentCount === 1 ? "comment" : "comments"}
-            </span>
-          </p>
+          {/* A date and a title alone read like an index entry; the byline makes
+              each row look like a post. */}
+          <p className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">{data.meta().name}</p>
         </div>
-        {teaserPath && (
-          <div className="relative h-24 w-36 flex-shrink-0 overflow-hidden rounded-lg">
-            <Image
-              src={teaserPath}
-              alt={`thumbnail-${post.title}`}
-              fill
-              className="rounded-lg object-cover"
-              unoptimized={teaserPath.startsWith("/api/asset/")}
-            />
-          </div>
-        )}
+        <div className="flex flex-shrink-0 flex-col items-end gap-2">
+          {teaserPath && (
+            <div className="relative h-24 w-36 overflow-hidden rounded-lg">
+              <Image
+                src={teaserPath}
+                alt={`thumbnail-${post.title}`}
+                fill
+                className="rounded-lg object-cover"
+                unoptimized={teaserPath.startsWith("/api/asset/")}
+              />
+            </div>
+          )}
+          {/* mt-auto pins it to the bottom-right whether or not a teaser sits
+              above it, so posts without an image still show it low. */}
+          <span className="mt-auto text-xs text-zinc-400 dark:text-zinc-500">
+            {commentCount} {commentCount === 1 ? "comment" : "comments"}
+          </span>
+        </div>
       </li>
     </Link>
   );

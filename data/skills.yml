@@ -1,7 +1,11 @@
 skills:
   - type: Research
     description: >
-      Visual Analytics, Mechanistic Interpretability, NLP, ML
+      Visual Analytics, Mechanistic Interpretability, NLP, AI Safety
+
+  - type: AI / ML
+    description: >
+      PyTorch, Hugging Face
 
   - type: Frontend
     description: >

@@ -25,11 +25,8 @@ export default function VisitorCounter({ className }: { className?: string }) {
   if (!counts) return null;
 
   return (
-    <small
-      data-pagefind-ignore="all"
-      className={className}
-      title="Unique visitors, deduped per day">
+    <span data-pagefind-ignore="all" className={className} title="Unique visitors, deduped per day">
       Today {counts.today.toLocaleString()} · Total {counts.total.toLocaleString()}
-    </small>
+    </span>
   );
 }

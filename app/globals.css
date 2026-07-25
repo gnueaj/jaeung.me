@@ -93,30 +93,27 @@ div.nextra-code {
 /* Waving-hand tilt for the alien icon beside the greeting. Pivots from the
    bottom so it rocks like a wave rather than spinning in place; runs a couple
    of times on load and again on hover, and holds still for reduced-motion. */
+/* Waves within the first third of the cycle, then rests, so on an infinite
+   loop it reads as a periodic hello rather than nonstop flapping. */
 @keyframes me-wave {
   0%,
-  60%,
+  35%,
   100% {
     transform: rotate(0deg);
   }
-  10%,
-  30%,
-  50% {
+  7%,
+  21% {
     transform: rotate(14deg);
   }
-  20%,
-  40% {
+  14%,
+  28% {
     transform: rotate(-8deg);
   }
 }
 
 .me-wave {
   transform-origin: 70% 80%;
-  animation: me-wave 2.2s ease-in-out 0.4s 2;
-}
-
-.me-wave:hover {
-  animation: me-wave 2.2s ease-in-out 0 1;
+  animation: me-wave 2.8s ease-in-out 0.4s infinite;
 }
 
 @media (prefers-reduced-motion: reduce) {

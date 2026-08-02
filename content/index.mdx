@@ -6,6 +6,7 @@ type: page
 
 import { News, Career, Educations, Publications, Honors, Skills } from "../content/sections";
 import { data } from "@/data";
+import { LastUpdated } from "@/components";
 import Image from "next/image";
 
 Hello! 안녕하세요! <Image src="/alien-40.png" alt="" aria-hidden="true" width={20} height={20} priority unoptimized className="me-wave not-prose ml-1 inline-block h-5 w-5 align-[-0.2rem]" /> I am **Jaeung Lee**, an AI Research Engineer at [Samsung Research](https://research.samsung.com).
@@ -14,7 +15,13 @@ My research interests lie in **visualization for machine learning**, with a part
 
 Before joining Samsung Research, I received my M.S. and B.S. degrees in Computer Science and Engineering from [Sungkyunkwan University](https://www.skku.edu/eng/) in 2026 and 2024, respectively. During my master's program, I worked at the [Interactive Data Computing Lab](https://idclab.skku.edu) under the supervision of **Prof. Jaemin Jo**.
 
+<div className="flex items-baseline gap-2">
+
 ### News [#about]
+
+<LastUpdated className="not-prose text-sm font-normal text-zinc-400 italic dark:text-zinc-500" />
+
+</div>
 
 <News />
 

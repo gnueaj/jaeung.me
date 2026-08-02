@@ -109,7 +109,6 @@ export default function Comments({
   const [actionMenuTarget, setActionMenuTarget] = useState<string | null>(null);
   const emojiRef = useRef<HTMLDivElement>(null);
   const actionMenuRef = useRef<HTMLDivElement>(null);
-  const skipInitialFetchRef = useRef(Boolean(initialData));
 
   // Dismiss the badge picker the way any popover should: click away or Escape.
   useEffect(() => {
@@ -149,11 +148,10 @@ export default function Comments({
   }, [actionMenuTarget]);
 
   useEffect(() => {
-    if (skipInitialFetchRef.current) {
-      skipInitialFetchRef.current = false;
-      return;
-    }
-
+    // Always revalidate on mount. initialData only seeds the first paint (no
+    // loading flash); the client Router Cache can hand back a stale server
+    // render on back-navigation, so a fresh fetch is what keeps a just-posted
+    // comment from vanishing until a hard refresh.
     let cancelled = false;
 
     void fetch(`/api/comments?page=${page}${scopeQuery}`, { cache: "no-store" })

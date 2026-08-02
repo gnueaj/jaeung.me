@@ -47,7 +47,7 @@ export default async function Card({
             <div className="absolute inset-0 z-2 border-0 border-none bg-gradient-to-b from-transparent to-white transition-opacity duration-300 dark:from-black/10 dark:to-zinc-900" />
           </div>
         )}
-        <div className="absolute bottom-0 z-1 flex flex-col gap-2 p-4">
+        <div className="absolute bottom-0 z-1 flex flex-col gap-2 px-4 pt-4 pb-3">
           <h3 className="text-base font-bold text-zinc-900 no-underline dark:text-zinc-100">
             {title}
           </h3>

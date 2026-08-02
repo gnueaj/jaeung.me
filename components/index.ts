@@ -1,3 +1,4 @@
+export { default as LastUpdated } from "./LastUpdated";
 export { default as VisitorCounter } from "./VisitorCounter";
 export { default as Comments } from "./Comments";
 export { default as CommentsServer } from "./CommentsServer";

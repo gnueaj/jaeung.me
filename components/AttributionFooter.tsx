@@ -14,10 +14,10 @@ import VisitorCounter from "./VisitorCounter";
  */
 export default function AttributionFooter() {
   const pathname = usePathname();
-  // Both the credit and the visit count belong to the home page only: the credit
-  // is for the layout the home page wears, and the count is a personal footer,
-  // not something to repeat under every project and post.
-  if (pathname !== "/") return null;
+  // The copyright now belongs to Jaeung, so it rides along on every page. The
+  // visit count stays home-only — it's a personal touch, not something to repeat
+  // under every project and post.
+  const isHome = pathname === "/";
 
   return (
     <footer className="mt-3 flex flex-wrap items-center justify-center gap-x-2 gap-y-0.5 px-4 pb-4 text-center text-[11px] text-zinc-500 md:pb-0 dark:text-zinc-400">
@@ -27,8 +27,8 @@ export default function AttributionFooter() {
           Jiwon Choi
         </a>
       </span>
-      <span aria-hidden>·</span>
-      <VisitorCounter />
+      {isHome && <span aria-hidden>·</span>}
+      {isHome && <VisitorCounter />}
     </footer>
   );
 }

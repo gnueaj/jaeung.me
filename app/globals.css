@@ -251,6 +251,16 @@ div.nextra-code {
   background-color: color-mix(in oklab, var(--color-primary) 18%, transparent);
 }
 
+/* The scroll-to-top button sits on --color-primary, so its hover has to mix from
+   that same variable rather than a fixed hue: darken in light, lighten in dark. */
+.me-primary-hover:is(:hover, :focus-visible) {
+  background-color: color-mix(in oklab, var(--color-primary) 85%, black);
+}
+
+[data-theme="dark"] .me-primary-hover:is(:hover, :focus-visible) {
+  background-color: color-mix(in oklab, var(--color-primary) 85%, white);
+}
+
 html {
   @apply bg-[var(--bg)];
   @apply text-zinc-800 dark:text-zinc-200;
@@ -273,10 +283,17 @@ body {
   margin-right: auto;
 }
 
+/* `themes: false` is load-bearing, not a cleanup. daisyUI ships its own `light`
+   and `dark` themes by default, emitted as
+   `:is(:root:has(input.theme-controller[value=...]:checked), [data-theme=...])`.
+   `:is()` takes the specificity of its most specific argument, so that rule scores
+   (0,4,1) while the `[data-theme=...]` selector the custom blocks below compile to
+   scores (0,1,0) — the built-in palette then wins on specificity no matter how far
+   down the file the custom one appears. Turning the built-ins off is what lets the
+   two `daisyui/theme` blocks below actually take effect. It also drops the emitted
+   CSS from ~384KB to ~126KB, since the unused built-in palettes stop shipping. */
 @plugin "daisyui" {
-  themes:
-    light --default,
-    dark --prefersdark;
+  themes: false;
 }
 
 @plugin "daisyui/theme" {
@@ -288,11 +305,16 @@ body {
   --color-base-200: oklch(98% 0 0);
   --color-base-300: oklch(95% 0 0);
   --color-base-content: oklch(21% 0.006 285.885);
-  --color-primary: oklch(54.1% 0.281 293.009);
+  /* Mint, hue 180. Each is the most saturated in-sRGB value at the contrast its
+     role needs: primary and secondary carry white text AND double as link text on
+     white, so they sit at 4.55:1 and 5.64:1 against white — 4.5:1 is the WCAG AA
+     floor, and going brighter than this is what would break the link-text use.
+     accent carries dark text instead, so it is measured against that (6.23:1). */
+  --color-primary: oklch(55.3% 0.1 180);
   --color-primary-content: oklch(100% 0 0);
-  --color-secondary: oklch(49.1% 0.27 292.581);
+  --color-secondary: oklch(50.3% 0.091 180);
   --color-secondary-content: oklch(100% 0 0);
-  --color-accent: oklch(70.2% 0.183 293.541);
+  --color-accent: oklch(66.8% 0.121 180);
   --color-accent-content: oklch(21% 0.006 285.885);
   --color-neutral: oklch(14% 0.005 285.823);
   --color-neutral-content: oklch(92% 0.004 286.32);

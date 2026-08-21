@@ -536,7 +536,7 @@ export default function Comments({
         <p
           role="status"
           aria-live="polite"
-          className="m-0 rounded-xl bg-violet-500/10 px-4 py-2.5 text-sm text-zinc-700 dark:text-zinc-200">
+          className="bg-primary/10 m-0 rounded-xl px-4 py-2.5 text-sm text-zinc-700 dark:text-zinc-200">
           {message}
         </p>
       )}

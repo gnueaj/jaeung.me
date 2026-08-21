@@ -1,9 +1,9 @@
 news:
+  - date: "2026.08"
+    description: "🎉 [*Unlearning Depth Score*](https://gnueaj.github.io/unlearning-depth-score/) was accepted to EMNLP 2026 with a **top 4.1% score**."
   - date: "2026.07.18"
     description: "👾 New personal website launched!"
   - date: "2026.06"
     description: "⭐ [*Unlearning Comparator*](https://github.com/gnueaj/Machine-Unlearning-Comparator) reached 100 GitHub stars!"
-  - date: "2026.05"
-    description: "📄 [*Measuring the Depth of LLM Unlearning via Activation Patching*](https://gnueaj.github.io/unlearning-depth-score/) is now on arXiv."
   - date: "2026.03"
     description: "🚀 Joined Samsung Research as an AI Research Engineer."

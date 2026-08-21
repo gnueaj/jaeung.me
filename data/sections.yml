@@ -6,27 +6,27 @@ sections:
 
   - key: experience
     title: Experience
-    shortTitle: Exp
+    shortTitle: Work
     type: main
 
   - key: educations
     title: Education
-    shortTitle: Edu
+    shortTitle: Education
     type: main
 
   - key: publications
     title: Publications
-    shortTitle: Pubs
+    shortTitle: Papers
     type: main
 
   - key: misc
-    title: Miscellaneous
-    shortTitle: Misc
+    title: More
+    shortTitle: More
     type: main
 
   - key: projects
     title: Project Gallery
-    shortTitle: Project
+    shortTitle: Projects
     type: page
 
   - key: blog
@@ -36,5 +36,5 @@ sections:
 
   - key: guestbook
     title: Guestbook
-    shortTitle: Guest
+    shortTitle: Guestbook
     type: page

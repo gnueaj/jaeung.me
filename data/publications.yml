@@ -12,8 +12,8 @@ publications:
       - Jaeung Lee
       - Dohyun Kim
       - Jaemin Jo
-    type: preprint
-    venue: "Preprint, 2026."
+    type: conference
+    venue: "Proceedings of the 2026 Conference on Empirical Methods in Natural Language Processing (EMNLP, 2,719 / 17,669 = 15.4%), Budapest, Hungary, 2026."
     url:
       pdf: https://arxiv.org/abs/2605.24614
       git: https://github.com/gnueaj/unlearning-depth-score
@@ -28,7 +28,7 @@ publications:
       - Jaemin Jo
       - Simon S. Woo
     type: conference
-    venue: "Proceedings of the ACM Web Conference 2026 (WWW '26), Dubai, United Arab Emirates, 2026."
+    venue: "Proceedings of the ACM Web Conference 2026 (WWW Short, 123 / 525 = 23.4%), Dubai, United Arab Emirates, 2026."
     url:
       pdf: https://arxiv.org/abs/2602.18505
       git: https://github.com/Yurim990507/suppression-or-deletion
@@ -56,7 +56,7 @@ publications:
       - Jaeung Lee
       - Jaemin Jo
     type: conference
-    venue: "Proceedings of Conference on 2024 IEEE Visualization & Visual Analytics (IEEE VIS), St. Pete Beach, USA."
+    venue: "Proceedings of the IEEE Visualization & Visual Analytics (IEEE VIS), St. Pete Beach, USA, 2024."
     url:
       pdf: https://ieeexplore.ieee.org/document/10771142/
       git: https://github.com/jiwnchoi/bavisitter

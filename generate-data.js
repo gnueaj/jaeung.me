@@ -278,6 +278,17 @@ async function main() {
         indexContent += `export { default as data } from "./${accessorFilenameNoExt}";\n`;
       }
 
+      // The accessor reads the YAML through `fs` at request time, so Turbopack
+      // never sees the .yml files as module dependencies and will not re-render
+      // a page when their contents change. Regenerating the .ts files does not
+      // help on its own either: their contents are identical unless the schema
+      // changed. Stamping this file on every watch run gives the module graph a
+      // real change to invalidate, which is what makes YAML edits hot-reload.
+      // Watch mode only, so production builds stay byte-for-byte reproducible.
+      if (WATCH_MODE) {
+        indexContent += `\n// hot-reload stamp: ${Date.now()}\n`;
+      }
+
       await fs.writeFile(INDEX_OUTPUT_PATH, indexContent, "utf8");
       console.log(`✅ index.ts generated successfully at ${INDEX_OUTPUT_PATH}`);
     } catch (error) {

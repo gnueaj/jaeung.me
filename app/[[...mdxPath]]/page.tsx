@@ -36,6 +36,12 @@ export async function generateMetadata(props: PageProps) {
 
 function getCustomMetadata(metadata: NetraMetadata): NetraMetadata {
   const title = metadata.title === "Index" ? data.meta().name : metadata.title;
+  // Built as params rather than interpolated: a page with no `description` in its
+  // frontmatter used to send the literal string "undefined", which reads as a real
+  // value on the other end and so slipped past the OG route's fallback, printing
+  // "undefined" across the share thumbnail. Omitting the key lets the fallback run.
+  const ogParams = new URLSearchParams({ title });
+  if (metadata.description) ogParams.set("description", metadata.description);
   return {
     ...metadata,
     metadataBase: new URL(siteConfig.url),
@@ -59,7 +65,7 @@ function getCustomMetadata(metadata: NetraMetadata): NetraMetadata {
     openGraph: {
       images: [
         {
-          url: `/api/og?title=${title}&description=${metadata.description}`,
+          url: `/api/og?${ogParams}`,
           width: 1200,
           height: 630,
           alt: title,
@@ -92,7 +98,11 @@ const Page: FC<PageProps> = async (props) => {
 
   return (
     <Wrapper toc={toc} metadata={metadata}>
-      <MDXContent {...props} params={params} />
+      {/* `contents` keeps this div out of the layout for everything that is not a
+          post, so the only thing it ever changes is the prose rhythm below. */}
+      <div className={postSlug ? "me-post" : "contents"}>
+        <MDXContent {...props} params={params} />
+      </div>
       {postSlug && (
         <section className="mt-12 border-t border-zinc-200 pt-8 dark:border-zinc-800">
           <h2 className="mt-0">Comments</h2>

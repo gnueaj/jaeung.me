@@ -248,7 +248,7 @@ export default function Navigation({ sections }: { sections: Section[] }) {
                 target="_self"
                 aria-current={activated === section.key ? "page" : undefined}
                 className={clsx(
-                  "w-[64px] rounded-lg text-center text-xs md:w-full md:text-start md:text-base",
+                  "me-nav-tab w-[64px] rounded-md text-center text-xs md:w-full md:rounded-lg md:text-start md:text-base",
                   activated === section.key ? "me-highlight font-bold" : "",
                 )}
               />
@@ -294,7 +294,7 @@ export default function Navigation({ sections }: { sections: Section[] }) {
                   data-nav-cta={section.key === CTA_PAGE_KEY ? "true" : undefined}
                   aria-current={activated === section.key ? "page" : undefined}
                   className={clsx(
-                    "w-[64px] rounded-lg text-center text-xs md:w-full md:text-start md:text-base",
+                    "me-nav-tab w-[64px] rounded-md text-center text-xs md:w-full md:rounded-lg md:text-start md:text-base",
                     activated === section.key ? "me-highlight font-bold" : "",
                     pathname === "/" && isAtPageBottom && section.key === CTA_PAGE_KEY
                       ? "me-nav-cta"

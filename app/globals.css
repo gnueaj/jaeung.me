@@ -184,8 +184,29 @@ div.nextra-code {
   @apply m-0 mb-0 flex flex-col px-0 pl-0;
 }
 
+/* No radius here on purpose. The tab picks its own per breakpoint, and setting one
+   here overrode that, leaving the selected tab as the only item in the row with a
+   different corner. */
 .me-highlight {
-  @apply bg-primary text-primary-content rounded-md font-semibold;
+  @apply bg-primary text-primary-content font-semibold;
+}
+
+/* daisyUI lays every menu item out as `display: grid` with `padding-inline: .75rem`
+   and `align-content: flex-start`. That is fine for the desktop sidebar, where the
+   item is full-width, but the mobile tabs are a fixed 64px — the padding leaves
+   only 40px of content box, so a label like "Education" overflows its own
+   background and stops lining up with it. Drop the padding and centre the grid
+   item for the horizontal strip; the sidebar keeps daisyUI's own spacing. */
+.menu .menu-item > a.me-nav-tab {
+  justify-content: center;
+  padding-inline: 0;
+}
+
+@media (width >= 48rem) {
+  .menu .menu-item > a.me-nav-tab {
+    justify-content: flex-start;
+    padding-inline: 0.75rem;
+  }
 }
 
 .menu {

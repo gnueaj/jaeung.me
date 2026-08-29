@@ -209,6 +209,19 @@ div.nextra-code {
   }
 }
 
+/* Paragraphs in a post are separated by space, not by an indent — either one marks
+   the boundary, and both together mark it twice. .me-prose closes paragraphs up to
+   0.5rem for the home page's CV blocks, which glues 200-character prose paragraphs
+   into a single block, so posts open that back up. The element selector outranks
+   .me-prose's `prose-p` variant, which is class-only.
+
+   No max-width on purpose: the title and byline are rendered by the wrapper as
+   siblings of this div, so capping the measure here narrows the body alone and
+   leaves it visibly out of line with the heading above it. */
+.me-post p {
+  margin-bottom: 1.15em;
+}
+
 .menu {
   --menu-active-bg: var(--color-primary);
   --menu-active-text: var(--color-primary-content);

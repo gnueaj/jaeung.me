@@ -30,8 +30,19 @@ export default async function PostItem({ post }: { post: PageMapItem }) {
     <Link href={post.route.replace("/content", "")} target="_self">
       <li className="hover:bg-primary/10 dark:hover:bg-primary/20 -m-4 flex justify-between gap-8 rounded-lg p-4 transition-colors duration-300">
         <div className="flex flex-col gap-2">
-          <Date date={post.frontMatter?.date} day={true} className="ml-0.5 text-xs" />
           <h3 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100">{post.title}</h3>
+          {/* Title first, then name and date on one line — the same order, and the
+              same two fields, the post itself opens with. Split across the top and
+              bottom of the card they read as two unrelated notes. */}
+          <div className="ml-0.5 flex items-center gap-2 text-xs text-zinc-500 dark:text-zinc-400">
+            <span>{data.meta().name}</span>
+            {post.frontMatter?.date && (
+              <>
+                <span aria-hidden>·</span>
+                <Date date={post.frontMatter.date} day={true} className="text-xs not-italic" />
+              </>
+            )}
+          </div>
           {tags.length > 0 && (
             <ul className="mt-1 flex gap-2">
               {tags.map((tag) => (
@@ -41,9 +52,6 @@ export default async function PostItem({ post }: { post: PageMapItem }) {
               ))}
             </ul>
           )}
-          {/* A date and a title alone read like an index entry; the byline makes
-              each row look like a post. */}
-          <p className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">{data.meta().name}</p>
         </div>
         <div className="flex flex-shrink-0 flex-col items-end gap-2">
           {teaserPath && (

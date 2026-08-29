@@ -27,8 +27,16 @@ export default async function PostItem({ post }: { post: PageMapItem }) {
   const commentCount = await countPostComments(postSlug);
 
   return (
-    <Link href={post.route.replace("/content", "")} target="_self">
-      <li className="hover:bg-primary/10 dark:hover:bg-primary/20 -m-4 flex justify-between gap-8 rounded-lg p-4 transition-colors duration-300">
+    // <li> is the element the <ul> is allowed to contain, and the link goes inside
+    // it. The other way round put an <a> directly in the <ul>, which is invalid and
+    // left no `li + li` for a separator to hang off. The negative margin is
+    // horizontal only now, so the hover still bleeds past the text column without
+    // pulling the row up over the rule above it.
+    <li className="py-6 first:pt-0 last:pb-0">
+      <Link
+        href={post.route.replace("/content", "")}
+        target="_self"
+        className="hover:bg-primary/10 dark:hover:bg-primary/20 -mx-4 flex justify-between gap-8 rounded-lg px-4 py-3 transition-colors duration-300">
         <div className="flex flex-col gap-2">
           <h3 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100">{post.title}</h3>
           {/* Title first, then name and date on one line — the same order, and the
@@ -71,7 +79,7 @@ export default async function PostItem({ post }: { post: PageMapItem }) {
             {commentCount} {commentCount === 1 ? "comment" : "comments"}
           </span>
         </div>
-      </li>
-    </Link>
+      </Link>
+    </li>
   );
 }

@@ -21,7 +21,11 @@ export default async function Page() {
   }
 
   return (
-    <ul className="not-prose flex flex-col gap-12">
+    // A hairline between entries. gap alone had carried the separation, which was
+    // enough when each card was three rows tall; now that the date sits beside the
+    // byline the rows are shorter and more alike, and space by itself stopped
+    // reading as a boundary.
+    <ul className="not-prose flex flex-col divide-y divide-zinc-200 dark:divide-zinc-800">
       {posts.map((post) => (
         <PostItem key={`post-item-${post.route}`} post={post} />
       ))}

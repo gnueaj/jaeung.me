@@ -185,18 +185,9 @@ export const useMDXComponents: UseMDXComponents<typeof DEFAULT_COMPONENTS> = <
                   description here just says the same thing twice. It stays in
                   the frontmatter for metadata and OG cards. */}
               {metadata.type !== "post" && <p className="my-0 text-sm">{metadata.description}</p>}
-              {/* The index card carries a date and a byline, so a post that opens
-                  with a bare title drops that context exactly when the reader
-                  commits to reading. Same two fields, same order. */}
-              {metadata.type === "post" && (
-                <div className="not-prose flex items-center gap-2 text-xs text-zinc-500 dark:text-zinc-400">
-                  <span>{data.meta().name}</span>
-                  {typeof metadata.date === "string" && (
-                    <>
-                      <span aria-hidden>·</span>
-                      <Date date={metadata.date} day className="text-xs not-italic" />
-                    </>
-                  )}
+              {metadata.type === "post" && typeof metadata.date === "string" && (
+                <div className="not-prose text-xs text-zinc-500 dark:text-zinc-400">
+                  <Date date={metadata.date} day className="text-xs not-italic" />
                 </div>
               )}
               <div className="divider my-2" />

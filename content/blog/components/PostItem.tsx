@@ -1,5 +1,4 @@
 import { Date, TagBadge } from "@/components";
-import { data } from "@/data";
 import { countPostComments } from "@/lib/guestbook-comments";
 import { existsSync } from "fs";
 import Image from "next/image";
@@ -39,18 +38,11 @@ export default async function PostItem({ post }: { post: PageMapItem }) {
         className="hover:bg-primary/10 dark:hover:bg-primary/20 -mx-4 flex justify-between gap-8 rounded-lg px-4 py-3 transition-colors duration-300">
         <div className="flex flex-col gap-2">
           <h3 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100">{post.title}</h3>
-          {/* Title first, then name and date on one line — the same order, and the
-              same two fields, the post itself opens with. Split across the top and
-              bottom of the card they read as two unrelated notes. */}
-          <div className="ml-0.5 flex items-center gap-2 text-xs text-zinc-500 dark:text-zinc-400">
-            <span>{data.meta().name}</span>
-            {post.frontMatter?.date && (
-              <>
-                <span aria-hidden>·</span>
-                <Date date={post.frontMatter.date} day={true} className="text-xs not-italic" />
-              </>
-            )}
-          </div>
+          {post.frontMatter?.date && (
+            <div className="ml-0.5 text-xs text-zinc-500 dark:text-zinc-400">
+              <Date date={post.frontMatter.date} day={true} className="text-xs not-italic" />
+            </div>
+          )}
           {tags.length > 0 && (
             <ul className="mt-1 flex gap-2">
               {tags.map((tag) => (

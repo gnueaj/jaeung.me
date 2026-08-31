@@ -546,12 +546,12 @@ export default function Comments({
         <p className="m-0 py-10 text-center text-sm text-zinc-500 dark:text-zinc-400">
           Loading messages…
         </p>
-      ) : comments.length === 0 ? (
+      ) : comments.length === 0 && !postSlug ? (
         <div className="rounded-2xl border border-dashed border-zinc-300 py-10 text-center dark:border-zinc-700">
           <p className="m-0 text-sm font-medium text-zinc-600 dark:text-zinc-300">{emptyTitle}</p>
           <p className="m-0 mt-1 text-xs text-zinc-400 dark:text-zinc-500">{emptyHint}</p>
         </div>
-      ) : (
+      ) : comments.length > 0 ? (
         <>
           <p className="m-0 text-xs font-medium tracking-wide text-zinc-400 uppercase dark:text-zinc-500">
             {totalComments} {totalComments === 1 ? "message" : "messages"}
@@ -739,7 +739,7 @@ export default function Comments({
             </button>
           </nav>
         </>
-      )}
+      ) : null}
 
       {/* …then the form, the way a comment section reads. */}
       <form

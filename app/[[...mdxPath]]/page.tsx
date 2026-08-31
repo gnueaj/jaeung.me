@@ -106,11 +106,7 @@ const Page: FC<PageProps> = async (props) => {
       {postSlug && (
         <section className="mt-12 border-t border-zinc-200 pt-8 dark:border-zinc-800">
           <h2 className="mt-0">Comments</h2>
-          <CommentsServer
-            postSlug={postSlug}
-            emptyTitle="No comments yet."
-            emptyHint="Be the first to leave one."
-          />
+          <CommentsServer postSlug={postSlug} />
         </section>
       )}
     </Wrapper>

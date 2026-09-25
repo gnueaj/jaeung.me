@@ -13,7 +13,7 @@ publications:
       - Dohyun Kim
       - Jaemin Jo
     type: conference
-    venue: "Proceedings of the 2026 Conference on Empirical Methods in Natural Language Processing (EMNLP, 2,719 / 17,669 = 15.4%), Budapest, Hungary, 2026."
+    venue: "Proceedings of the 2026 Conference on Empirical Methods in Natural Language Processing (EMNLP, 462 / 17,669 = 2.6%), Budapest, Hungary, 2026."
     url:
       pdf: https://arxiv.org/abs/2605.24614
       git: https://github.com/gnueaj/unlearning-depth-score

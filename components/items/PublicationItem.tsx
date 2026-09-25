@@ -107,7 +107,7 @@ export default async function PublicationItem(props: Publication) {
       <div className="flex flex-col">
         {typeof title === "string" ? <MDXContent mdxSource={`### ${title}`} /> : title}
         {authors.length > 0 && <AuthorNames authorList={authors} />}
-        <p className="not-prose text-sm text-zinc-500 dark:text-zinc-400">{venue}</p>
+        <MDXContent mdxSource={venue} className="text-sm text-zinc-500 dark:text-zinc-400" />
         <PublicationLinks url={url} />
       </div>
     </li>

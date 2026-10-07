@@ -1,7 +1,7 @@
 import MDXContent from "@/components/MDXContent";
 import { data, type Publication } from "@/data";
 import Link from "next/link";
-import { FaFilePdf, FaGithub, FaGlobe, FaVideo } from "react-icons/fa6";
+import { FaFilePdf, FaFilePowerpoint, FaGithub, FaGlobe, FaVideo } from "react-icons/fa6";
 import { twMerge } from "tailwind-merge";
 
 async function AuthorNames({ authorList }: { authorList: string[] }) {
@@ -68,6 +68,7 @@ const URL_ICON = {
   pdf: FaFilePdf,
   git: FaGithub,
   web: FaGlobe,
+  slides: FaFilePowerpoint,
   video: FaVideo,
 };
 
@@ -75,12 +76,13 @@ const URL_FULLNAME = {
   pdf: "Paper",
   git: "GitHub",
   web: "Project",
+  slides: "Slides",
   video: "Video",
 };
 
 // Fixed display order, so it no longer depends on the key order each entry
 // happens to use in `data/publications.yml`.
-const URL_ORDER = ["web", "video", "git", "pdf"] as const;
+const URL_ORDER = ["web", "slides", "video", "git", "pdf"] as const;
 
 export async function PublicationLinks({ url }: { url: Publication["url"] }) {
   return (

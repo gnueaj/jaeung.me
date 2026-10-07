@@ -18,6 +18,7 @@ publications:
       pdf: https://arxiv.org/abs/2605.24614
       git: https://github.com/gnueaj/unlearning-depth-score
       web: https://gnueaj.github.io/unlearning-depth-score/
+      slides: https://gnueaj.github.io/unlearning-depth-score/slides/UDS_EMNLP2026_slides.pdf
 
   - id: suppression-or-deletion
     title: "Suppression or Deletion: A Restoration-Based Representation-Level Analysis of Machine Unlearning"
